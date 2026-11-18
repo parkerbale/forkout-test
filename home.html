@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+/* Home: positions match the reference picture (1024px canvas). */
+.canvas{height:2540px}
+
+/* Header */
+.logo{left:88px;top:88px;width:20px;height:68px;color:var(--neon);filter:drop-shadow(0 0 10px rgba(188,217,138,.30))}
+.logo svg{display:block;width:100%;height:100%}
+.wordmark{left:132px;top:109px;font-size:22px;font-weight:500;letter-spacing:13.4px}
+.streak-top{left:676px;top:98px;height:48px;padding:0 20px 0 14px;border-radius:24px;display:flex;align-items:center;gap:8px;
+  background:linear-gradient(160deg,rgba(var(--r-ff9f5a),.16),rgba(var(--r-ff783c),.05));border:1px solid rgba(var(--r-ff9f5a),.32);
+  box-shadow:0 0 22px rgba(var(--r-ff8c3c),.18),inset 0 1px 0 rgba(var(--ink),.08)}
+.streak-top svg{width:24px;height:24px;filter:drop-shadow(0 0 6px rgba(var(--r-ff9646),.8));animation:flick 2.4s ease-in-out infinite;transform-origin:50% 90%}
+.streak-top b{font-size:23px;font-weight:700;letter-spacing:-.3px}
+.streak-top small{display:none}
+@keyframes flick{0%,100%{transform:scale(1) rotate(0)}30%{transform:scale(1.08,1.12) rotate(-3deg)}60%{transform:scale(.97,1.03) rotate(2deg)}}
+.bell{left:822px;top:100px;width:44px;height:44px;display:grid;place-items:center}
+.bell svg{width:36px;height:36px}
+.bell::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px var(--x-050a0d),0 0 10px var(--acc)}
+.avatar{left:890px;top:92px;width:60px;height:60px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px rgba(var(--ink),.14)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.gm{left:80px;top:178px;font-size:19px;font-weight:500;letter-spacing:4.7px;color:var(--x-c8cfd2)}
+.name{left:78px;top:224px;font-size:52px;font-weight:500;letter-spacing:-.8px;color:var(--fg2);white-space:nowrap}
+.name b{font-weight:700;color:var(--fg)}
+.tag{left:81px;top:277px;font-size:25px;color:var(--x-c6cdd1);letter-spacing:-.1px}
+.today{left:795px;top:202px;width:155px;height:50px;border-radius:25px;display:flex;align-items:center;gap:10px;padding-left:18px;z-index:3;
+  background:rgba(var(--r-121a1c),.82);border:1px solid var(--line);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:22px}
+.today svg{width:22px;height:22px}
+.today .chev{width:16px;height:16px;margin-left:2px}
+
+/* Nutrition */
+.nutri{position:absolute;left:48px;top:350px;width:928px;height:510px;border-radius:44px}
+.bowl{left:480px;top:238px;width:540px;height:389px;z-index:2;pointer-events:none}
+.ring{left:716px;top:398px;width:212px;height:212px;z-index:3;border-radius:50%;transition:box-shadow .6s}
+.ring.hit{box-shadow:0 0 40px color-mix(in srgb,var(--acc) 60%,transparent);animation:glow 1.8s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 70px color-mix(in srgb,var(--acc) 80%,transparent)}}
+.ring svg{position:absolute;inset:0}
+.ring .p{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:50px;font-weight:600;letter-spacing:-1px}
+.ring .d{position:absolute;left:0;right:0;top:92px;text-align:center;font-size:17px;font-weight:500;letter-spacing:1.6px;color:var(--fg2)}
+.n-ico{position:absolute;left:80px;top:360px;width:52px;height:52px}
+.kcalrow{left:84px;top:436px;display:flex;align-items:baseline;gap:18px}
+.kcal{font-size:82px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+.kcal-u{font-size:28px;color:var(--x-e9edee)}
+.of{left:86px;top:530px;font-size:25px;color:var(--x-8e9aa3)}
+.of b{font-weight:400;color:var(--mint)}
+.calbar{position:absolute;left:86px;top:571px;width:460px}
+.calbar i{background:linear-gradient(90deg,color-mix(in srgb,var(--mint) 80%,var(--x-3ccf80)),var(--mint))}
+.mlabel{font-size:25px;color:var(--x-e7ebed)}
+.mval{font-size:44px;font-weight:600;letter-spacing:-.5px}
+.mof{font-size:21px;color:var(--x-8e9aa3)}
+.mbar{position:absolute;height:14px;border-radius:7px;background:var(--x-2b343d)}
+.div{position:absolute;width:1px;top:654px;height:130px;background:rgba(var(--ink),.13)}
+.mi{position:absolute;width:40px;height:40px}
+
+/* Quick actions: four equal tiles */
+.tile{position:absolute;top:736px;width:200px;height:132px;border-radius:22px;text-align:left;
+  background:linear-gradient(170deg,rgba(var(--ink),.055),rgba(var(--ink),.02));border:1px solid rgba(var(--ink),.08)}
+.tile svg.ti{position:absolute;left:20px;top:20px;width:32px;height:32px;color:var(--x-e8edee)}
+.tile .tt{position:absolute;left:20px;top:64px;font-size:23px;line-height:1;color:var(--x-f1f4f5)}
+.tile .ts{position:absolute;left:20px;top:97px;font-size:21px;line-height:1;color:var(--x-8c979e)}
+.tile.main{background:linear-gradient(165deg,var(--x-163a2c),var(--x-0d251d) 70%);border:1.5px solid color-mix(in srgb,var(--acc) 45%,var(--x-1f5a3d));box-shadow:0 0 30px color-mix(in srgb,var(--acc) 12%,transparent),inset 0 1px 0 rgba(var(--ink),.06)}
+.tile.main svg.ti{color:color-mix(in srgb,var(--acc) 70%,var(--x-ffffff))}
+.tile .chev{position:absolute;right:20px;top:24px;width:16px;height:22px;color:var(--x-e8edee)}
+
+/* (AI tip and water moved out of Home) */
+.shift{position:absolute;left:0;top:0;width:1024px}
+.canvas#canvas{padding-bottom:0;min-height:2540px!important}
+.workout{position:absolute;left:48px;top:904px;width:928px;height:230px;border-radius:40px;overflow:hidden;background:var(--x-080c13);border:1px solid var(--line)}
+.wlabel{position:absolute;left:44px;top:36px;font-size:22px;font-weight:600;color:var(--muted)}
+.wtitle{left:44px;top:70px;font-size:46px;font-weight:700;letter-spacing:-.6px;white-space:nowrap}
+.wsub{position:absolute;left:44px;top:146px;display:flex;gap:30px;font-size:24px;color:var(--fg2)}
+.wsub span{display:flex;align-items:center;gap:10px}
+.wsub svg{width:26px;height:26px;color:var(--acc)}
+.wsub i{font-style:normal}
+.start{position:absolute;left:588px;top:80px;width:304px;height:70px;border-radius:35px;padding:0 28px 0 34px;justify-content:flex-start;font-size:23px}
+.start .play{width:22px;height:24px;margin-right:2px}
+.start .arr{width:26px;height:26px;margin-left:auto}
+
+.sc{position:absolute;top:1252px;height:110px;border-radius:22px;text-align:left;background:linear-gradient(170deg,var(--x-0d141b),var(--x-070c12));border:1px solid rgba(var(--ink),.08)}
+.sc .ico{position:absolute;left:20px;top:28px;width:52px;height:52px}
+.sc .st{position:absolute;left:88px;top:30px;font-size:23px;line-height:1;color:var(--x-f1f4f5)}
+.sc .ss{position:absolute;left:88px;top:62px;font-size:19px;line-height:1;color:var(--x-8c979e)}
+.sc .chev{position:absolute;right:16px;top:43px;width:14px;height:24px;color:var(--x-c9d0d4)}
+
+.watercard{position:absolute;left:48px;top:1256px;width:928px;height:150px;border-radius:32px}
+.watercard .ico{position:absolute;left:32px;top:46px}
+.watercard .wl{left:112px;top:40px}
+.watercard .wa{left:112px;top:72px;font-size:34px;font-weight:600}
+.watercard .wa small{font-size:21px;color:var(--x-8e9aa3);font-weight:400}
+.wnote{left:470px;top:46px;font-size:21px;line-height:1.45;color:var(--x-8e9aa3);white-space:normal;width:430px}
+.glasses i{width:28px;height:10px;border-radius:5px;background:var(--x-26303a);transition:background-color .4s,box-shadow .4s}
+.glasses i.on{background:var(--water);box-shadow:0 0 12px rgba(var(--r-5fc3ff),.5)}
+.addw{position:absolute;right:30px;top:45px;height:60px;padding:0 26px;border-radius:30px;font-size:22px;font-weight:700;color:var(--water);
+  background:rgba(var(--r-5fc3ff),.12);border:1.5px solid rgba(var(--r-5fc3ff),.35)}
+.card.meals,html[data-fk="light"] .card.meals{position:absolute;left:48px;top:1172px;width:928px;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.card.meals::before,.card.meals::after{display:none}
+.mh{font-size:40px;font-weight:700;letter-spacing:-.5px;margin:0 6px 26px}
+.mr{display:flex;align-items:center;gap:34px;padding:26px;border-radius:44px;background:rgba(var(--ink),.055);border:1px solid var(--line);margin-bottom:22px}
+.mr img{flex:none;width:210px;height:210px;border-radius:32px;object-fit:cover}
+.mt{flex:1;min-width:0;display:grid;gap:18px}
+.mtop{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.mt b{font-size:35px;font-weight:700;white-space:nowrap;letter-spacing:-.3px}
+.mtime{flex:none;font-size:22px;font-weight:600;padding:9px 20px;border-radius:24px;background:rgba(var(--ink),.08);color:var(--fg2)}
+.mk{display:flex;align-items:center;gap:12px;font-size:36px;font-weight:700}
+.mk svg{width:34px;height:34px;color:var(--fg)}
+.mk small{font-size:26px;font-weight:600;margin-left:-2px;color:var(--fg2)}
+.mm{display:flex;gap:20px;font-size:27px;font-weight:600}
+.mm span{display:flex;align-items:center;gap:9px}
+.mm svg.bd{width:42px;height:42px}
+.mm .p{color:var(--protein)}.mm .c{color:var(--carbs)}.mm .f{color:var(--fat)}
+.mm span{color:var(--fg)}
+.mm .p svg,.mm .c svg,.mm .f svg{flex:none}
+.mr.add{justify-content:center;padding:30px;border:2px dashed color-mix(in srgb,var(--acc) 40%,transparent);background:none;margin-bottom:0}
+.mr.add b{font-size:32px;font-weight:700;color:var(--acc)}
+.mph{display:grid;place-items:center;color:var(--acc)}
+.mph svg{width:36px;height:36px}
+
+/* Streak card (tap the streak) */
+.streak-bg{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .3s;z-index:7}
+.streak-card{position:absolute;left:48px;right:48px;top:170px;padding:40px;border-radius:40px;z-index:8;opacity:0;transform:translateY(-30px) scale(.96);pointer-events:none;
+  transition:transform .4s var(--spring),opacity .25s;background:linear-gradient(170deg,var(--x-1a120c),var(--x-0a0d10) 60%);border:1px solid rgba(var(--r-ff9f5a),.3);box-shadow:0 0 60px rgba(var(--r-ff8c3c),.12)}
+.streak-open .streak-bg,.streak-open .streak-card{opacity:1;pointer-events:auto}
+.streak-open .streak-card{transform:none}
+.streak-card .big{font-size:110px;font-weight:700;letter-spacing:-3px;line-height:1}
+.streak-card .flame{width:90px;height:90px;filter:drop-shadow(0 0 20px rgba(var(--r-ff9646),.7))}
+.week7{display:flex;gap:12px;margin:30px 0 26px}
+.week7 div{flex:1;text-align:center;font-size:19px;color:var(--muted)}
+.week7 i{display:grid;place-items:center;height:62px;margin-top:10px;border-radius:18px;background:rgba(var(--ink),.05);border:1px solid var(--line);font-style:normal;color:var(--dim)}
+.week7 i.y{background:rgba(var(--r-ff9f5a),.18);border-color:rgba(var(--r-ff9f5a),.4);color:var(--flame)}
+.week7 i.t{border:2px dashed rgba(var(--r-ff9f5a),.6);color:var(--flame)}
+.ms{display:flex;gap:14px}
+.ms div{flex:1;padding:18px;border-radius:22px;background:rgba(var(--ink),.04);border:1px solid var(--line);text-align:center;font-size:20px;color:var(--muted)}
+.ms div b{display:block;font-size:30px;color:var(--fg);margin-bottom:4px}
+.ms div.got{border-color:rgba(var(--r-ff9f5a),.4);color:var(--flame)}
+.freeze{display:flex;align-items:center;gap:18px;margin-top:22px;padding:20px 24px;border-radius:24px;background:rgba(var(--r-6cb8ff),.08);border:1px solid rgba(var(--r-6cb8ff),.25);font-size:21px;color:var(--x-cfe5ff);line-height:1.35}
+.freeze svg{flex:none;width:40px;height:40px;color:var(--x-8cc8ff)}
+@media (prefers-reduced-motion:reduce){.streak-top svg,.tip::before,.ring.hit{animation:none}}
+.first{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:56px 40px;margin-top:16px;border-radius:44px;border:2px dashed color-mix(in srgb,var(--acc) 45%,transparent)}
+.first .fc{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+.first .fc svg{width:56px;height:56px}
+.first b{font-size:36px;margin-top:10px}
+.first>span:not(.fc){font-size:24px;color:var(--muted);line-height:1.4;max-width:560px}
+.first em{font-style:normal;margin-top:18px;height:84px;padding:0 48px;border-radius:42px;display:inline-flex;align-items:center;background:var(--acc);color:var(--on-acc);font-size:27px;font-weight:700}
+.pregym{position:absolute;left:48px;top:1160px;width:928px;height:150px;box-sizing:border-box;display:flex;align-items:center;gap:26px;padding:0 34px;border-radius:40px;background:color-mix(in srgb,var(--carbs) 11%,transparent);border:1px solid color-mix(in srgb,var(--carbs) 30%,transparent)}
+.pregym[hidden]{display:none}
+.pregym .pgi{width:84px;height:84px;flex:none;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--carbs) 22%,transparent);color:var(--carbs)}
+.pregym .pgi svg{width:42px;height:42px}
+.pregym .pgt{flex:1;min-width:0}
+.pregym small{display:block;font-size:21px;color:var(--carbs);font-weight:600}
+.pregym b{display:block;margin-top:6px;font-size:31px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pregym .pgt>span{display:block;margin-top:4px;font-size:22px;color:var(--muted)}
+.pregym .chev{width:16px;height:22px;color:var(--muted);flex:none}
+.shift.hasPre .card.meals{top:1340px!important}
+</style>
+</head>
+<body data-tab="home" data-title="Home" data-note="Tap the streak, Start Workout, Add meal, the + button and the tab bar.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll" id="scroll">
+        <div class="canvas" id="canvas">
+          <!-- Header -->
+          <div class="a logo in" style="--i:0" role="img" aria-label="Forkout"><svg viewBox="276 160 232 802" fill="currentColor" aria-hidden="true"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="281" y="773" width="35" height="134" rx="10"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/><rect x="470" y="773" width="35" height="134" rx="10"/></svg></div>
+          <div class="a wordmark in" style="--i:0">FORKOUT</div>
+          <button class="a streak-top press in" style="--i:0" id="streakBtn" aria-label="12-day streak"><svg viewBox="0 0 24 24" style="fill:var(--x-ff9f5a)"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/><path d="M12 13.5c.5 1.6 2.3 2.2 2.3 4a2.3 2.3 0 0 1-4.6 0c0-1.2.8-1.7 1-2.6.5.5.9.8 1.3.8z" style="fill:var(--x-ffe2b8)"/></svg><b id="stN">12</b><small>day streak</small></button>
+          <button class="a bell press in" style="--i:0" aria-label="Notifications" onclick="location.href='extras.html#alerts'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5a6 6 0 0 1 12 0c0 5.5 2 7 2 7H4s2-1.5 2-7z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg></button>
+          <a class="a avatar press in" style="--i:0" aria-label="Profile and settings" href="settings.html"><img src="photos/avatar.jpg" alt=""></a>
+          <div class="a name in" style="--i:1" id="greet">Good morning, <b>Parker</b></div>
+
+          <!-- Nutrition -->
+          <section class="card green nutri in" style="--i:2"></section>
+          <div class="a ring in" style="--i:3" id="ringBox">
+            <svg viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="74" style="fill:rgba(var(--r-040c0e),.88)"/>
+              <circle class="ring-fill" id="ring" cx="80" cy="80" r="69" fill="none" stroke="var(--mint)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 434" transform="rotate(-90 80 80)"/></svg>
+            <div class="p"><span id="pctR">0</span>%</div>
+          </div>
+          <div class="a kcalrow in" style="--i:2"><span class="kcal num" id="kcal">0</span><span class="kcal-u">kcal</span></div>
+          <div class="a of in" style="--i:2">of <span id="gK">2,800</span><b style="display:none"><span id="pctT">0</span>%</b></div>
+          <div class="bar calbar in" style="--i:2"><i id="bK"></i></div>
+
+          <svg class="mi in" style="left:86px;top:650px;--i:3;color:var(--protein)" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg>
+          <div class="a mlabel in" style="left:134px;top:658px;--i:3">Protein</div>
+          <div class="a in" style="left:86px;top:702px;--i:3"><span class="mval num" id="mP">0</span><span class="mval">g</span><span class="mof" style="margin-left:10px" id="xP">/ 180g</span></div>
+          <div class="bar mbar in" style="left:86px;top:770px;width:240px;--i:3"><i id="bP" style="background:var(--protein)"></i></div>
+          <div class="div in" style="left:362px;--i:3"></div>
+          <svg class="mi in" style="left:394px;top:650px;--i:3;color:var(--carbs)" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg>
+          <div class="a mlabel in" style="left:442px;top:658px;--i:3">Carbs</div>
+          <div class="a in" style="left:394px;top:702px;--i:3"><span class="mval num" id="mC">0</span><span class="mval">g</span><span class="mof" style="margin-left:10px" id="xC">/ 350g</span></div>
+          <div class="bar mbar in" style="left:394px;top:770px;width:240px;--i:3"><i id="bC" style="background:var(--carbs)"></i></div>
+          <div class="div in" style="left:670px;--i:3"></div>
+          <svg class="mi in" style="left:702px;top:650px;--i:3;color:var(--fat)" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg>
+          <div class="a mlabel in" style="left:750px;top:658px;--i:3">Fats</div>
+          <div class="a in" style="left:702px;top:702px;--i:3"><span class="mval num" id="mF">0</span><span class="mval">g</span><span class="mof" style="margin-left:10px" id="xF">/ 90g</span></div>
+          <div class="bar mbar in" style="left:702px;top:770px;width:240px;--i:3"><i id="bF" style="background:var(--fat)"></i></div>
+
+          <div class="shift">
+            <!-- Workout -->
+            <section class="workout in" style="--i:6">
+              <div class="wlabel">Today's workout</div>
+              <div class="a wtitle" id="wTitle">Upper Body Push</div>
+              <div class="wsub"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><i id="wMin">45 min</i></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><i id="wEx">5 exercises</i></span></div>
+              <a class="btn start" href="workout.html"><svg class="play" viewBox="0 0 22 24"><path d="M2 2.5v19a1 1 0 0 0 1.5.9l16.5-9.5a1 1 0 0 0 0-1.8L3.5 1.6A1 1 0 0 0 2 2.5z" fill="currentColor"/></svg><span id="wBtn">Start Workout</span><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M14 5l7 7-7 7"/></svg></a>
+            </section>
+
+            <!-- Pre-gym suggestion (training days only) -->
+            <a class="pregym press in" style="--i:7" id="preGym" href="meals.html#pregym" hidden>
+              <span class="pgi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span>
+              <span class="pgt"><small id="pgWhen">Pre-gym fuel · eat 30–60 min before</small><b id="pgName">Rice cakes, banana &amp; honey</b><span id="pgMac">270 kcal · 64g carbs</span></span>
+              <svg class="chev" viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg>
+            </a>
+
+            <!-- Today's meals -->
+            <section class="card meals in" style="--i:8">
+              <div class="mh">Today's meals</div>
+              <a class="mr press" href="food.html"><img src="photos/yoghurt.jpg" alt="Greek yoghurt and berries"><div class="mt"><div class="mtop"><b>Greek yoghurt</b><span class="mtime">8:10am</span></div><div class="mk num"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/></svg>260<small>kcal</small></div><div class="mm num"><span class="p"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg>24g</span><span class="c"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg>28g</span><span class="f"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg>5g</span></div></div></a>
+              <a class="mr press" href="food.html"><img src="photos/smoothie.jpg" alt="Berry protein smoothie"><div class="mt"><div class="mtop"><b>Protein smoothie</b><span class="mtime">10:30am</span></div><div class="mk num"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/></svg>240<small>kcal</small></div><div class="mm num"><span class="p"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg>30g</span><span class="c"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg>22g</span><span class="f"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg>4g</span></div></div></a>
+              <a class="mr press" href="food.html"><img src="photos/tunawrap.jpg" alt="Tuna wrap and side salad"><div class="mt"><div class="mtop"><b>Tuna wrap</b><span class="mtime">12:45pm</span></div><div class="mk num"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/></svg>420<small>kcal</small></div><div class="mm num"><span class="p"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg>32g</span><span class="c"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg>44g</span><span class="f"><svg class="bd " viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg>12g</span></div></div></a>
+              <a class="mr add press" href="scan.html"><span class="mph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span><b>Add meal</b></a>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer">
+        <div class="streak-bg" id="streakBg"></div>
+        <div class="streak-card" id="streakCard" role="dialog" aria-label="Your streak">
+          <div class="between">
+            <div><div class="lbl" style="color:var(--x-ffc9a3)">Your streak</div><div class="big" style="margin-top:16px"><span id="stN2">12</span> <span style="font-size:40px;letter-spacing:0;font-weight:500;color:var(--x-e9c9b2)">days</span></div></div>
+            <svg class="flame" viewBox="0 0 24 24" style="fill:var(--x-ff9f5a)"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/><path d="M12 13.5c.5 1.6 2.3 2.2 2.3 4a2.3 2.3 0 0 1-4.6 0c0-1.2.8-1.7 1-2.6.5.5.9.8 1.3.8z" style="fill:var(--x-ffe2b8)"/></svg>
+          </div>
+          <div class="week7">
+            <div>M<i class="y">✓</i></div><div>T<i class="y">✓</i></div><div>W<i class="t">?</i></div><div>T<i></i></div><div>F<i></i></div><div>S<i></i></div><div>S<i></i></div>
+          </div>
+          <div class="ms"><div class="got"><b>7</b>days ✓</div><div><b>14</b>2 to go</div><div><b>30</b>18 to go</div><div><b>100</b>legend</div></div>
+          <div class="freeze"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v20M4 7l16 10M20 7L4 17M9 4l3 2 3-2M9 20l3-2 3 2"/></svg><span><b>1 streak freeze ready.</b> Miss a day and it saves your streak automatically.</span></div>
+          <button class="btn wide" style="margin-top:28px" id="streakClose">Log today to make it 13</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+
+<script src="js/plan.js"></script>
+<script src="js/fk.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var GOAL = FKPlan.get().kcal, MAX = FKPlan.macros(), T = /[?&]new=1/.test(location.search) ? { k: 0, p: 0, c: 0, f: 0 } : { k: 1842, p: 142, c: 168, f: 58 }, shown = { k: 0, p: 0, c: 0, f: 0, pct: 0 }, goalHit = false;
+
+  function paint() {
+    var pct = Math.round(T.k / GOAL * 100);
+    FK.count($('kcal'), shown.k, T.k, 1400); FK.count($('pctT'), shown.pct, pct, 1400); FK.count($('pctR'), shown.pct, pct, 1400);
+    FK.count($('mP'), shown.p, T.p, 1300); FK.count($('mC'), shown.c, T.c, 1300); FK.count($('mF'), shown.f, T.f, 1300);
+    shown = { k: T.k, p: T.p, c: T.c, f: T.f, pct: pct };
+    FK.ring($('ring'), T.k / GOAL);
+    $('bK').style.width = Math.min(100, T.k / GOAL * 100) + '%';
+    $('bP').style.width = Math.min(100, T.p / MAX.p * 100) + '%';
+    $('bC').style.width = Math.min(100, T.c / MAX.c * 100) + '%';
+    $('bF').style.width = Math.min(100, T.f / MAX.f * 100) + '%';
+    // Milestone: calorie goal hit → the ring glows and a neon burst goes off
+    if (!goalHit && T.k >= GOAL) {
+      goalHit = true;
+      setTimeout(function () { $('ringBox').classList.add('hit'); FK.burst(822, 504); FK.toast('Calorie goal hit. Nice work!'); }, 1300);
+    }
+  }
+
+  // Streak card
+  var app = $('app');
+  $('streakBtn').onclick = function () { app.classList.add('streak-open'); };
+  $('streakBg').onclick = $('streakClose').onclick = function () { app.classList.remove('streak-open'); };
+
+  if (/[?&]new=1/.test(location.search)) {
+    var ms = document.querySelector('.meals');
+    ms.innerHTML = '<div class="mh">Today\u2019s meals</div><a class="first press" href="scan.html"><span class="fc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.5"/></svg></span><b>Log your first meal</b><span>Snap a photo and Forkout works out the calories and macros.</span><em>Scan a meal</em></a>';
+    var sub = document.getElementById('greet'); }
+
+  // LIVE: your real meals today (demo numbers above are only for the design preview)
+  if (FK.db && FK.db.live) {
+    T = { k: 0, p: 0, c: 0, f: 0 };
+    var tpl = document.querySelector('.meals .mr:not(.add)'), ms = document.querySelector('.meals');
+    var PLATE = '<span class="mph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/></svg></span>';
+    var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    Promise.all([FK.store.meals(), FK.store.profile()]).then(function (r) {
+      var list = r[0], prof = r[1], t = FK.store.totals(list);
+      T = { k: t.kcal, p: t.protein, c: t.carbs, f: t.fat }; GOAL = FKPlan.get().kcal; MAX = FKPlan.macros();
+      var gr = document.getElementById('greet');
+      gr.innerHTML = prof.name ? gr.innerHTML.replace(/<b>.*<\/b>/, '<b>' + esc(prof.name.split(' ')[0]) + '</b>') : gr.innerHTML.replace(/,\s*<b>.*<\/b>/, '');
+      if (!list.length) {
+        ms.innerHTML = '<div class="mh">Today’s meals</div><a class="first press" href="scan.html"><span class="fc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3.5"/></svg></span><b>Log your first meal</b><span>Snap a photo and Forkout works out the calories and macros.</span><em>Scan a meal</em></a>';
+      } else {
+        ms.querySelectorAll('.mr:not(.add)').forEach(function (m) { m.remove(); });
+        var add = ms.querySelector('.mr.add');
+        list.slice(-4).forEach(function (m) {
+          var c = tpl.cloneNode(true), img = c.querySelector('img'); img.insertAdjacentHTML('beforebegin', PLATE); img.remove();
+          c.querySelector('.mtop b').textContent = m.name;
+          c.querySelector('.mtime').textContent = new Date(m.eaten_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).replace(' ', '').toLowerCase();
+          c.querySelector('.mk').lastChild.previousSibling.textContent = Math.round(m.kcal);
+          [['.p', m.protein], ['.c', m.carbs], ['.f', m.fat]].forEach(function (x) { c.querySelector('.mm ' + x[0]).lastChild.textContent = Math.round(x[1]) + 'g'; });
+          ms.insertBefore(c, add);
+        });
+      }
+      try { document.getElementById('gK').textContent = GOAL.toLocaleString('en-US'); var MX = MAX; document.getElementById('xP').textContent = '/ ' + MX.p + 'g'; document.getElementById('xC').textContent = '/ ' + MX.c + 'g'; document.getElementById('xF').textContent = '/ ' + MX.f + 'g'; } catch (e) {}
+      paint();
+    }, function (e) { FK.toast(FK.db.friendly ? FK.db.friendly(e) : 'Could not load today'); });
+    FK.ready();
+  } else FK.ready(paint);
+})();
+
+  (function () {
+    try { var sn = FKPlan.streak(); document.getElementById('stN').textContent = sn; document.getElementById('stN2').textContent = sn; document.getElementById('streakBtn').setAttribute('aria-label', sn + '-day streak'); } catch (e) {}
+    try { var MX = FKPlan.macros(); document.getElementById('xP').textContent = '/ ' + MX.p + 'g'; document.getElementById('xC').textContent = '/ ' + MX.c + 'g'; document.getElementById('xF').textContent = '/ ' + MX.f + 'g'; } catch (e) {}
+    document.getElementById('gK').textContent = FKPlan.get().kcal.toLocaleString('en-US');
+    var d = new Date(), hr = d.getHours();
+    var g = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greet').innerHTML = g + ', <b>Parker</b>';
+    var w = FKPlan.week()[FKPlan.today()], rest = w.rest;
+    document.getElementById('wTitle').textContent = rest ? 'Rest day' : w.name;
+    document.getElementById('wMin').textContent = rest ? '10 min' : w.min + ' min';
+    document.getElementById('wEx').textContent = rest ? 'Easy mobility' : w.ex + ' exercises';
+    document.getElementById('wBtn').textContent = rest ? 'Stretch' : 'Start Workout';
+    var TT = FKPlan.timeFor(FKPlan.get(), FKPlan.today()), nowH = new Date().getHours() + new Date().getMinutes() / 60;
+    if (!rest && !/[?&]new=1/.test(location.search) && nowH < TT + 0.5) {
+      var eat = TT - (TT <= 7 ? 0.5 : 1), eh = Math.floor(eat), em = Math.round((eat - eh) * 60);
+      document.getElementById('pgWhen').textContent = 'Pre-gym fuel \u00b7 training ' + FKPlan.hm(TT) + ', eat by ' + FKPlan.hm(eat);
+      var PG = [['Rice cakes, banana & honey', '270 kcal \u00b7 64g carbs'], ['Honey toast & banana', '340 kcal \u00b7 74g carbs'], ['Banana honey oats', '420 kcal \u00b7 79g carbs'], ['Crumpets & honey', '240 kcal \u00b7 50g carbs'], ['Bagel & jam', '280 kcal \u00b7 58g carbs']][new Date().getDay() % 5];
+      document.getElementById('pgName').textContent = PG[0]; document.getElementById('pgMac').textContent = PG[1];
+      document.getElementById('preGym').hidden = false; document.querySelector('.shift').classList.add('hasPre');
+      var cv = document.getElementById('canvas'); cv.style.height = '2720px'; cv.style.minHeight = '2720px';
+    }
+  })();
+</script>
+</body>
+</html>

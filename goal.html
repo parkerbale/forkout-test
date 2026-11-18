@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Your goal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:2700px;min-height:2700px!important}</style>
+</head>
+<body class="solidtop" data-tab="none" data-title="Your goal" data-note="Change your weight and goal weight, pick a pace (slow, steady or fast) and see your new daily calories and macros.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="top in" style="--i:0;justify-content:flex-start"><a class="ibtn press" href="settings.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1 class="ttl" style="margin:0 0 0 22px">Your goal</h1></div>
+        <section class="c in" style="--i:1;margin-top:0">
+          <div class="gw2">
+            <div><span class="k">Current weight</span><div class="sv"><button class="pm press" data-k="weight" data-d="-0.5" aria-label="Less">−</button><b class="num"><span id="vW">80.6</span><small>kg</small></b><button class="pm press" data-k="weight" data-d="0.5" aria-label="More">+</button></div></div>
+            <div><span class="k">Goal weight</span><div class="sv"><button class="pm press" data-k="goalW" data-d="-0.5" aria-label="Less">−</button><b class="num"><span id="vG">80.6</span><small>kg</small></b><button class="pm press" data-k="goalW" data-d="0.5" aria-label="More">+</button></div></div>
+          </div>
+          <div class="gdiff" id="gDiff">Maintain your weight</div>
+        </section>
+        <section class="c in" style="--i:2" id="paceCard">
+          <div class="qh">How fast do you want to get there?</div>
+          <div class="pace" id="pace">
+            <button data-v="slow"><span class="pe">🐢</span><b>Slow</b><small id="r_slow">0.25 kg/wk</small></button>
+            <button data-v="steady"><span class="pe">🐇</span><b>Steady</b><small id="r_steady">0.5 kg/wk</small></button>
+            <button data-v="fast"><span class="pe">🐆</span><b>Fast</b><small id="r_fast">0.75 kg/wk</small></button>
+          </div>
+          <div class="when" id="gWhen">Reach 80.6 kg around August 2027</div>
+        </section>
+        <section class="c in" style="--i:3">
+          <div class="qh">Your new daily targets</div>
+          <div class="tk"><b class="num" id="tK">2,800</b><span>kcal a day</span><em id="tD"></em></div>
+          <div class="tm"><div><span class="ic p"><svg class="bd" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg></span><b class="num" id="tP">160g</b><small>Protein</small></div><div><span class="ic cc"><svg class="bd" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg></span><b class="num" id="tC">350g</b><small>Carbs</small></div><div><span class="ic f"><svg class="bd" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".18"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg></span><b class="num" id="tF">80g</b><small>Fat</small></div></div>
+        </section>
+        <section class="c expect in" style="--i:4" id="expect"><div class="qh" id="eT">What to expect</div><ul id="eL"></ul></section>
+        <p class="gnote in" style="--i:5">These are estimates based on your weight, height and training. If you're planning a big change, check in with your doctor.</p>
+        <button class="btn wide press in" style="--i:5;margin-top:30px" id="gSave">Save goal</button>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var P = FKPlan.get(), before = P.kcal;
+  function f1(v) { return (Math.round(v * 10) / 10).toFixed(1).replace(/\.0$/, ''); }
+  var EXP = {
+    1: { slow: ['Most of what you gain will be muscle, not fat.', 'Easy to stick to: a small amount of extra food each day.', 'Stretch marks are unlikely at this pace.'],
+         steady: ['A good balance of muscle and some fat gain.', 'You’ll need to eat a bit more at every meal.', 'Low chance of stretch marks.'],
+         fast: ['More of the weight will be fat, not just muscle.', 'Stretch marks are more likely when you gain weight this quickly.', 'Eating this much can leave you feeling full and bloated.', 'You may need a cut later to lose the extra fat.'] },
+    '-1': { slow: ['You keep almost all your muscle and strength.', 'Easiest to stick to and to keep off.', 'Hunger stays manageable.'],
+         steady: ['Steady fat loss while keeping most of your muscle.', 'Some hunger, especially in the first two weeks.', 'Keep protein high to protect your strength.'],
+         fast: ['You may lose muscle as well as fat.', 'Expect lower energy in the gym and more hunger.', 'Loose skin and stretch marks are more likely with fast changes.', 'Fast losses are harder to keep off.'] } };
+  function draw() {
+    var r = FKPlan.calc(P), M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    $('vW').textContent = f1(P.weight); $('vG').textContent = f1(P.goalW);
+    $('gDiff').textContent = r.dir === 0 ? 'Maintain your weight' : (r.dir > 0 ? 'Gain ' : 'Lose ') + f1(Math.abs(r.diff)) + ' kg';
+    $('gDiff').className = 'gdiff' + (r.dir > 0 ? ' up' : r.dir < 0 ? ' down' : '');
+    $('paceCard').hidden = r.dir === 0; $('expect').hidden = r.dir === 0;
+    ['slow', 'steady', 'fast'].forEach(function (k) { $('r_' + k).textContent = FKPlan.PACE[k][r.dir < 0 ? 'lose' : 'gain'] + ' kg/wk'; });
+    document.querySelectorAll('#pace button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === P.pace)); });
+    if (r.dir) $('gWhen').innerHTML = 'Reach <b>' + f1(P.goalW) + ' kg</b> around <b>' + M[r.end.getMonth()] + ' ' + r.end.getFullYear() + '</b> · ' + r.weeks + ' weeks';
+    $('tK').textContent = r.kcal.toLocaleString('en-AU');
+    var d = r.kcal - before; $('tD').textContent = d ? (d > 0 ? '+' : '−') + Math.abs(d).toLocaleString('en-AU') + ' from now' : ''; $('tD').className = d > 0 ? 'up' : d < 0 ? 'down' : '';
+    $('tP').textContent = r.p + 'g'; $('tC').textContent = r.c + 'g'; $('tF').textContent = r.f + 'g';
+    if (r.dir) { var L = EXP[String(r.dir)][P.pace]; $('eT').textContent = P.pace === 'fast' ? 'Heads up: going fast' : 'What to expect'; $('expect').classList.toggle('warn', P.pace === 'fast'); $('eL').innerHTML = L.map(function (x) { return '<li>' + x + '</li>'; }).join(''); }
+    return r;
+  }
+  document.querySelectorAll('.pm').forEach(function (b) { b.onclick = function () { var k = b.dataset.k; P[k] = Math.max(35, Math.min(250, Math.round((P[k] + +b.dataset.d) * 10) / 10)); FK.haptic(6); draw(); }; });
+  $('pace').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; P.pace = b.dataset.v; FK.haptic(8); draw(); });
+  $('gSave').onclick = function () { var r = draw(); P.kcal = r.kcal; P.auto = false; P.macros = { p: r.p, c: r.c, f: r.f }; P.goal = r.dir > 0 ? 'Build muscle' : r.dir < 0 ? 'Lose fat' : P.goal; FKPlan.save(P); FK.toast('Goal saved · ' + r.kcal.toLocaleString('en-AU') + ' kcal a day'); setTimeout(function () { location.href = 'settings.html'; }, 900); };
+  draw();
+  FK.ready();
+})();
+</script>
+</body>
+</html>

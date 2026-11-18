@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Food AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.left{margin-top:40px;padding:36px}
+.left .big{font-size:96px;font-weight:700;letter-spacing:-2px;line-height:1}
+.left .big small{font-size:30px;font-weight:400;color:var(--x-e9edee);letter-spacing:0;margin-left:14px}
+.left p{margin:12px 0 0;font-size:24px;color:var(--muted)}
+.left p b{color:var(--protein);font-weight:500}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:6px;margin:34px 0 8px;background:linear-gradient(90deg,var(--mint) var(--p,69%),var(--x-29323b) var(--p,69%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:46px;height:46px;border-radius:50%;background:var(--x-ffffff);border:6px solid var(--acc);box-shadow:0 0 20px color-mix(in srgb,var(--acc) 60%,transparent)}
+input[type=range]::-moz-range-thumb{width:36px;height:36px;border-radius:50%;background:var(--x-ffffff);border:6px solid var(--acc)}
+.scale{display:flex;justify-content:space-between;font-size:19px;color:var(--dim)}
+.asks{margin-top:28px}
+.chat{display:flex;flex-direction:column;gap:20px;margin-top:34px}
+.bub b{font-weight:700}
+.mealc{border-radius:40px;overflow:hidden;animation:fkin .55s var(--ease) both}
+.mealc .ph{position:relative;height:360px;overflow:hidden}
+.mealc .ph img{width:100%;height:100%;object-fit:cover}
+.mealc .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.35))}
+.mealc .ph .time{position:absolute;left:24px;top:24px;z-index:1;padding:10px 18px;border-radius:20px;background:rgba(0,0,0,.55);color:#fff;font-size:20px;font-weight:600;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.mealc .ph .fit{position:absolute;right:24px;top:24px;z-index:1;padding:10px 18px;border-radius:20px;background:var(--acc);color:var(--on-acc);font-size:20px;font-weight:700}
+.mealc .bd{padding:30px 30px 26px}
+.mealc .hd{display:flex;align-items:center;gap:22px}
+.mealc .tile{flex:none;width:96px;height:96px;border-radius:28px;display:grid;place-items:center;background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.mealc .tile svg{width:48px;height:48px}
+.mealc h3{margin:0;font-size:34px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
+.mealc .meta{margin-top:6px;font-size:21px;color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.pills span{padding:10px 18px;border-radius:20px;background:rgba(var(--ink),.06);font-size:21px;font-weight:600}
+.ing{margin-top:18px;font-size:22px;color:var(--muted);line-height:1.45}
+.mbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.mbtns .btn{height:80px;padding:0 20px;font-size:24px}
+.another{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;height:56px;font-size:22px;font-weight:600;color:var(--muted)}
+.another svg{width:24px;height:24px}
+/* Recipe */
+.recipe{padding:32px;animation:fkin .5s var(--ease) both}
+.recipe .rhd{display:flex;align-items:center;justify-content:space-between}
+.recipe h4{margin:14px 0 0;font-size:32px;font-weight:700;letter-spacing:-.3px}
+.rmeta{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.rmeta span{padding:10px 18px;border-radius:20px;background:rgba(var(--ink),.06);font-size:20px;font-weight:600;color:var(--fg2)}
+.rings{display:grid;grid-template-columns:1fr 1fr;gap:4px 24px;margin-top:22px}
+.rings div{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:22px}
+.rings div b{font-weight:600;color:var(--muted);white-space:nowrap}
+.rsteps{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+.rs{display:flex;gap:20px;align-items:flex-start;padding:22px 24px;border-radius:28px;background:rgba(var(--ink),.035);border:1px solid var(--line);font-size:23px;line-height:1.45;color:var(--fg2);
+  opacity:0;transform:translateY(16px);transition:opacity .45s,transform .5s var(--ease)}
+.rs.on{opacity:1;transform:none}
+.rs>b{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:var(--on-acc);font-size:22px}
+.rs .tm{display:inline-flex;align-items:center;gap:8px;margin-top:12px;height:48px;padding:0 18px;border-radius:24px;background:var(--acc-soft);border:1px solid var(--acc-line);color:var(--acc);font-size:20px;font-weight:700}
+.rs .tm svg{width:22px;height:22px}
+/* Grocery plan */
+.gro{margin-top:60px;padding:36px}
+.gro .tot{display:flex;align-items:baseline;gap:14px;margin-top:20px}
+.gro .tot b{font-size:72px;font-weight:700;color:var(--mint);letter-spacing:-1.5px}
+.gro .tot span{font-size:24px;color:var(--muted)}
+.cat{margin-top:34px;font-size:19px;letter-spacing:3.6px;color:var(--muted);text-transform:uppercase}
+.gi{display:flex;align-items:center;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);font-size:24px;cursor:pointer}
+.gi .tick{width:52px;height:52px;border-radius:16px}
+.gi .tick svg{width:24px;height:24px}
+.gi span{flex:1}
+.gi small{color:var(--muted);margin-left:10px}
+.gi b{font-weight:600}
+.gi.got span{text-decoration:line-through;color:var(--dim)}
+.gro .btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
+</style>
+</head>
+<body data-tab="nutrition" data-title="Food AI · meal ideas" data-streak="1" data-note="Forkout AI knows what you have left. Ask at the bottom (or tap a chip). Every ask gives a different meal, sized to fit. Tap How to make it for the recipe.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <div class="head in">
+          <div><div class="k">Food AI</div><h1>Meal ideas</h1></div>
+          <a class="back press" href="food.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+        </div>
+
+        <section class="card green left in" style="--i:1">
+          <div class="lbl">Left for today</div>
+          <div class="big num" style="margin-top:20px"><span id="kOut">958</span><small>kcal</small></div>
+          <p><b>38g protein</b> to go · Forkout AI already knows, just ask</p>
+          <div class="bar" style="margin-top:26px;height:12px"><i style="width:66%"></i></div>
+          <div class="scale" style="margin-top:12px"><span>1,842 eaten</span><span>2,800 goal</span></div>
+        </section>
+
+        <div class="chips asks in" style="--i:2" role="group" aria-label="What to ask">
+          <button class="chip" data-q="easy" aria-pressed="false">Easy dinner</button>
+          <button class="chip" data-q="cheap" aria-pressed="false">Make it cheap</button>
+          <button class="chip" data-q="flavour" aria-pressed="false">Big flavour</button>
+        </div>
+
+        <div class="chat in" style="--i:3" id="chat" aria-live="polite"></div>
+
+
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  // Meal ideas. Every ask picks one you haven't seen lately, so it's different each time (remembered on this phone).
+  var MEALS = {
+    easy: [
+      { n: 'Honey-soy chicken stir-fry', t: 25, k: 920, p: 60, c: 98, f: 24, img: 'photos/stirfry.jpg', ing: 'Chicken, brown rice, broccoli, carrot, capsicum, snow peas, soy, honey, garlic',
+        r: [['Chicken breast', '200 g'], ['Brown rice (cooked)', '1½ cups'], ['Broccoli, carrot, capsicum', '2 cups'], ['Snow peas', '1 handful'], ['Soy sauce + honey', '2 tbsp + 1 tbsp'], ['Garlic, sesame seeds', '2 cloves, 1 tsp']],
+        s: [['Slice the chicken into bite-size pieces. Mix the soy, honey and crushed garlic in a cup.', 0], ['Stir-fry the chicken in a hot pan with a little oil until golden.', 6], ['Add the veg and a splash of water. Toss until bright and just tender.', 4], ['Pour in the sauce and let it bubble until sticky. Serve on the rice with sesame seeds.', 2]] },
+      { n: 'Chicken pesto pasta', t: 20, k: 880, p: 58, c: 96, f: 26, ing: 'Chicken breast, wholemeal pasta, pesto, cherry tomatoes, spinach, parmesan',
+        r: [['Wholemeal pasta (dry)', '100 g'], ['Chicken breast', '180 g'], ['Basil pesto', '1½ tbsp'], ['Cherry tomatoes', '1 cup'], ['Spinach', '2 handfuls'], ['Parmesan', '10 g']],
+        s: [['Boil the pasta in salted water.', 10], ['Meanwhile pan-fry the sliced chicken until cooked through.', 7], ['Add the tomatoes and spinach for the last minute until the spinach wilts.', 1], ['Toss everything with the pesto and a splash of pasta water. Top with parmesan.', 0]] },
+      { n: 'Teriyaki salmon rice bowl', t: 20, k: 780, p: 46, c: 84, f: 24, ing: 'Salmon, jasmine rice, edamame, cucumber, teriyaki, sesame',
+        r: [['Salmon fillet', '150 g'], ['Jasmine rice (cooked)', '1 cup'], ['Edamame', '½ cup'], ['Cucumber', '½'], ['Teriyaki sauce', '2 tbsp']],
+        s: [['Brush the salmon with half the teriyaki.', 0], ['Air-fry or bake at 200°C.', 10], ['Warm the edamame and slice the cucumber.', 2], ['Build the bowl: rice, salmon, veg, then drizzle the rest of the sauce.', 0]] },
+      { n: 'Grilled chicken & avo bowl', t: 20, k: 720, p: 62, c: 64, f: 22, img: 'photos/scan-bowl.jpg', ing: 'Chicken breast, white rice, avocado, broccoli, mixed greens',
+        r: [['Chicken breast', '180 g'], ['White rice (cooked)', '1 cup'], ['Avocado', '½'], ['Broccoli', '1 cup'], ['Mixed greens', '1 handful']],
+        s: [['Season the chicken with salt, pepper and paprika.', 0], ['Grill it in a hot pan, then rest and slice.', 8], ['Steam the broccoli.', 4], ['Build the bowl with rice, greens, broccoli, chicken and sliced avocado.', 0]] },
+      { n: 'Egg & feta omelette with toast', t: 10, k: 520, p: 38, c: 30, f: 26, ing: '3 eggs + 2 whites, feta, spinach, sourdough',
+        r: [['Eggs', '3 + 2 whites'], ['Feta', '25 g'], ['Spinach', '1 handful'], ['Sourdough', '1 slice']],
+        s: [['Whisk the eggs and whites with a pinch of salt.', 0], ['Wilt the spinach in a non-stick pan, pour in the eggs.', 3], ['Crumble in the feta, fold and serve with toast.', 1]] },
+      { n: 'Chicken & salad wrap', t: 10, k: 480, p: 42, c: 40, f: 14, img: 'photos/tunawrap.jpg', ing: 'Wholemeal wrap, chicken breast, lettuce, tomato, light mayo',
+        r: [['Wholemeal wrap', '1 large'], ['Cooked chicken breast', '130 g'], ['Lettuce, tomato', '1 handful'], ['Light mayo', '1 tbsp']],
+        s: [['Warm the wrap for a few seconds.', 0], ['Spread the mayo, add salad and sliced chicken.', 0], ['Roll it tight, cut in half and eat.', 0]] }
+    ],
+    cheap: [
+      { n: 'Chicken, rice & frozen veg', t: 20, k: 900, p: 62, c: 110, f: 18, img: 'photos/meal.jpg', cost: 'A$4.20', ing: 'Chicken thigh, rice, frozen mixed veg, soy',
+        r: [['Chicken thigh', '200 g'], ['Rice (dry)', '¾ cup'], ['Frozen mixed veg', '1½ cups'], ['Soy sauce', '1 tbsp']],
+        s: [['Cook the rice.', 12], ['Pan-fry the chicken thigh until golden and cooked through.', 8], ['Add the frozen veg and soy for the last few minutes.', 3], ['Serve the lot on the rice.', 0]] },
+      { n: 'Mince & potato bake', t: 35, k: 860, p: 55, c: 80, f: 30, cost: 'A$4.50', ing: 'Lean beef mince, potatoes, onion, passata, cheese',
+        r: [['Lean beef mince', '180 g'], ['Potatoes', '2 medium'], ['Onion', '½'], ['Passata', '½ cup'], ['Grated cheese', '20 g']],
+        s: [['Slice the potatoes thin and microwave until just soft.', 5], ['Brown the mince and onion, then stir in the passata.', 8], ['Layer potato over the mince, top with cheese.', 0], ['Bake at 200°C until golden.', 18]] },
+      { n: 'Tuna pasta bake', t: 25, k: 740, p: 48, c: 92, f: 16, cost: 'A$3.80', ing: 'Pasta, canned tuna, passata, frozen peas, cheese',
+        r: [['Pasta (dry)', '90 g'], ['Canned tuna', '1 tin'], ['Passata', '½ cup'], ['Frozen peas', '½ cup'], ['Cheese', '20 g']],
+        s: [['Boil the pasta with the peas for the last 2 minutes.', 10], ['Mix with the tuna and passata in a baking dish.', 0], ['Top with cheese and grill until bubbling.', 6]] },
+      { n: 'Chickpea & egg curry', t: 25, k: 680, p: 34, c: 78, f: 22, cost: 'A$3.10', ing: 'Chickpeas, eggs, curry paste, tinned tomatoes, rice',
+        r: [['Chickpeas', '1 tin'], ['Eggs', '2'], ['Curry paste', '1 tbsp'], ['Tinned tomatoes', '½ tin'], ['Rice (cooked)', '¾ cup']],
+        s: [['Boil the eggs.', 8], ['Fry the curry paste, add tomatoes and chickpeas, simmer.', 10], ['Halve the eggs, add them and serve on rice.', 0]] },
+      { n: 'Lentil & veg soup with toast', t: 30, k: 520, p: 30, c: 70, f: 10, cost: 'A$2.20', ing: 'Red lentils, carrot, onion, stock, wholemeal toast',
+        r: [['Red lentils (dry)', '½ cup'], ['Carrot, onion', '1 each'], ['Stock', '3 cups'], ['Wholemeal toast', '2 slices']],
+        s: [['Soften the chopped onion and carrot in a pot.', 5], ['Add lentils and stock, simmer until thick.', 20], ['Blend half for a creamy soup. Serve with toast.', 0]] },
+      { n: 'Eggs on toast with spinach', t: 10, k: 450, p: 28, c: 38, f: 18, cost: 'A$2.50', ing: '3 eggs, 2 slices wholemeal toast, spinach',
+        r: [['Eggs', '3'], ['Wholemeal bread', '2 slices'], ['Spinach', '1 handful']],
+        s: [['Toast the bread.', 2], ['Scramble or poach the eggs.', 4], ['Wilt the spinach in the same pan and pile it all on the toast.', 1]] }
+    ],
+    flavour: [
+      { n: 'Butter chicken (lighter)', t: 30, k: 930, p: 62, c: 96, f: 28, ing: 'Chicken, Greek yoghurt sauce, basmati rice, naan',
+        r: [['Chicken thigh', '200 g'], ['Butter chicken paste', '2 tbsp'], ['Greek yoghurt', '½ cup'], ['Basmati rice (cooked)', '1 cup'], ['Mini naan', '1']],
+        s: [['Brown the diced chicken.', 6], ['Stir in the paste, then a splash of water. Simmer.', 10], ['Take off the heat and stir through the yoghurt.', 0], ['Serve with rice and naan.', 0]] },
+      { n: 'Smash burger bowl', t: 20, k: 880, p: 60, c: 60, f: 38, ing: 'Lean beef, potato wedges, lettuce, pickles, burger sauce',
+        r: [['Lean beef mince', '180 g'], ['Potato wedges', '200 g'], ['Lettuce, pickles, onion', '1 cup'], ['Light burger sauce', '1 tbsp']],
+        s: [['Air-fry the wedges.', 15], ['Smash the beef into thin patties in a very hot pan.', 4], ['Chop, then pile on lettuce with pickles, wedges and sauce.', 0]] },
+      { n: 'Korean beef rice bowl', t: 20, k: 790, p: 50, c: 88, f: 24, ing: 'Lean beef, gochujang, rice, cucumber, sesame, spring onion',
+        r: [['Lean beef strips', '160 g'], ['Gochujang + soy', '1 tbsp each'], ['Rice (cooked)', '1 cup'], ['Cucumber, spring onion', '½ cup']],
+        s: [['Toss the beef in gochujang and soy.', 0], ['Sear it fast in a very hot pan.', 4], ['Serve on rice with cucumber, spring onion and sesame.', 0]] },
+      { n: 'Peri-peri chicken & corn', t: 25, k: 720, p: 58, c: 62, f: 20, ing: 'Chicken thigh, peri-peri, corn cob, rice, slaw',
+        r: [['Chicken thigh', '200 g'], ['Peri-peri marinade', '2 tbsp'], ['Corn cob', '1'], ['Slaw', '1 cup']],
+        s: [['Rub the chicken with peri-peri.', 0], ['Grill or air-fry the chicken and corn.', 18], ['Serve with slaw and a squeeze of lemon.', 0]] },
+      { n: 'Spicy prawn tacos', t: 15, k: 520, p: 36, c: 48, f: 18, ing: 'Prawns, corn tortillas, slaw, chipotle yoghurt, lime',
+        r: [['Raw prawns', '150 g'], ['Corn tortillas', '3'], ['Slaw', '1 cup'], ['Chipotle + yoghurt', '1 tsp + 3 tbsp']],
+        s: [['Season the prawns with paprika and chilli.', 0], ['Cook them in a hot pan until pink.', 3], ['Fill warm tortillas with slaw, prawns and chipotle yoghurt.', 0]] },
+      { n: 'Thai chicken lettuce cups', t: 15, k: 480, p: 44, c: 22, f: 20, ing: 'Chicken mince, lettuce, chilli, lime, fish sauce, herbs',
+        r: [['Chicken mince', '180 g'], ['Baby cos leaves', '6'], ['Lime, fish sauce, chilli', 'to taste'], ['Mint, coriander', '1 handful']],
+        s: [['Brown the mince with garlic and chilli.', 6], ['Season with lime and fish sauce, stir in the herbs.', 0], ['Spoon into lettuce cups.', 0]] }
+    ]
+  };
+  var QTXT = { easy: 'Easy high protein dinner?', cheap: 'Something cheap that fits?', flavour: 'Something with big flavour?' };
+  var Q = 'easy', n = 0, seen = [];
+  try { seen = JSON.parse(localStorage.getItem('fk-seen-meals') || '[]'); } catch (e) {}
+  var BOWL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18a9 6.5 0 0 1-18 0z"/><path d="M6.5 12c.5-2 2-3 3.5-3M12 12c0-2.5 1.5-3.8 3.5-4M8.5 7.5l1-2.5M14 6l1.5-2"/></svg>';
+  var CLOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>';
+  var AGAIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></svg>';
+
+  // Scales every amount in an ingredient line ("200 g" → "240 g", "1½ cups" → "1¾ cups")
+  var FR = { '½': .5, '¼': .25, '¾': .75 };
+  function frac(v, grams) {
+    if (grams) return String(Math.max(5, Math.round(v / 5) * 5));
+    var q = Math.max(.25, Math.round(v * 4) / 4), w = Math.floor(q), r = q - w;
+    return ((w ? String(w) : '') + (r === .25 ? '¼' : r === .5 ? '½' : r === .75 ? '¾' : '')) || '¼';
+  }
+  function scaleAmt(txt, x) {
+    if (Math.abs(x - 1) < .02 || /taste/.test(txt)) return txt;
+    return txt.replace(/(\d+(?:\.\d+)?)?([½¼¾])?(\s*)(g\b|ml\b)?/g, function (all, num, fr, sp, unit) {
+      if (!num && !fr) return all;
+      return frac(((num ? +num : 0) + (fr ? FR[fr] : 0)) * x, !!unit) + sp + (unit || '');
+    });
+  }
+  // The AI sizes the portion so the meal lands right on what's left (just under)
+  function fit(m, kc) {
+    var target = kc - Math.min(25, Math.round(kc * .025)), x = Math.max(.5, Math.min(2.5, Math.round(target / m.k * 100) / 100));
+    var o = {}; for (var k in m) o[k] = m[k];
+    o.x = x; o.k = Math.round(m.k * x / 5) * 5; o.p = Math.round(m.p * x); o.c = Math.round(m.c * x); o.f = Math.round(m.f * x);
+    o.r = m.r.map(function (it) { return [it[0], scaleAmt(it[1], x)]; });
+    return o;
+  }
+  // A meal you haven't seen lately (the one that naturally fits best first), sized to your calories.
+  function pick(kc, q) {
+    var byFit = MEALS[q].slice().sort(function (a, b) { return Math.abs(a.k - kc) - Math.abs(b.k - kc); });
+    var fresh = byFit.filter(function (m) { return seen.indexOf(m.n) < 0; });
+    if (!fresh.length) { seen = seen.filter(function (x) { return !byFit.some(function (m) { return m.n === x; }); }); fresh = byFit; }
+    var m = fresh[0]; seen.push(m.n); seen = seen.slice(-14);
+    try { localStorage.setItem('fk-seen-meals', JSON.stringify(seen)); } catch (e) {}
+    return fit(m, kc);
+  }
+  function addBubble(cls, html) { var el = document.createElement('div'); el.className = cls; el.innerHTML = html; $('chat').appendChild(el); return el; }
+  function aiSays(html, then) {
+    var t = addBubble('typing', '<i></i><i></i><i></i>'); FK.scrollTo(t, 700);
+    setTimeout(function () { t.remove(); var h = addBubble('aihead', '<span class="aiorb"></span>Forkout AI'); addBubble('bub ai', html); if (then) then(h); }, FK.reduce ? 0 : 850);
+  }
+  function card(m, kc) {
+    var id = 'm' + (++n);
+    var sized = Math.abs(m.x - 1) >= .05;
+    var el = addBubble('card mealc', '<div class="bd"><div class="hd"><span class="tile">' + BOWL + '</span>' +
+      '<div><h3>' + m.n + '</h3><div class="meta">' + m.t + ' min' + (m.cost ? ' · about ' + m.cost : '') + (sized ? ' · ' + m.x.toFixed(1) + '× portion to fit' : '') + '</div></div></div>' +
+      '<div class="pills"><span>' + m.k + ' kcal</span><span style="color:var(--protein)">P ' + m.p + 'g</span><span style="color:var(--carbs)">C ' + m.c + 'g</span><span style="color:var(--fat)">F ' + m.f + 'g</span></div>' +
+      '<div class="ing">' + m.ing + '</div>' +
+      '<div class="mbtns"><button class="btn dark" data-act="how" id="how' + n + '">How to make it</button><button class="btn" data-act="add" id="add' + n + '">Add to dinner</button></div>' +
+      '<button class="another" data-act="again">' + AGAIN + 'Something else</button></div>');
+    el.querySelector('[data-act=add]').onclick = function () { this.textContent = 'Added ✓'; this.disabled = true; FK.burst(512, 1500); toast(m.n + ' added to dinner'); };
+    el.querySelector('[data-act=how]').onclick = function () { this.disabled = true; this.style.opacity = .5; recipe(m); };
+    el.querySelector('[data-act=again]').onclick = function () { ask('Something else?', kc, Q); };
+    if (!window.addDinner) window.addDinner = function () { el.querySelector('[data-act=add]').click(); };
+    return el;
+  }
+  // Step-by-step recipe, written out by the AI
+  function recipe(m) {
+    addBubble('bub me', 'How do I make it?');
+    aiSays('Here\'s how. About <b>' + m.t + ' minutes</b>, one pan where it can be.', function () {
+      var el = addBubble('card recipe', '<div class="rhd"><span class="lbl acc">Recipe · ' + (Math.abs(m.x - 1) < .05 ? '1 serve' : 'sized to fit') + '</span><span class="lbl">' + m.k + ' kcal</span></div><h4>' + m.n + '</h4>' +
+        '<div class="rmeta"><span>⏱ ' + m.t + ' min</span><span style="color:var(--protein)">' + m.p + 'g protein</span>' + (m.cost ? '<span>about ' + m.cost + '</span>' : '') + '</div>' +
+        '<div class="rings">' + m.r.map(function (x) { return '<div><span>' + x[0] + '</span><b>' + x[1] + '</b></div>'; }).join('') + '</div>' +
+        '<div class="rsteps">' + m.s.map(function (x, i) { return '<div class="rs"><b>' + (i + 1) + '</b><div>' + x[0] + (x[1] ? '<br><button class="tm" data-min="' + x[1] + '">' + CLOCK + x[1] + ' min timer</button>' : '') + '</div></div>'; }).join('') + '</div>');
+      el.querySelectorAll('.rs').forEach(function (r, i) { setTimeout(function () { r.classList.add('on'); }, FK.reduce ? 0 : 250 + i * 260); });
+      el.querySelectorAll('.tm').forEach(function (b) { b.onclick = function () { toast('Timer set: ' + b.dataset.min + ' min. We\'ll buzz you.'); FK.haptic([10, 30, 10]); }; });
+      setTimeout(function () { FK.scrollTo(el, 160); }, 150);
+    });
+  }
+  // Read what you typed: a number sets the calories, words pick the kind of meal
+  function parse(txt) {
+    var num = /(\d{3,4})/.exec(txt.replace(',', '')), kc = num ? Math.max(300, Math.min(1500, +num[1])) : LEFT;
+    var t = txt.toLowerCase(), q = /cheap|budget|\$|save/.test(t) ? 'cheap' : /flavou?r|spicy|tasty|treat/.test(t) ? 'flavour' : /something else|another/.test(t) ? Q : 'easy';
+    return { kc: kc, q: q };
+  }
+  function ask(txt, kc, q) {
+    Q = q; document.querySelectorAll('.asks .chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.q === q)); });
+    var me = addBubble('bub me', txt); FK.scrollTo(me, 500);
+    var m = pick(kc, q);
+    aiSays('<b>' + m.n + '</b> lands right on your number: <b>' + m.k + ' of ' + kc + ' kcal</b>, with ' + m.p + 'g protein. Ready in ' + m.t + ' min.', function () {
+      var c = card(m, kc); setTimeout(function () { FK.scrollTo(c, 200); }, 100);
+    });
+  }
+  var bar = FK.askbar({ placeholder: 'Tell Forkout AI what you want…', onSend: function (txt) { var p = parse(txt); ask(txt, p.kc, p.q); } });
+  var LEFT = 958; // the app already knows what's left today
+  document.querySelectorAll('.asks .chip').forEach(function (b) {
+    b.onclick = function () { bar.type(QTXT[b.dataset.q], 22); };
+  });
+  // Greeting
+  addBubble('aihead', '<span class="aiorb"></span>Forkout AI');
+  var hello = addBubble('bub ai', 'Hey Parker. You\'ve got <b>958 kcal</b> and <b>38g protein</b> left today. Tell me what you feel like and I\'ll find a dinner that fits.');
+
+  // ---------- Live mode: real Forkout AI meal ideas (demo mode keeps the built-in meals above) ----------
+  if (FK.api && FK.api.live) {
+    var busy = false;
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    FK.api.chatContext().then(function (c) {
+      LEFT = Math.max(0, (c.kcal_goal || 0) - (c.kcal_eaten || 0));
+      var pl = Math.max(0, (c.protein_goal || 0) - (c.protein_eaten || 0));
+      hello.innerHTML = 'Hey' + (c.name ? ' ' + esc(c.name.split(' ')[0]) : '') + '. You\'ve got <b>' + LEFT.toLocaleString('en-AU') + ' kcal</b> and <b>' + pl + 'g protein</b> left today. Tell me what you feel like and I\'ll find a meal that fits.';
+    }).catch(function () {});
+    FK.api.chatHistory('food', 12).catch(function () {}); // so "something else" knows what it already suggested
+    function slotNow() { var h = new Date().getHours(); return h < 11 ? 'Breakfast' : h < 15 ? 'Lunch' : h < 21 ? 'Dinner' : 'Snack'; }
+    // The AI's meal in the shape this screen's card + recipe use. Every word is escaped first,
+    // because card() and recipe() build HTML from these (the AI's text must never become code).
+    function shape(m) {
+      return { raw: m, n: esc(m.name), t: m.minutes, k: m.kcal, p: m.protein, c: m.carbs, f: m.fat, x: 1, cost: m.cost_aud ? 'A$' + m.cost_aud.toFixed(2) : '',
+        ing: esc(m.ingredients.map(function (i) { return i.item; }).join(', ')), r: m.ingredients.map(function (i) { return [esc(i.item), esc(i.amount)]; }), s: m.steps.map(function (s) { return [esc(s.text), s.timer_min]; }) };
+    }
+    ask = function (txt, kc, q) {
+      if (busy) return; busy = true;
+      Q = q; document.querySelectorAll('.asks .chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.q === q)); });
+      var me = addBubble('bub me', ''); me.textContent = txt; FK.scrollTo(me, 500);
+      var t = addBubble('typing', '<i></i><i></i><i></i>'); FK.scrollTo(t, 700);
+      FK.api.chat('food', txt).then(function (r) {
+        t.remove(); addBubble('aihead', '<span class="aiorb"></span>Forkout AI'); addBubble('bub ai', FK.api.fmt(r.reply));
+        if (!r.meal) return;
+        var m = shape(r.meal), el = card(m, LEFT);
+        var add = el.querySelector('[data-act=add]'); add.textContent = 'Add to ' + slotNow().toLowerCase();
+        add.onclick = function () {
+          var b = this; b.disabled = true;
+          FK.store.addMeal({ name: m.raw.name, kcal: m.k, protein: m.p, carbs: m.c, fat: m.f, slot: slotNow(), source: 'ai', items: m.raw.ingredients.map(function (i) { return { name: i.item + ' (' + i.amount + ')' }; }) })
+            .then(function () { b.textContent = 'Added ✓'; FK.burst(512, 1500); toast(m.raw.name + ' added'); try { FKPlan.logMeal(); } catch (e) {} LEFT = Math.max(0, LEFT - m.k); },
+              function (e) { b.disabled = false; toast(e.message || 'Couldn’t add it. Try again.'); });
+        };
+        setTimeout(function () { FK.scrollTo(el, 200); }, 100);
+      }, function (e) {
+        t.remove(); var b = addBubble('bub ai', ''); b.textContent = e.message || 'Something went wrong. Try again.';
+      }).then(function () { busy = false; });
+    };
+  }
+
+  FK.ready();
+})();
+</script>
+</body>
+</html>

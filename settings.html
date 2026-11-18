@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.prof{display:flex;align-items:center;gap:28px;margin-top:40px;padding:30px}
+.prof img{width:120px;height:120px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--acc-line)}
+.prof b{display:block;font-size:36px}
+.prof span{display:block;font-size:22px;color:var(--muted);margin-top:8px}
+.prof .pro{display:inline-flex;margin-top:12px;padding:8px 16px;border-radius:14px;background:var(--acc-soft);color:var(--acc);font-size:18px;font-weight:700;letter-spacing:1px}
+.sec{margin:48px 6px 16px}
+.group{border-radius:36px;overflow:hidden}
+.item{display:flex;align-items:center;gap:22px;padding:24px 28px;border-bottom:1px solid var(--line);font-size:24px;width:100%;text-align:left}
+.item:last-child{border:0}
+.item .ico{width:56px;height:56px;border-radius:18px}
+.item .val{margin-left:auto;color:var(--muted);font-size:22px;display:flex;align-items:center;gap:12px}
+.item .val svg{width:16px;height:22px}
+.sw{position:relative;margin-left:auto;width:96px;height:56px;border-radius:28px;background:rgba(var(--ink),.12);transition:background-color .25s;flex:none}
+.sw::after{content:"";position:absolute;left:5px;top:5px;width:46px;height:46px;border-radius:50%;background:#fff;transition:transform .3s var(--spring);box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.sw[aria-checked="true"]{background:var(--acc)}
+.sw[aria-checked="true"]::after{transform:translateX(40px)}
+.looks{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;padding:30px}
+.looks button{display:flex;flex-direction:column;align-items:center;gap:16px;font-size:23px;font-weight:600;color:var(--muted)}
+.looks button[aria-pressed="true"]{color:var(--fg)}
+.mini{position:relative;width:100%;height:250px;border-radius:30px;padding:26px;display:flex;flex-direction:column;gap:14px;box-shadow:0 0 0 2px var(--line2);transition:box-shadow .25s,transform .3s var(--spring)}
+.looks button[aria-pressed="true"] .mini{box-shadow:0 0 0 4px var(--acc);transform:scale(1.02)}
+.mini.d{background:linear-gradient(180deg,#0B1418,#03070A)}.mini.l{background:linear-gradient(180deg,#FFFFFF,#EEF3F1)}
+.mini i{display:block;height:16px;border-radius:8px;background:currentColor;opacity:.9}
+.mini.d i{color:#2A3439}.mini.l i{color:#DDE5E2}
+.mini i.k{width:46%;height:22px}.mini i.r{margin-top:auto;width:62px;height:62px;border-radius:50%;background:none;border:9px solid #B7F2A3;opacity:1}
+.mini.l i.r{border-color:#2DB062}
+.mini .tk{position:absolute;right:20px;top:20px;width:44px;height:44px;border-radius:50%;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;opacity:0;transform:scale(.5);transition:opacity .2s,transform .3s var(--spring)}
+.mini .tk svg{width:26px;height:26px}
+.mini{height:340px!important;padding:24px!important;gap:16px!important;overflow:hidden;position:relative}
+.mini.d{background:#0E1113!important}.mini.l{background:#F4F5F2!important}
+.mini .hd{display:block;height:14px;width:40%;border-radius:7px;background:currentColor}
+.mini.d .hd{color:#3A4246}.mini.l .hd{color:#C9CEC8}
+.mini .ring{display:block;width:92px;height:92px;border-radius:50%;border:12px solid;margin:6px 0}
+.mini.d .ring{border-color:#BCD98A #2A3034 #2A3034 #BCD98A}.mini.l .ring{border-color:#648C3A #DADFD8 #DADFD8 #648C3A}
+.mini .bars{display:flex;gap:8px}.mini .bars i{flex:1;height:10px;border-radius:5px;opacity:1}
+.mini .cd{display:block;flex:1;border-radius:18px}
+.mini.d .cd{background:#1B2024}.mini.l .cd{background:#fff;box-shadow:0 0 0 1px #E3E6E1}
+
+.looks button[aria-pressed="true"] .tk{opacity:1;transform:none}
+.seg{display:flex;margin-left:auto;padding:5px;border-radius:26px;background:rgba(var(--ink),.06)}
+.seg button{height:46px;padding:0 22px;border-radius:22px;font-size:20px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--on-acc);font-weight:700}
+.danger{color:var(--red)}
+.mini.a{background:linear-gradient(90deg,#F4F5F2 50%,#0E1113 50%)!important}
+.mini.a .hd{color:#C9CEC8}.mini.a .ring{border-color:#648C3A #2A3034 #2A3034 #648C3A}.mini.a .cd{background:linear-gradient(90deg,#fff 50%,#1B2024 50%)}
+.looks .hint{grid-column:1/-1;font-size:21px;color:var(--muted);text-align:center;font-weight:500}
+.avw{position:relative;flex:none;cursor:pointer}
+.avw .cam{position:absolute;right:-12px;bottom:-6px;width:42px;height:42px;border-radius:50%;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;border:4px solid var(--bg)}
+.avw .cam svg{width:24px;height:24px}
+</style>
+</head>
+<body data-tab="" data-title="Settings" data-note="Switch between dark and light mode: the whole app changes (try it, then open another screen). Toggles and units work too.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <div class="head in"><div><div class="k">Profile</div><h1>Settings</h1></div>
+          <a class="back press" href="home.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a></div>
+
+        <section class="card prof in" style="--i:1"><label class="avw press" aria-label="Change profile photo"><img src="photos/avatar.jpg" alt="" id="avImg"><span class="cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span><input type="file" accept="image/*" id="avFile" hidden></label><div><b>Parker</b><span id="profSub">80.6 kg · 178 cm · Build muscle</span><span class="pro">FORKOUT PRO · YEARLY</span></div></section>
+
+        <div class="sec in" style="--i:2"><span class="lbl">Appearance</span></div>
+        <section class="card in" style="--i:2"><div class="looks themeSeg"><button data-t="light"><span class="mini l"><b class="hd"></b><span class="ring"></span><span class="bars"><i style="background:#F28B82"></i><i style="background:#F2B36B"></i><i style="background:#7FB4F5"></i></span><span class="cd"></span><span class="tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></span>Light</button><button data-t="dark"><span class="mini d"><b class="hd"></b><span class="ring"></span><span class="bars"><i style="background:#F28B82"></i><i style="background:#F2B36B"></i><i style="background:#7FB4F5"></i></span><span class="cd"></span><span class="tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></span>Dark</button><button data-t="auto"><span class="mini a"><b class="hd"></b><span class="ring"></span><span class="bars"><i style="background:#F28B82"></i><i style="background:#F2B36B"></i><i style="background:#7FB4F5"></i></span><span class="cd"></span><span class="tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></span>Auto</button></div></section>
+
+        <div class="sec in" style="--i:3"><span class="lbl">Goals</span></div>
+        <section class="card group in" style="--i:3">
+          <a class="item press" href="goal.html"><span class="ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="4"/><path d="M8.500 10a3.500 3.500 0 0 1 7 0M12 10l1.500-2"/></svg></span>Current weight<span class="val" id="vWt">80.6 kg<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <a class="item press" href="goal.html"><span class="ico mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span>Goal weight<span class="val" id="vGw">80.6 kg<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <a class="item press" href="goal.html"><span class="ico mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 8 8"/></svg></span>Daily calories<span class="val" id="vK">2,800 kcal<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <a class="item press" href="goal.html"><span class="ico" style="background:rgba(var(--r-8ef0b4),.14);color:var(--protein)"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg></span>Protein<span class="val">180 g<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <a class="item press" href="plan.html"><span class="ico blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span>Training plan<span class="val" id="vP">4 days · Gym<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+        </section>
+
+        <div class="sec in" style="--i:4"><span class="lbl">Notifications</span></div>
+        <section class="card group in" style="--i:4">
+          <div class="item">Meal reminders<button class="sw" role="switch" aria-checked="true" aria-label="Meal reminders"></button></div>
+          <div class="item">Workout reminders<button class="sw" role="switch" aria-checked="true" aria-label="Workout reminders"></button></div>
+          <div class="item">Pre-gym meal reminder<button class="sw" role="switch" aria-checked="true" aria-label="Pre-gym meal reminder"></button></div>
+          <div class="item">Streak alerts<button class="sw" role="switch" aria-checked="true" aria-label="Streak alerts"></button></div>
+          <div class="item">Weekly progress photo<button class="sw" role="switch" aria-checked="false" aria-label="Weekly progress photo"></button></div>
+          <a class="item press" href="extras.html#alerts">See examples<span class="val"><svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+        </section>
+
+        <div class="sec in" style="--i:5"><span class="lbl">Devices &amp; widgets</span></div>
+        <section class="card group in" style="--i:5">
+          <a class="item press" href="extras.html#watch"><span class="ico teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="3.5"/><path d="M9 6l.5-3h5l.5 3M9 18l.5 3h5l.5-3"/></svg></span>Apple Watch<span class="val" style="color:var(--mint)">Connected<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <a class="item press" href="extras.html#widgets"><span class="ico purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/></svg></span>Widgets &amp; lock screen<span class="val"><svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <div class="item"><span class="ico" style="background:rgba(var(--r-ff6b6b),.14);color:var(--x-ff6b6b)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.3 6c-2.3 4.4-9.3 9-9.3 9z"/></svg></span>Apple Health sync<button class="sw" role="switch" aria-checked="true" aria-label="Apple Health sync"></button></div>
+        </section>
+
+        <div class="sec in" style="--i:6"><span class="lbl">Units</span></div>
+        <section class="card group in" style="--i:6">
+          <div class="item">Weight<div class="seg"><button aria-pressed="true">kg</button><button aria-pressed="false">lb</button></div></div>
+          <div class="item">Energy<div class="seg"><button aria-pressed="true">kcal</button><button aria-pressed="false">kJ</button></div></div>
+        </section>
+
+        <div class="sec in" style="--i:7"><span class="lbl">Privacy</span></div>
+        <section class="card group in" style="--i:7">
+          <div class="item">Progress photos stay on this phone<span class="val" style="color:var(--mint)">On</span></div>
+          <button class="item press" onclick="toast('Your data export is on its way')">Export my data</button>
+          <a class="item press" href="paywall.html">Manage subscription<span class="val">Yearly<svg viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg></span></a>
+          <button class="item press danger" id="signOut">Sign out</button>
+          <button class="item press danger" id="delAcct">Delete my account</button>
+        </section>
+        <p style="text-align:center;font-size:20px;color:var(--dim);margin-top:36px">Forkout 1.0 · hello@forkoutai.app</p>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/plan.js"></script>
+<script src="js/fk.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  document.querySelector('.looks').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) toast(b.dataset.t === 'auto' ? 'Matching your phone' : b.dataset.t === 'light' ? 'Light mode on' : 'Dark mode on'); });
+  document.querySelectorAll('.sw').forEach(function (s) { s.onclick = function () { s.setAttribute('aria-checked', String(s.getAttribute('aria-checked') !== 'true')); }; });
+  // Account: sign out, delete (Apple requires an in-app delete). Live only; demo just shows a message.
+  var LIVE = FK.db && FK.db.live;
+  function clearPhone() { ['fk-plan', 'fk-onboarded', 'fk-meal-days', 'fk-log', 'fk-history', 'fk-session', 'fk-weights', 'fk-program-cache', 'fk-sync-pending'].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
+  $('signOut').onclick = function () {
+    if (!LIVE) return toast('Signed out (demo)');
+    FK.db.auth.signOut().then(function () { clearPhone(); location.replace('signin.html'); });
+  };
+  $('delAcct').onclick = function () {
+    if (!LIVE) return toast('Account deleted (demo)');
+    if (!confirm('Delete your Forkout account and ALL your meals, workouts and progress? This can\'t be undone.')) return;
+    if ((prompt('Type DELETE to confirm') || '').trim().toUpperCase() !== 'DELETE') return toast('Not deleted');
+    FK.db.auth.deleteAccount().then(function () { clearPhone(); location.replace('signin.html?new=1'); }, function (e) { toast(FK.db.friendly(e)); });
+  };
+  if (LIVE) FK.store.profile().then(function (p) { var n = document.querySelector('.prof b, .prof h2, #profName'); if (n && p.name) n.textContent = p.name; }).catch(function () {});
+  document.querySelectorAll('.seg:not(.themeSeg)').forEach(function (g) { g.onclick = function (e) { var b = e.target.closest('button'); if (!b) return; g.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); }; });
+  FK.ready();
+})();
+</script>
+<script>
+(function(){try{var p=FKPlan.get(),MX=FKPlan.macros(p);
+document.getElementById('vWt').firstChild.nodeValue=p.weight+' kg';document.getElementById('vGw').firstChild.nodeValue=p.goalW+' kg';
+document.getElementById('profSub').textContent=p.weight+' kg \u00b7 '+p.height+' cm \u00b7 '+p.goal;
+var pr=[].slice.call(document.querySelectorAll('.item')).filter(function(x){return /^Protein/.test(x.textContent.trim());})[0];if(pr)pr.querySelector('.val').firstChild.nodeValue=MX.p+' g';document.getElementById('vK').firstChild.nodeValue=p.kcal.toLocaleString('en-US')+' kcal';
+var sp=FKPlan.find(p.split);document.getElementById('vP').firstChild.nodeValue=p.days+' days \u00b7 '+(p.times&&p.times.some(function(t){return typeof t==='number'&&t!==p.time})?'times vary':FKPlan.hm(p.time));}catch(e){}})();
+</script>
+<script>
+(function(){
+  try{var a=localStorage.getItem('fk-avatar');if(a)document.getElementById('avImg').src=a;}catch(e){}
+  document.getElementById('avFile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var im=new Image();im.onload=function(){var c=document.createElement('canvas'),S=320;c.width=c.height=S;var x=c.getContext('2d'),m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);var d=c.toDataURL('image/jpeg',.86);try{localStorage.setItem('fk-avatar',d);}catch(e){}document.getElementById('avImg').src=d;FK.toast('Profile photo updated');};im.src=rd.result;};rd.readAsDataURL(f);this.value='';};
+})();
+</script>
+</body>
+</html>

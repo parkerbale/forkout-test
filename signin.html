@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.canvas{padding-bottom:64px;display:flex;flex-direction:column}
+.hero{position:relative;margin:0 -48px;height:620px;overflow:hidden;flex:none}
+.hero .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;filter:brightness(.7)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--r-000408),.55),rgba(var(--r-000408),.15) 40%,var(--bg) 97%)}
+.hero .mark{position:absolute;left:48px;top:150px;width:40px;height:136px;color:var(--neon);filter:drop-shadow(0 0 16px rgba(200,248,8,.5));z-index:3}
+.hero h1{position:absolute;left:48px;right:48px;bottom:36px;z-index:3;margin:0;font-size:70px;font-weight:700;letter-spacing:-2px;line-height:1.02;text-shadow:0 4px 30px rgba(0,0,0,.8)}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.sub{font-size:24px;color:var(--muted);margin:6px 0 34px;line-height:1.45}
+.social{display:flex;flex-direction:column;gap:16px}
+.sbtn{display:flex;align-items:center;justify-content:center;gap:16px;height:84px;border-radius:42px;font-size:25px;font-weight:600;border:1px solid var(--line2);background:rgba(var(--ink),.05);color:var(--fg)}
+.sbtn svg{width:30px;height:30px}
+.sbtn.apple{background:var(--fg);color:var(--bg);border-color:transparent}
+.or{display:flex;align-items:center;gap:20px;margin:30px 0;font-size:20px;color:var(--dim);letter-spacing:3px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;align-items:center;height:84px;padding:0 30px;border-radius:42px;background:rgba(var(--ink),.05);border:1px solid var(--line);transition:border-color .2s,box-shadow .2s}
+.field:focus-within{border-color:color-mix(in srgb,var(--acc) 60%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 14%,transparent)}
+.field input{flex:1;min-width:0;font-size:25px;color:var(--fg);outline:none;caret-color:var(--acc)}
+.field input::placeholder{color:var(--muted)}
+.field .eye{font-size:20px;font-weight:600;color:var(--muted);padding:12px 0 12px 16px}
+.go{margin-top:10px;height:88px;border-radius:44px;font-size:27px}
+.go[disabled]{opacity:.6}
+.msg{min-height:30px;font-size:21px;line-height:1.4;color:var(--x-ff8f8f);text-align:center;margin:4px 0 0}
+.msg.ok{color:var(--mint)}
+.swap{text-align:center;font-size:22px;color:var(--muted);margin-top:26px}
+.swap button{color:var(--acc);font-weight:600}
+.forgot{align-self:flex-end;font-size:20px;color:var(--muted);padding:4px 10px}
+.fine{text-align:center;font-size:19px;color:var(--dim);margin-top:30px;line-height:1.5}
+.fine a{color:var(--muted);text-decoration:underline}
+.demo{margin-top:26px;padding:22px 26px;border-radius:26px;background:rgba(var(--r-ff9f5a),.08);border:1px solid rgba(var(--r-ff9f5a),.28);font-size:20px;line-height:1.45;color:var(--x-ffd9b8)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body data-tab="none" data-auth="none" data-title="Sign in" data-note="Sign in or create an account (email, Apple or Google). Works for real once the backend is connected.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <div class="hero">
+          <img class="ph" src="photos/gym-wide.jpg" alt="">
+          <svg class="mark in" viewBox="276 160 232 802" fill="currentColor" aria-hidden="true"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="281" y="773" width="35" height="134" rx="10"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/><rect x="470" y="773" width="35" height="134" rx="10"/></svg>
+          <h1 class="in" style="--i:1" id="title">Welcome back.<br><em>Let's get to work.</em></h1>
+        </div>
+
+        <p class="sub in" style="--i:2" id="sub">Sign in to pick up where you left off. Your meals, workouts and progress are saved to your account.</p>
+
+        <div class="social in" style="--i:2">
+          <button class="sbtn apple press" data-p="apple"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.9 5c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>Continue with Apple</button>
+          <button class="sbtn press" data-p="google"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8.1z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1-3.7 1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2.1a11 11 0 0 0 0 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7.1l3.7 2.8C6.7 7.3 9.1 5.4 12 5.4z"/></svg>Continue with Google</button>
+        </div>
+
+        <div class="or in" style="--i:3">OR</div>
+
+        <form class="in" style="--i:3" id="form" novalidate>
+          <label class="field" id="nameF" hidden><input id="name" autocomplete="given-name" placeholder="First name" maxlength="60"></label>
+          <label class="field"><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="Email" required></label>
+          <label class="field" id="pwF"><input id="pw" type="password" autocomplete="current-password" placeholder="Password" minlength="8"><button type="button" class="eye" id="eye">Show</button></label>
+          <button type="button" class="forgot" id="forgot">Forgot password?</button>
+          <button class="btn wide go" id="go" type="submit">Sign in</button>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="swap" id="swapP"><span id="swapTxt">New to Forkout?</span> <button type="button" id="swap">Create an account</button></p>
+        <p class="fine">By continuing you agree to the <a href="https://forkoutai.app/terms/">Terms</a> and <a href="https://forkoutai.app/privacy/">Privacy Policy</a>.</p>
+        <div class="demo" id="demo" hidden><b>Demo mode.</b> The backend isn't connected yet, so nothing is sent anywhere. Any email and password will take you into the app.</div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/store.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$, A = FK.db.auth, LIVE = FK.db.live;
+  var mode = /[?&]new=1/.test(location.search) ? 'up' : 'in'; // in | up | reset
+  var next = new URLSearchParams(location.search).get('next') || 'home.html';
+  if (!/^[\w.-]+\.html([?#].*)?$/.test(next)) next = 'home.html'; // only our own pages
+
+  function say(t, ok) { $('msg').textContent = t || ''; $('msg').classList.toggle('ok', !!ok); }
+  function busy(on, label) { $('go').disabled = on; $('go').textContent = on ? 'One sec…' : label; }
+  function label() { return mode === 'up' ? 'Create account' : mode === 'reset' ? 'Send reset link' : 'Sign in'; }
+  function paint() {
+    $('nameF').hidden = mode !== 'up'; $('pwF').hidden = mode === 'reset'; $('forgot').hidden = mode !== 'in';
+    $('pw').autocomplete = mode === 'up' ? 'new-password' : 'current-password';
+    $('pw').placeholder = mode === 'up' ? 'Password (8+ characters)' : 'Password';
+    $('title').innerHTML = mode === 'up' ? 'Eat right.<br>Lift right.<br><em>Start here.</em>' : mode === 'reset' ? 'Reset your<br><em>password.</em>' : 'Welcome back.<br><em>Let\'s get to work.</em>';
+    $('sub').textContent = mode === 'up' ? 'Create your free account. It takes 20 seconds, then we build your plan.' : mode === 'reset' ? 'Type your email and we\'ll send you a link to set a new password.' : 'Sign in to pick up where you left off. Your meals, workouts and progress are saved to your account.';
+    $('swapTxt').textContent = mode === 'in' ? 'New to Forkout?' : 'Already have an account?';
+    $('swap').textContent = mode === 'in' ? 'Create an account' : 'Sign in';
+    busy(false, label()); say('');
+  }
+  $('swap').onclick = function () { mode = mode === 'in' ? 'up' : 'in'; paint(); };
+  $('forgot').onclick = function () { mode = 'reset'; paint(); $('email').focus(); };
+  $('eye').onclick = function () { var p = $('pw'); p.type = p.type === 'password' ? 'text' : 'password'; this.textContent = p.type === 'password' ? 'Show' : 'Hide'; };
+
+  // Where next: your account's planner comes down to this phone; new people (or not set up yet) go to onboarding,
+  // unless they already did onboarding on this phone before making the account (then it's saved up to the account).
+  function done(isNew) {
+    if (!LIVE) { location.replace(isNew && !localStorage.getItem('fk-onboarded') ? 'onboarding.html' : next); return; }
+    FK.sync.afterLogin(next).then(function (to) { location.replace(to); });
+  }
+
+  $('form').onsubmit = function (e) {
+    e.preventDefault();
+    var email = $('email').value.trim(), pw = $('pw').value, name = $('name').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Type a valid email address.'); $('email').focus(); return; }
+    if (mode !== 'reset' && pw.length < (mode === 'up' ? 8 : 1)) { say(mode === 'up' ? 'Use a password with at least 8 characters.' : 'Type your password.'); $('pw').focus(); return; }
+    if (!LIVE) { FK.toast('Demo mode: signed in'); setTimeout(function () { done(mode === 'up'); }, 700); return; }
+    busy(true);
+    var job = mode === 'up' ? A.signUp(email, pw, name) : mode === 'reset' ? A.resetPassword(email, location.href.split('?')[0]) : A.signIn(email, pw);
+    job.then(function (r) {
+      if (mode === 'reset') { busy(false, label()); say('Check your email for the reset link.', true); return; }
+      if (r && r.confirmEmail) { busy(false, label()); say('Almost there! Check your email and tap the link to confirm, then sign in.', true); mode = 'in'; setTimeout(paint, 4000); return; }
+      FK.haptic([10, 40, 20]); done(mode === 'up');
+    }).catch(function (err) { busy(false, label()); say(err.message); });
+  };
+
+  document.querySelector('.social').onclick = function (e) {
+    var b = e.target.closest('.sbtn'); if (!b) return;
+    if (!LIVE) { FK.toast('Demo mode: signed in'); setTimeout(function () { done(false); }, 700); return; }
+    A.oauth(b.dataset.p, location.href.split('#')[0]);
+  };
+
+  // Coming back from Apple/Google, or already signed in: go straight in
+  if (LIVE) {
+    A.fromRedirect().then(function (got) {
+      if (got) return done(false);
+      return A.session().then(function (s) { if (s) done(false); });
+    }).catch(function (err) { say(err.message); });
+  } else $('demo').hidden = false;
+
+  paint();
+  FK.ready();
+})();
+</script>
+</body>
+</html>

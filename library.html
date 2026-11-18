@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Exercise library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.canvas#canvas{min-height:2100px}
+.lsearch{display:flex;align-items:center;gap:18px;height:92px;padding:0 30px;border-radius:46px;background:rgba(var(--ink),.06);border:1px solid var(--line);margin-top:6px}
+.lsearch svg{flex:none;width:34px;height:34px;color:var(--muted)}
+.lsearch input{flex:1;min-width:0;height:100%;background:transparent;border:0;outline:none;color:var(--fg);font:inherit;font-size:28px}
+.lchips{display:flex;gap:12px;overflow-x:auto;margin:26px -48px 0;padding:0 48px 6px;scrollbar-width:none}
+.lchips::-webkit-scrollbar{display:none}
+.lchips .chip{flex:none;height:64px;padding:0 28px;font-size:24px}
+.lcount{margin:30px 6px 0;font-size:23px;color:var(--muted)}
+.lgrp{margin:40px 6px 0;font-size:22px;letter-spacing:5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lrows{padding:6px 30px;margin-top:16px}
+.lrow{display:flex;align-items:center;gap:22px;padding:26px 0;color:var(--fg);text-decoration:none}
+.lrow+.lrow{border-top:1px solid var(--line)}
+.lrow .t{flex:1;min-width:0;font-size:30px;font-weight:600}
+.lrow .t small{display:block;margin-top:5px;font-size:22px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .tag2{flex:none;font-size:19px;font-weight:700;padding:8px 16px;border-radius:20px;letter-spacing:.5px;background:rgba(var(--ink),.07);color:var(--muted)}
+.lrow .tag2.on{background:var(--acc);color:var(--on-acc)}
+.lrow svg.ch{flex:none;width:16px;height:22px;color:var(--muted)}
+.lnone{margin:60px 6px;text-align:center;font-size:26px;color:var(--muted)}
+</style>
+</head>
+<body data-tab="workouts" data-title="Exercise library" data-note="All 91 exercises with form steps and what to avoid. Search or pick a muscle group, then tap one to open its form guide.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="top in" style="--i:0"><a class="ibtn press" href="train.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1 class="ttl">Exercises</h1><span style="width:72px"></span></div>
+        <label class="lsearch in" style="--i:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.500-3.500"/></svg><input id="q" type="search" placeholder="Search 91 exercises" autocomplete="off" aria-label="Search exercises"></label>
+        <div class="lchips in" style="--i:2" id="chips" role="group" aria-label="Muscle group"></div>
+        <div class="lcount in" style="--i:2" id="count"></div>
+        <div id="list"></div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/exercises.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$, E = FK.ex, group = 'All', have = {}, CH = '<svg class="ch" viewBox="0 0 16 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4l7 7-7 7"/></svg>';
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  // Which exercises already have a video (list.json is made by update-videos.ps1)
+  fetch('video/forms/list.json').then(function (r) { return r.ok ? r.json() : []; }).then(function (a) { (a || []).forEach(function (s) { have[s] = 1; }); draw(); }).catch(function () {});
+  $('chips').innerHTML = ['All'].concat(E.groups).map(function (g) { return '<button class="chip press" aria-pressed="' + (g === group) + '" data-g="' + esc(g) + '">' + esc(g) + '</button>'; }).join('');
+  $('chips').onclick = function (e) { var b = e.target.closest('[data-g]'); if (!b) return; group = b.dataset.g; this.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); draw(); };
+  $('q').addEventListener('input', draw);
+  function draw() {
+    var q = $('q').value.trim().toLowerCase(), n = 0, vids = 0, html = '';
+    E.groups.forEach(function (g) {
+      if (group !== 'All' && g !== group) return;
+      var rows = E.list.filter(function (e) { return e.group === g && (!q || (e.name + ' ' + e.muscles.join(' ') + ' ' + g).toLowerCase().indexOf(q) >= 0); });
+      if (!rows.length) return;
+      html += '<div class="lgrp">' + esc(g) + '</div><section class="card lrows">' + rows.map(function (e) {
+        n++; if (have[e.slug]) vids++;
+        return '<a class="lrow press" href="' + E.url(e) + '"><span class="t">' + esc(e.name) + '<small>' + esc(e.muscles.join(' · ')) + '</small></span><span class="tag2' + (have[e.slug] ? ' on' : '') + '">' + (have[e.slug] ? 'VIDEO' : 'SOON') + '</span>' + CH + '</a>';
+      }).join('') + '</section>';
+    });
+    $('list').innerHTML = html || '<div class="lnone">No exercises found.<br>Try another word.</div>';
+    $('count').textContent = n + ' exercise' + (n === 1 ? '' : 's') + (vids ? ' · ' + vids + ' with video' : '');
+  }
+  draw(); FK.ready();
+})();
+</script>
+</body>
+</html>

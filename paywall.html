@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Paywall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.canvas{padding-bottom:64px;display:flex;flex-direction:column}
+.hero{position:relative;margin:0 -48px;height:1060px;flex:none;overflow:hidden;background:#0A0F11}
+.hero .gym{position:absolute;left:50%;top:90px;height:970px;width:auto;max-width:none;transform:translateX(-50%)}
+.hero .bowl{position:absolute;right:-200px;top:120px;width:700px;z-index:2;filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}
+.hero .mark{position:absolute;left:48px;top:150px;width:44px;height:150px;color:var(--neon);z-index:3}
+.close{position:absolute;right:48px;top:112px;z-index:3;background:rgba(0,0,0,.55);color:#fff}
+.ph1{margin:56px 0 0;font-size:74px;font-weight:700;letter-spacing:-2px;line-height:1.02}
+.ph1 em{font-style:normal;color:var(--acc)}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;margin-top:44px}
+.feat div{display:flex;align-items:center;gap:16px;font-size:24px;color:var(--fg2)}
+.feat i{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--acc-soft);color:var(--acc);font-style:normal;font-size:22px;font-weight:700}
+.plans{display:flex;flex-direction:column;gap:18px;margin-top:48px}
+.plan{position:relative;display:flex;align-items:center;gap:24px;padding:30px 32px;border-radius:34px;text-align:left;border:2px solid var(--line);background:rgba(var(--ink),.03);transition:border-color .25s,background-color .25s}
+.plan .rad{width:44px;height:44px;border-radius:50%;border:3px solid var(--line2);display:grid;place-items:center;flex:none}
+.plan .rad::after{content:"";width:22px;height:22px;border-radius:50%;background:var(--acc);transform:scale(0);transition:transform .25s var(--spring)}
+.plan[aria-checked="true"]{border-color:var(--acc);background:var(--acc-soft);box-shadow:0 0 34px color-mix(in srgb,var(--acc) 14%,transparent)}
+.plan[aria-checked="true"] .rad{border-color:var(--acc)}
+.plan[aria-checked="true"] .rad::after{transform:none}
+.plan b{display:block;font-size:28px}
+.plan span{display:block;font-size:21px;color:var(--muted);margin-top:6px}
+.plan .pr{margin-left:auto;text-align:right}
+.plan .pr b{font-size:40px;letter-spacing:-.5px}
+.plan .best{position:absolute;right:30px;top:-20px;padding:8px 18px;border-radius:14px;background:var(--acc);color:var(--on-acc);font-size:18px;font-weight:800;letter-spacing:1.2px}
+.trial{margin-top:36px;height:92px;border-radius:46px;font-size:28px}
+.fine{text-align:center;font-size:20px;color:var(--muted);margin-top:22px;line-height:1.5}
+.links{display:flex;justify-content:center;gap:34px;margin-top:22px;font-size:20px;color:var(--dim)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:40px;position:relative}
+.how::before{content:"";position:absolute;left:16%;right:16%;top:31px;height:3px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 30%,transparent))}
+.how div{position:relative;text-align:center;padding:0 10px}
+.how i{display:grid;place-items:center;width:64px;height:64px;margin:0 auto;border-radius:50%;background:var(--bg);border:3px solid var(--acc);color:var(--acc);font-style:normal}
+.how i svg{width:28px;height:28px}
+.how div:first-child i{background:var(--acc);color:var(--on-acc)}
+.how b{display:block;margin-top:14px;font-size:24px}
+.how span{display:block;margin-top:6px;font-size:20px;color:var(--muted);line-height:1.35}
+.status,.status *{color:#fff!important}
+html,body,.canvas,.status{background:#0A0F11!important}
+.canvas{--bg:#0A0F11}
+</style>
+</head>
+<body data-auth="none" class="photo-top" data-dark="1" data-tab="none" data-title="Paywall" data-note="Yearly (BEST DEAL) is picked by default. 7-day free trial, A$9.99/month or A$59.99/year.">
+<script>document.documentElement.removeAttribute('data-fk')</script>
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <div class="hero">
+          <img class="gym" src="photos/paywall-phone.jpg" alt="The Forkout home screen on an iPhone">
+          <a class="back press close" href="home.html" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+          <svg class="mark in" viewBox="276 160 232 802" fill="currentColor" aria-hidden="true"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="281" y="773" width="35" height="134" rx="10"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/><rect x="470" y="773" width="35" height="134" rx="10"/></svg>
+
+        </div>
+        <h1 class="ph1 in" style="--i:2">Eat right.<br>Lift right.<br><em>Unlock Forkout.</em></h1>
+        <div class="feat in" style="--i:3">
+          <div><i>✓</i>Snap meals, get macros</div><div><i>✓</i>AI-built program</div>
+          <div><i>✓</i>Form guide for every lift</div><div><i>✓</i>Forkout AI coach, any time</div>
+          <div><i>✓</i>Progress photos &amp; streaks</div><div><i>✓</i>Apple Watch app</div>
+        </div>
+        <div class="how in" style="--i:3" aria-label="How your free trial works">
+          <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/></svg></i><b>Today</b><span>Everything unlocked</span></div>
+          <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5a6 6 0 0 1 12 0c0 5.5 2 7 2 7H4s2-1.5 2-7z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg></i><b>Day 5</b><span>We remind you</span></div>
+          <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></i><b>Day 7</b><span>Trial ends, cancel any time</span></div>
+        </div>
+        <div class="plans in" style="--i:4" role="radiogroup" aria-label="Choose a plan">
+          <button class="plan" role="radio" aria-checked="true" data-p="year"><span class="best">BEST DEAL</span><span class="rad"></span><div><b>Yearly</b><span>Just A$5.00 a month · save 50%</span></div><div class="pr"><b class="num">A$59.99</b><span>/ year</span></div></button>
+          <button class="plan" role="radio" aria-checked="false" data-p="month"><span class="rad"></span><div><b>Monthly</b><span>Billed every month</span></div><div class="pr"><b class="num">A$9.99</b><span>/ month</span></div></button>
+        </div>
+        <button class="btn wide trial in" style="--i:5" id="trial">Start 7-day free trial</button>
+        <p class="fine in" style="--i:5" id="fine">Free for 7 days, then A$59.99/year.<br>Cancel any time before it ends and you won't pay a cent.</p>
+        <div class="links"><a href="#" onclick="toast('Purchases restored');return false">Restore</a><a href="#" onclick="return false">Terms</a><a href="#" onclick="return false">Privacy</a></div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  document.querySelector('.plans').onclick = function (e) {
+    var p = e.target.closest('.plan'); if (!p) return;
+    document.querySelectorAll('.plan').forEach(function (x) { x.setAttribute('aria-checked', String(x === p)); });
+    $('fine').innerHTML = 'Free for 7 days, then ' + (p.dataset.p === 'year' ? 'A$59.99/year' : 'A$9.99/month') + '.<br>Cancel any time before it ends and you won\'t pay a cent.';
+  };
+  $('trial').onclick = function () { FK.burst(512, 1700); toast('Trial started. Welcome to Forkout!'); setTimeout(function () { location.href = 'home.html'; }, 1500); };
+  FK.ready();
+})();
+</script>
+</body>
+</html>

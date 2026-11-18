@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Forkout app icon: the fork-and-dumbbell mark in neon lime on black.
+       Square corners on purpose: iPhone and Android round them for you. -->
+  <rect width="1024" height="1024" fill="#060606"/>
+  <g fill="#BCD98A" transform="translate(512 512) scale(0.9) translate(-392.5 -561)">
+    <path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/>
+    <rect x="281" y="773" width="35" height="134" rx="10"/>
+    <rect x="318" y="740" width="44" height="202" rx="9"/>
+    <rect x="424" y="740" width="44" height="202" rx="9"/>
+    <rect x="470" y="773" width="35" height="134" rx="10"/>
+  </g>
+</svg>

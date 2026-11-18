@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Workouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:2100px;min-height:2100px!important}</style>
+</head>
+<body data-tab="workouts" data-title="Workouts" data-note="Today's workout and your week. Tap Edit plan to change your split, goal and calories.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="top in" style="--i:0"><h1 class="ttl">Workouts</h1><a class="ibtn press" href="progress.html" aria-label="Progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V12M12 20V5M19 20v-5"/></svg></a></div>
+        <section class="c hero in" style="--i:1;margin-top:0">
+          <div class="k">Today</div>
+          <h2 id="tName" style="margin-top:12px;font-size:56px">Upper Body Push</h2>
+          <div class="meta"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><i id="tMin" style="font-style:normal">45 min</i></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><i id="tEx" style="font-style:normal">5 exercises</i></span></div>
+          <a class="btn wide press" id="tGo" href="workout.html"><svg style="width:24px;height:24px" viewBox="0 0 22 24"><path d="M2 2.5v19a1 1 0 0 0 1.5.9l16.5-9.5a1 1 0 0 0 0-1.8L3.5 1.6A1 1 0 0 0 2 2.5z" fill="currentColor"/></svg><span id="tBtn">Start workout</span></a>
+        </section>
+        <div class="sec in" style="--i:2"><h3>This week</h3><a class="pillbtn press" href="plan.html">Edit plan</a></div>
+        <section class="c days in" style="--i:3;padding-top:14px;padding-bottom:14px" id="weekList"></section>
+        <div class="c in" style="--i:4;padding:30px 36px"><div class="between"><div><div class="k">Your split</div><div style="font-size:32px;font-weight:700;margin-top:8px" id="spName">Upper / Lower × 2</div></div><a class="pillbtn press" style="font-size:22px;font-weight:700;padding:14px 26px;border-radius:30px;background:rgba(var(--ink),.08)" href="plan.html">Change</a></div></div>
+        <a class="c in press" href="library.html" style="--i:5;display:block;padding:30px 36px;margin-top:18px;color:inherit;text-decoration:none"><div class="between"><div><div class="k">Exercise library</div><div style="font-size:32px;font-weight:700;margin-top:8px">91 exercises with form guides</div></div><span class="pillbtn" style="font-size:22px;font-weight:700;padding:14px 26px;border-radius:30px;background:rgba(var(--ink),.08)">Browse</span></div></a>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var P = FKPlan.get(), W = FKPlan.week(P), T = FKPlan.today(), DN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var CK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  $('weekList').innerHTML = W.map(function (d, i) {
+    var st = d.rest ? '' : i < T ? '<span class="st ok">' + CK + '</span>' : i === T ? '<span class="now">Today</span>' : '<span class="st"></span>';
+    if (d.rest && i === T) st = '<span class="now" style="background:rgba(var(--ink),.12);color:var(--fg)">Today</span>';
+    return '<div class="d' + (d.rest ? ' rest' : '') + '"><span class="dn">' + DN[i] + '</span><span class="dt">' + d.name + '<small>' + (d.rest ? 'Recovery' : d.ex + ' exercises') + '</small></span>' + st + '</div>';
+  }).join('');
+  var t = W[T];
+  $('tName').textContent = t.rest ? 'Rest day' : t.name;
+  $('tMin').textContent = t.rest ? '10 min' : t.min + ' min'; $('tEx').textContent = t.rest ? 'Easy mobility' : t.ex + ' exercises';
+  $('tBtn').textContent = t.rest ? 'Stretch' : 'Start workout';
+  var sp = FKPlan.find(P.split); $('spName').textContent = sp.days === P.days ? sp.name : FKPlan.find(FKPlan.rec(P.sex, P.days)).name;
+  FK.ready();
+})();
+</script>
+</body>
+</html>

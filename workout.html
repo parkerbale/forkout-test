@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Workout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:2330px;min-height:2330px!important}</style>
+</head>
+<body class="solidtop" data-tab="none" data-title="Workout" data-note="Watch the form clip, set weight and reps, tap Done and rest. The big Form guide button at the bottom opens the form page.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="lg-top in" style="--i:0"><a class="ibtn press" href="train.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+          <div class="mid"><b>Upper Body Push</b><span><i class="live"></i><span class="num" id="clock">12:43</span><span style="margin-left:10px">· Exercise <span id="exN">1</span> of <span id="exT">5</span></span></span></div>
+          <a class="formbtn press" href="finish.html" style="background:rgba(var(--ink),.08);color:var(--fg)">Finish</a></div>
+        <div class="segs in" style="--i:1" id="segs"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+
+        <section class="wv in" style="--i:2">
+          <video id="wvid" src="video/bench-press.mp4#t=0.01" muted playsinline loop autoplay preload="auto" aria-label="Bench press form"></video>
+          <div class="wv-fade"></div>
+          <div class="wv-t"><h2 id="exName">Bench press</h2><span id="exMus">Chest · Shoulders · Triceps</span></div>
+        </section>
+
+        <section class="c cur in" style="--i:3" id="curCard">
+          <div class="cur-h"><span class="k" id="setLbl">Set 1 of 3</span><span class="last" id="lastT">Last time 60 kg × 8</span></div>
+          <div class="stp2">
+            <div><span class="k">Weight</span><div class="sv"><button class="pm press" data-t="kg" data-d="-2.5" aria-label="Less weight">−</button><b class="num"><span id="vKg">62.5</span><small>kg</small></b><button class="pm press" data-t="kg" data-d="2.5" aria-label="More weight">+</button></div></div>
+            <div><span class="k">Reps</span><div class="sv"><button class="pm press" data-t="rp" data-d="-1" aria-label="Fewer reps">−</button><b class="num"><span id="vRp">8</span></b><button class="pm press" data-t="rp" data-d="1" aria-label="More reps">+</button></div></div>
+          </div>
+          <button class="btn wide press" id="doneBtn" style="margin-top:30px"><svg style="width:28px;height:28px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg>Done · start rest</button>
+        </section>
+
+        <section class="c restc in" style="--i:3" id="restCard" hidden>
+          <div class="rg"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="88" fill="none" stroke-width="14" style="stroke:rgba(var(--ink),.1)"/><circle id="rRing" cx="100" cy="100" r="88" fill="none" stroke="var(--acc)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 100 100)" stroke-dasharray="553" stroke-dashoffset="0"/></svg><div class="rn"><b class="num" id="rt">2:00</b><span>Rest</span></div></div>
+          <div class="rside"><b id="rNext">Next: set 2 of 3</b><span id="rHint">Breathe, then 62.5 kg × 8</span>
+            <div class="rbtns"><button class="chip press" id="plus">+15s</button><button class="btn press" id="skip" style="height:72px;font-size:26px;padding:0 34px">Skip</button></div></div>
+        </section>
+
+        <div class="done-s in" style="--i:4" id="doneSets"></div>
+
+        <div class="sec in" style="--i:5"><h3>Up next</h3></div>
+        <section class="c nx in" style="--i:6;padding-top:14px;padding-bottom:14px"><div class="d"><span class="i">2</span>Incline dumbbell press<small>3 × 10</small></div><div class="d"><span class="i">3</span>Seated shoulder press<small>3 × 8</small></div><div class="d"><span class="i">4</span>Lateral raise<small>3 × 15</small></div><div class="d"><span class="i">5</span>Triceps pushdown<small>3 × 12</small></div></section>
+        <a class="btn wide press formbig in" style="--i:7" href="form.html" id="formLink"><svg style="width:26px;height:26px" viewBox="0 0 22 24"><path d="M2 2.5v19a1 1 0 0 0 1.5.9l16.5-9.5a1 1 0 0 0 0-1.8L3.5 1.6A1 1 0 0 0 2 2.5z" fill="currentColor"/></svg>Form guide</a>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/exercises.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var $ = FK.$, EX = [['Bench press', 'Chest · Shoulders · Triceps', 62.5, 8, '60 kg × 8'], ['Incline dumbbell press', 'Upper chest · Shoulders', 24, 10, '22 kg × 10'], ['Seated shoulder press', 'Shoulders · Triceps', 20, 8, '20 kg × 7'], ['Lateral raise', 'Side delts', 8, 15, '8 kg × 14'], ['Triceps pushdown', 'Triceps', 30, 12, '27.5 kg × 12']];
+  var LOG = {}; try { LOG = JSON.parse(localStorage.getItem('fk-log') || '{}'); } catch (e) {}
+  var BEST0 = {'Bench press': 60, 'Incline dumbbell press': 22, 'Seated shoulder press': 20, 'Lateral raise': 8, 'Triceps pushdown': 27.5};
+  function rec(n) { var r = LOG[n]; if (r) return r; var e = EX.filter(function (x) { return x[0] === n; })[0]; return { last: [BEST0[n], +e[4].split('× ')[1]], best: BEST0[n] }; }
+  function fmtKg(v) { return v % 1 ? v.toFixed(1) : v; }
+  function start(i) {
+    if (EXS) { // live: today's target from the plan + last session
+      kg = TGT[i].kg; rp = TGT[i].reps; SETS = EXS[i].sets; REST = EXS[i].rest_sec || 120; STEP = EXS[i].step_kg || (kg ? 2.5 : 0);
+      EX[i][4] = TGT[i].last || 'first time';
+      document.querySelectorAll('.pm[data-t="kg"]').forEach(function (b) { b.dataset.d = (b.dataset.d[0] === '-' ? -1 : 1) * (STEP || 2.5); });
+      var vid = $('wvid'); vid.style.visibility = EX[i][0] === 'Bench press' ? '' : 'hidden';
+      return;
+    }
+    var r = rec(EX[i][0]); kg = r.last[0]; rp = r.last[1]; EX[i][4] = fmtKg(r.last[0]) + ' kg × ' + r.last[1];
+  }
+  var SESSION = { sets: 0, vol: 0, prs: [] };
+  var ex = 0, set = 0, kg = 62.5, rp = 8, SETS = 3, hist = [], total = 120, left = 0, rt = null;
+  start(0);
+  var t0 = Date.now();
+  // Live mode: every ticked set is saved to the account as it happens; the workout is closed at the end.
+  // Anything that fails is ignored so the workout itself never gets stuck. Demo mode saves only on the phone.
+  var WID = null, QUEUE = Promise.resolve();
+  var LIVE = !!(window.FK && FK.plan && FK.plan.live);
+  function liveSet(name, no, w, r) {
+    if (!LIVE) return;
+    QUEUE = QUEUE.then(function () { return WID || FK.plan.startWorkout(WNAME).then(function (x) { WID = x.id; }); })
+      .then(function () { return FK.plan.logSet(WID, { exercise: name, set_no: no, reps: r, weight_kg: w }); }).catch(function () {});
+  }
+  function liveFinish() { return LIVE ? QUEUE.then(function () { return WID && FK.plan.finishWorkout(WID); }).catch(function () {}) : Promise.resolve(); }
+  // Live mode: today's session comes from the person's real plan (their split), and each exercise's
+  // target comes from progressive overload on their saved sets (all hit = add weight, a bad day = back off).
+  var WNAME = 'Upper Body Push', EXS = null, TGT = [], REST = 120, STEP = 2.5;
+  if (LIVE) {
+    FK.plan.ensure().then(function (plan) {
+      var sc = FK.plan.schedule(plan), d = sc[FK.plan.weekday()].day;
+      if (d < 0) { for (var k = 1; k < 7 && d < 0; k++) d = sc[(FK.plan.weekday() + k) % 7].day; } // rest day: do the next session
+      var day = plan.days[Math.max(0, d)]; if (!day || !day.exercises.length) return;
+      return Promise.all(day.exercises.map(function (e) { return FK.plan.lastSets(e.name).catch(function () { return []; }); })).then(function (rows) {
+        EXS = day.exercises; WNAME = day.name;
+        EX = EXS.map(function (e, i) { var t = FK.plan.next(e, rows[i]); TGT[i] = t; return [e.name, e.muscles, t.kg, t.reps, t.last || 'first time']; });
+        EXS.forEach(function (e, i) { var mx = rows[i].reduce(function (a, s) { return Math.max(a, +s.weight_kg || 0); }, 0); BEST0[e.name] = mx || TGT[i].kg || 0; delete LOG[e.name]; });
+        document.querySelector('.lg-top .mid b').textContent = WNAME;
+        $('segs').innerHTML = EX.map(function (_, i) { return '<i' + (i ? '' : ' class="on"') + '></i>'; }).join('');
+        document.querySelector('.nx').innerHTML = EX.slice(1).map(function (e, i) { return '<div class="d"><span class="i">' + (i + 2) + '</span>' + esc(e[0]) + '<small>' + EXS[i + 1].sets + ' × ' + EXS[i + 1].reps_min + (EXS[i + 1].reps_max > EXS[i + 1].reps_min ? '–' + EXS[i + 1].reps_max : '') + '</small></div>'; }).join('') || '<div class="d">Last one. Finish strong.</div>';
+        ex = 0; set = 0; hist = []; start(0); paint();
+      });
+    }).catch(function () {});
+  }
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  setInterval(function () { var s = 763 + Math.floor((Date.now() - t0) / 1000); $('clock').textContent = Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }, 1000);
+  var v = $('wvid'); try { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {}
+  function paint() {
+    $('vKg').textContent = kg % 1 ? kg.toFixed(1) : kg; $('vRp').textContent = rp;
+    $('setLbl').textContent = 'Set ' + (set + 1) + ' of ' + SETS; $('lastT').textContent = EX[ex][4] === 'first time' ? 'First time: start light' : 'Last time ' + EX[ex][4]; $('exT').textContent = EX.length;
+    var fe = window.FK.ex && FK.ex.find(EX[ex][0]); $('formLink').href = fe ? FK.ex.url(fe) : 'library.html'; // the Form guide button opens this exercise's guide
+    $('exName').textContent = EX[ex][0]; $('exMus').textContent = EX[ex][1]; $('exN').textContent = ex + 1;
+    document.querySelectorAll('#segs i').forEach(function (i, n) { i.classList.toggle('on', n <= ex); });
+    $('doneSets').innerHTML = hist.map(function (h, n) { return '<div class="ds"><span class="n">' + (n + 1) + '</span><b class="num">' + h[0] + ' kg × ' + h[1] + '</b><i>' + (h[2] ? 'PR' : '') + '</i><em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></em></div>'; }).join('');
+  }
+  document.querySelectorAll('.pm').forEach(function (b) { b.onclick = function () { var d = +b.dataset.d; if (b.dataset.t === 'kg') kg = Math.max(0, kg + d); else rp = Math.max(1, rp + d); FK.haptic(8); paint(); }; });
+  function showRest() { var n = Math.floor(left / 60) + ':' + ('0' + (left % 60)).slice(-2); $('rt').textContent = n; $('rRing').setAttribute('stroke-dashoffset', 553 * (1 - left / total)); }
+  function endRest() { clearInterval(rt); $('restCard').hidden = true; $('curCard').hidden = false; paint(); }
+  $('doneBtn').onclick = function () {
+    var n = EX[ex][0], r = rec(n), pb = kg > r.best;
+    hist.push([fmtKg(kg), rp, pb]); FK.haptic(12);
+    SESSION.sets++; SESSION.vol += kg * rp;
+    if (pb && SESSION.prs.indexOf(n) < 0) { SESSION.prs.push(n); SESSION.prev = SESSION.prev || {}; SESSION.prev[n] = r.best; }
+    LOG[n] = { last: [kg, rp], best: Math.max(r.best, kg), date: Date.now() };
+    try { localStorage.setItem('fk-log', JSON.stringify(LOG)); localStorage.setItem('fk-session', JSON.stringify({ id: t0, name: WNAME, sets: SESSION.sets, vol: Math.round(SESSION.vol), prs: SESSION.prs.map(function (p) { return [p, LOG[p].best, LOG[p].last[1], SESSION.prev[p]]; }), secs: Math.floor((Date.now() - t0) / 1000) + 763 })); } catch (e) {}
+    if (pb) FK.toast('New personal best: ' + n + ' ' + fmtKg(kg) + ' kg');
+    liveSet(n, set + 1, kg, rp);
+    set++;
+    if (set >= SETS) {
+      if (ex >= EX.length - 1) { FK.toast('Workout complete'); liveFinish().then(function () { setTimeout(function () { location.href = 'finish.html'; }, 600); }); return; }
+      ex++; set = 0; hist = []; start(ex); FK.toast('Next: ' + EX[ex][0]); paint(); return;
+    }
+    $('curCard').hidden = true; $('restCard').hidden = false; total = left = REST; showRest();
+    $('rNext').textContent = 'Next: set ' + (set + 1) + ' of ' + SETS; $('rHint').textContent = 'Breathe, then ' + (kg % 1 ? kg.toFixed(1) : kg) + ' kg × ' + rp;
+    paint(); clearInterval(rt); rt = setInterval(function () { left--; if (left <= 0) { left = 0; endRest(); return; } showRest(); }, 1000);
+  };
+  $('skip').onclick = endRest;
+  $('plus').onclick = function () { left += 15; total += 15; showRest(); };
+  paint();
+  FK.ready();
+})();
+</script>
+</body>
+</html>

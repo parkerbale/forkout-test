@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="276 160 232 802" fill="#BCD98A">
+  <!-- Forkout logo: a fork whose handle runs through a dumbbell -->
+  <path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/>
+  <rect x="281" y="773" width="35" height="134" rx="10"/>
+  <rect x="318" y="740" width="44" height="202" rx="9"/>
+  <rect x="424" y="740" width="44" height="202" rx="9"/>
+  <rect x="470" y="773" width="35" height="134" rx="10"/>
+</svg>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Widgets, Watch and alerts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.canvas{padding-bottom:160px}
+/* Lock screen */
+.lock{position:relative;margin:0 -48px;height:1400px;overflow:hidden;background:url(photos/header-bg.jpg) center/cover}
+.lock::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 600px at 50% 30%,rgba(var(--r-3c785a),.35),transparent 70%),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.75))}
+.island{position:absolute;left:50%;top:26px;transform:translateX(-50%);height:74px;min-width:250px;padding:0 20px 0 14px;border-radius:37px;background:#000;display:flex;align-items:center;gap:16px;z-index:3;box-shadow:0 0 0 1px rgba(var(--ink),.06)}
+.island .mini{width:46px;height:46px;position:relative}
+.island .mini svg{position:absolute;inset:0}
+.island b{font-size:24px;color:var(--carbs);font-variant-numeric:tabular-nums;margin-left:auto}
+.island span{font-size:20px;color:var(--fg2)}
+.date{position:relative;text-align:center;margin-top:170px;font-size:30px;font-weight:600;color:rgba(var(--ink),.85)}
+.clock{position:relative;text-align:center;font-size:220px;font-weight:700;letter-spacing:-8px;line-height:1;margin-top:6px;color:rgba(var(--ink),.92)}
+.lw{position:relative;display:flex;justify-content:center;gap:28px;margin-top:40px}
+.lw > div{width:130px;height:130px;border-radius:50%;background:rgba(var(--ink),.12);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);position:relative;display:grid;place-items:center;text-align:center}
+.lw svg.r{position:absolute;inset:8px;width:114px;height:114px}
+.lw b{font-size:30px;font-weight:700;line-height:1}
+.lw small{display:block;font-size:16px;color:var(--fg2);margin-top:4px}
+.live{position:relative;margin:60px 48px 0;padding:30px;border-radius:44px;background:rgba(var(--r-14181c),.75);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);display:flex;align-items:center;gap:28px;border:1px solid rgba(var(--ink),.08)}
+.live .lr{position:relative;width:150px;height:150px;flex:none}
+.live .lr svg{position:absolute;inset:0}
+.live .lr b{position:absolute;inset:0;display:grid;place-items:center;font-size:40px;font-weight:700;font-variant-numeric:tabular-nums}
+.live .t{flex:1;min-width:0}
+.live .t .lbl{font-size:16px}
+.live .t h3{margin:10px 0 0;font-size:32px}
+.live .t p{margin:6px 0 0;font-size:22px;color:var(--fg2)}
+.live .t .bts{display:flex;gap:12px;margin-top:16px}
+.live .t .bts button{height:52px;padding:0 22px;border-radius:26px;background:rgba(var(--ink),.1);font-size:20px;font-weight:600}
+.live .t .bts button.p{background:var(--acc);color:var(--on-acc)}
+.lockcap{position:relative;text-align:center;font-size:20px;color:rgba(var(--ink),.6);margin-top:24px}
+.notif{position:relative;margin:20px 48px 0;padding:24px 28px;border-radius:36px;background:rgba(var(--r-1e2226),.72);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);display:flex;gap:20px;border:1px solid rgba(var(--ink),.06);animation:fkin .6s var(--ease) both}
+.appicon{flex:none;width:74px;height:74px;border-radius:18px;background:var(--x-060606);display:grid;place-items:center}
+.appicon svg{width:22px;height:60px;color:var(--neon)}
+.notif .t{flex:1;min-width:0}
+.notif .t div{display:flex;justify-content:space-between;font-size:20px;color:var(--fg2)}
+.notif .t b{display:block;font-size:24px;margin-top:4px}
+.notif .t p{margin:4px 0 0;font-size:22px;color:var(--x-dde3e5);line-height:1.35}
+/* Sections */
+.sh{margin:70px 6px 8px}
+.sh h2{margin:12px 0 0;font-size:46px;font-weight:700;letter-spacing:-.8px}
+.sh p{margin:10px 0 0;font-size:23px;color:var(--muted)}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:30px}
+.wg{border-radius:48px;padding:30px;background:linear-gradient(160deg,var(--x-0f1a17),var(--x-070b0e));border:1px solid var(--line);aspect-ratio:1;position:relative;overflow:hidden}
+.wg.wide{grid-column:1/-1;aspect-ratio:auto;height:330px}
+.wg .r{position:relative;width:190px;height:190px;margin:6px auto 0}
+.wg .r svg{position:absolute;inset:0}
+.wg .r .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wg .r b{font-size:44px;font-weight:700}
+.wg .r span{font-size:17px;color:var(--fg2);letter-spacing:1.4px}
+.wg .cap{text-align:center;font-size:19px;color:var(--muted);margin-top:14px}
+.wg .flamebig{width:120px;height:120px;margin:10px auto 0;display:block;filter:drop-shadow(0 0 22px rgba(var(--r-ff9646),.7))}
+.wg .sn{text-align:center;font-size:64px;font-weight:700;margin-top:4px;line-height:1}
+.wg.wide .cols{display:grid;grid-template-columns:200px 1fr 1fr;gap:28px;align-items:center;height:100%}
+.wg.wide .mm div{margin-top:16px;font-size:20px;color:var(--fg2)}
+.wg.wide .mm .bar{height:10px;margin-top:8px}
+.wg.wide .wo{border-left:1px solid var(--line);padding-left:28px}
+.wg.wide .wo b{display:block;font-size:30px;margin-top:10px}
+.wg.wide .wo span{display:block;font-size:20px;color:var(--muted);margin-top:6px}
+.wg .logo{position:absolute;right:26px;top:22px;width:16px;height:46px;color:var(--neon);opacity:.9}
+/* Watch */
+.watches{display:flex;justify-content:center;gap:40px;margin-top:40px}
+.watch{position:relative;width:380px}
+.strap{position:relative;width:236px;height:150px;margin:0 auto;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(255,255,255,.06) 28%,rgba(255,255,255,.13) 50%,rgba(255,255,255,.05) 72%,rgba(0,0,0,.55) 100%),#1b1f22}
+.strap.t{border-radius:84px 84px 8px 8px / 56px 56px 8px 8px}.strap.b{border-radius:8px 8px 84px 84px / 8px 8px 56px 56px}
+.strap.t::before{content:"";position:absolute;left:50%;top:30px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#8a9095,#2b2f33 70%);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.strap.b::before{content:"";position:absolute;left:50%;top:34px;width:18px;height:92px;margin-left:-9px;background:radial-gradient(circle,#07080a 5.5px,rgba(255,255,255,.08) 6.6px,transparent 7.8px) 50% 0/18px 26px repeat-y}
+.strap::after{content:"";position:absolute;left:8px;right:8px;height:18px;background:linear-gradient(180deg,#07080a,#1a1d20)}
+.strap.t::after{bottom:0}.strap.b::after{top:0;transform:scaleY(-1)}
+.wcase{position:relative;height:460px;border-radius:110px;background:#000;border:14px solid transparent;
+  background:linear-gradient(#000,#000) padding-box,linear-gradient(150deg,#b1b6ba 0%,#55595e 8%,#2a2d30 24%,#3a3e42 50%,#1e2023 74%,#4f5459 90%,#a9aeb2 100%) border-box;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.05),0 0 0 1.5px #000,0 30px 60px rgba(0,0,0,.6)}
+.crown{position:absolute;right:-32px;top:110px;width:26px;height:80px;border-radius:12px;background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(255,255,255,.28) 55%,rgba(0,0,0,.45)),repeating-linear-gradient(180deg,#7d8287 0 3px,#2b2e31 3px 6px);box-shadow:0 0 0 1px #000}
+.wscr{position:absolute;inset:0;padding:40px 34px 30px;display:flex;flex-direction:column;gap:6px}
+.wscr .wt{display:flex;justify-content:space-between;font-size:22px;font-weight:700;color:var(--acc);letter-spacing:.6px}
+.wscr .wt span:last-child{color:var(--x-ffffff)}
+.wscr .s{font-size:24px;color:var(--x-9aa39e);font-weight:600}
+.wscr .bg{font-size:76px;font-weight:700;line-height:1;letter-spacing:-2px;font-variant-numeric:tabular-nums}
+.wscr .bg small{font-size:30px;color:var(--x-9aa39e);letter-spacing:0}
+.wscr .rp{font-size:28px;font-weight:600}
+.wscr .hr{display:flex;align-items:center;gap:8px;color:var(--x-ff6b6b);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.wscr .hr svg{width:24px;height:24px}
+.wdone{margin-top:auto;height:84px;border-radius:42px;background:var(--acc);color:var(--on-acc);font-size:28px;font-weight:700}
+.wdone.rest{background:var(--x-1e2421);color:var(--carbs)}
+.wface{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.wface .tm{font-size:96px;font-weight:700;letter-spacing:-3px;line-height:1}
+.wface .rings{position:relative;width:200px;height:200px}
+.wface .rings svg{position:absolute;inset:0}
+.wcap{text-align:center;font-size:21px;color:var(--muted);margin-top:22px}
+</style>
+</head>
+<body data-auth="none" class="photo-top" data-tab="none" data-title="Widgets · Watch · alerts" data-note="Lock screen with the rest timer Live Activity and Dynamic Island, home-screen widgets, notifications, and the Apple Watch app (tap Done).">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <!-- Lock screen with Live Activity + Dynamic Island -->
+        <div class="lock dk" id="lock">
+          <div class="island"><span class="mini"><svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="19" fill="none" stroke-width="5" style="stroke:rgba(var(--r-6cb8ff),.25)"/><circle class="isl" cx="23" cy="23" r="19" fill="none" stroke="var(--carbs)" stroke-width="5" stroke-linecap="round" transform="rotate(-90 23 23)"/></svg></span><span>Rest</span><b class="islT">1:24</b></div>
+          <div class="date">Thursday 22 October</div>
+          <div class="clock">9:41</div>
+          <div class="lw">
+            <div><svg class="r" viewBox="0 0 114 114"><circle cx="57" cy="57" r="50" fill="none" stroke-width="8" style="stroke:rgba(var(--ink),.2)"/><circle cx="57" cy="57" r="50" fill="none" stroke="var(--mint)" stroke-width="8" stroke-linecap="round" stroke-dasharray="207 315" transform="rotate(-90 57 57)"/></svg><span><b>958</b><small>kcal left</small></span></div>
+            <div><span><svg viewBox="0 0 24 24" style="fill:var(--x-ff9f5a);width:44px;height:44px;filter:drop-shadow(0 0 8px rgba(var(--r-ff9646),.8))"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/></svg><b>12</b></span></div>
+            <div><svg class="r" viewBox="0 0 114 114"><circle cx="57" cy="57" r="50" fill="none" stroke-width="8" style="stroke:rgba(var(--ink),.2)"/><circle cx="57" cy="57" r="50" fill="none" stroke="var(--protein)" stroke-width="8" stroke-linecap="round" stroke-dasharray="248 315" transform="rotate(-90 57 57)"/></svg><span><b>38g</b><small>protein</small></span></div>
+          </div>
+          <div class="live">
+            <div class="lr"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="64" fill="none" stroke-width="12" style="stroke:rgba(var(--r-6cb8ff),.2)"/><circle class="isl2" cx="75" cy="75" r="64" fill="none" stroke="var(--carbs)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 75 75)"/></svg><b class="islT">1:24</b></div>
+            <div class="t"><div class="lbl" style="color:var(--carbs)">Forkout · Rest timer</div><h3>Bench press</h3><p>Next: set 2 of 3 · 62.5 kg × 8</p><div class="bts"><button id="lSkip">Skip rest</button><button class="p" id="lAdd">+30s</button></div></div>
+          </div>
+          <div class="lockcap">Live Activity: your rest timer on the lock screen and in the Dynamic Island</div>
+          <div class="notif" style="animation-delay:.4s"><span class="appicon"><svg viewBox="276 160 232 802" fill="currentColor"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="281" y="773" width="35" height="134" rx="10"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/><rect x="470" y="773" width="35" height="134" rx="10"/></svg></span>
+            <div class="t"><div><span>FORKOUT</span><span>now</span></div><b>New PR 🏆</b><p>Bench press 62.5 kg × 8. That's +2.5 kg on last week.</p></div></div>
+        </div>
+
+        <!-- Home-screen widgets -->
+        <div class="sh" id="widgets"><span class="lbl acc">Home screen</span><h2>Widgets</h2><p>Glance at your day without opening the app.</p></div>
+        <div class="wgrid">
+          <div class="wg"><svg class="logo" viewBox="276 160 232 802" fill="currentColor"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/></svg>
+            <div class="r"><svg viewBox="0 0 190 190"><circle cx="95" cy="95" r="80" fill="none" stroke-width="16" style="stroke:rgba(var(--ink),.08)"/><circle cx="95" cy="95" r="80" fill="none" stroke="var(--mint)" stroke-width="16" stroke-linecap="round" stroke-dasharray="331 503" transform="rotate(-90 95 95)" style="filter:drop-shadow(0 0 8px color-mix(in srgb,var(--mint) 60%,transparent))"/></svg><div class="c"><b>958</b><span>KCAL LEFT</span></div></div>
+            <div class="cap">1,842 of 2,800</div></div>
+          <div class="wg" style="background:linear-gradient(160deg,var(--x-1a120c),var(--x-0a0d10))"><svg class="flamebig" viewBox="0 0 24 24" style="fill:var(--x-ff9f5a)"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/><path d="M12 13.5c.5 1.6 2.3 2.2 2.3 4a2.3 2.3 0 0 1-4.6 0c0-1.2.8-1.7 1-2.6.5.5.9.8 1.3.8z" style="fill:var(--x-ffe2b8)"/></svg><div class="sn">12</div><div class="cap">day streak · log today</div></div>
+          <div class="wg wide"><div class="cols">
+            <div class="r" style="width:180px;height:180px;margin:0"><svg viewBox="0 0 190 190"><circle cx="95" cy="95" r="80" fill="none" stroke-width="16" style="stroke:rgba(var(--ink),.08)"/><circle cx="95" cy="95" r="80" fill="none" stroke="var(--mint)" stroke-width="16" stroke-linecap="round" stroke-dasharray="331 503" transform="rotate(-90 95 95)"/></svg><div class="c"><b>66%</b><span>TODAY</span></div></div>
+            <div class="mm"><div>Protein 142/180g<div class="bar" style="--c:var(--protein)"><i style="width:79%"></i></div></div><div>Carbs 168/350g<div class="bar" style="--c:var(--carbs)"><i style="width:48%"></i></div></div><div>Fats 58/90g<div class="bar" style="--c:var(--fat)"><i style="width:64%"></i></div></div></div>
+            <div class="wo"><span class="lbl" style="font-size:16px">Today 5:30 PM</span><b>Upper Body Push</b><span>5 exercises · ~45 min</span></div>
+          </div></div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="sh" id="alerts"><span class="lbl acc">Notifications</span><h2>Smart nudges</h2><p>Only when they help. You choose which ones in Settings.</p></div>
+        <div style="margin:0 -48px" id="nlist"></div>
+
+        <!-- Apple Watch -->
+        <div class="sh" id="watch"><span class="lbl acc">Apple Watch</span><h2>Log sets from your wrist</h2><p>Tap Done after each set. The rest timer starts on its own.</p></div>
+        <div class="watches dk">
+          <div class="watch"><div class="strap t"></div><div class="wcase"><div class="crown"></div>
+            <div class="wscr"><div class="wt"><span>BENCH PRESS</span><span>9:41</span></div><div class="s" id="wSet">Set 1 of 3</div>
+              <div class="bg" id="wBig">62.5<small> kg</small></div><div class="rp" id="wReps">× 8 reps</div>
+              <div class="hr"><svg viewBox="0 0 24 24" style="fill:var(--x-ff6b6b)"><path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6a5.4 5.4 0 0 1 9.3 6c-2.3 4.4-9.3 9-9.3 9z"/></svg><span id="wHr">122</span> bpm</div>
+              <button class="wdone" id="wDone">Done ✓</button></div></div><div class="strap b"></div>
+            <div class="wcap">Workout app</div></div>
+          <div class="watch"><div class="strap t"></div><div class="wcase"><div class="crown"></div>
+            <div class="wscr wface"><div class="rings"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="none" stroke-width="16" style="stroke:rgba(var(--ink),.1)"/><circle cx="100" cy="100" r="86" fill="none" stroke="var(--mint)" stroke-width="16" stroke-linecap="round" stroke-dasharray="357 541" transform="rotate(-90 100 100)"/><circle cx="100" cy="100" r="62" fill="none" stroke-width="16" style="stroke:rgba(var(--ink),.1)"/><circle cx="100" cy="100" r="62" fill="none" stroke="var(--protein)" stroke-width="16" stroke-linecap="round" stroke-dasharray="308 390" transform="rotate(-90 100 100)"/><circle cx="100" cy="100" r="38" fill="none" stroke-width="16" style="stroke:rgba(var(--ink),.1)"/><circle cx="100" cy="100" r="38" fill="none" stroke="var(--water)" stroke-width="16" stroke-linecap="round" stroke-dasharray="143 239" transform="rotate(-90 100 100)"/></svg></div>
+              <div style="font-size:26px;font-weight:600">958 kcal left</div><div style="font-size:21px;color:var(--muted)">🔥 12 · 1.5 L water</div></div></div><div class="strap b"></div>
+            <div class="wcap">Watch face rings</div></div>
+        </div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  // Live Activity rest timer (counts down, loops for the demo)
+  var total = 120, end = performance.now() + 84000;
+  var L1 = 2 * Math.PI * 19, L2 = 2 * Math.PI * 64;
+  function tick() {
+    var left = (end - performance.now()) / 1000; if (left <= 0) { end = performance.now() + total * 1000; left = total; }
+    var s = Math.ceil(left), txt = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    document.querySelectorAll('.islT').forEach(function (e) { e.textContent = txt; });
+    document.querySelector('.isl').style.strokeDasharray = (L1 * left / total) + ' ' + L1;
+    document.querySelector('.isl2').style.strokeDasharray = (L2 * left / total) + ' ' + L2;
+    requestAnimationFrame(tick);
+  }
+  tick();
+  $('lSkip').onclick = function () { end = performance.now() + total * 1000; toast('Rest skipped · set 2'); };
+  $('lAdd').onclick = function () { end += 30000; total += 30; };
+
+  // Notifications
+  var LOGO = document.querySelector('.appicon').innerHTML;
+  var N = [['now', 'Lunch time?', '958 kcal left today. Snap your lunch and it\'s logged in 2 seconds.'],
+    ['4:55 PM', 'Upper Body Push at 5:30', '5 exercises · ~45 min. Try 62.5 kg on bench today.'],
+    ['8:30 PM', 'Keep your 12-day streak 🔥', 'Log today\'s workout or a meal before midnight.'],
+    ['Sun 9:00 AM', 'Week 13 photo day 📸', 'Same spot, same light. It only takes 10 seconds.']];
+  $('nlist').innerHTML = N.map(function (n, i) {
+    return '<div class="notif" style="animation-delay:' + (i * .1) + 's;background:rgba(var(--ink),.05)"><span class="appicon">' + LOGO + '</span><div class="t"><div><span>FORKOUT</span><span>' + n[0] + '</span></div><b>' + n[1] + '</b><p>' + n[2] + '</p></div></div>';
+  }).join('');
+
+  // Apple Watch set logger: Done → rest timer → next set (same as the website demo)
+  var W = { set: 1, rest: 0, timer: null }, REPS = [8, 8, 7];
+  function wPaint() {
+    if (W.set > 3) { $('wSet').textContent = 'Bench press done'; $('wBig').innerHTML = '3<small> sets</small>'; $('wReps').textContent = 'Next: Incline DB press'; $('wDone').textContent = 'Start again'; $('wDone').classList.remove('rest'); return; }
+    $('wSet').textContent = 'Set ' + W.set + ' of 3'; $('wBig').innerHTML = '62.5<small> kg</small>'; $('wReps').textContent = '× ' + REPS[W.set - 1] + ' reps';
+    if (W.rest > 0) { $('wDone').textContent = 'Rest ' + Math.floor(W.rest / 60) + ':' + String(W.rest % 60).padStart(2, '0'); $('wDone').classList.add('rest'); }
+    else { $('wDone').textContent = 'Done ✓'; $('wDone').classList.remove('rest'); }
+  }
+  $('wDone').onclick = function () {
+    if (W.set > 3) { W.set = 1; W.rest = 0; wPaint(); return; }
+    if (W.rest > 0) { W.rest = 0; clearInterval(W.timer); wPaint(); return; }
+    W.set++; FK.haptic(20);
+    if (W.set <= 3) { W.rest = 90; clearInterval(W.timer); W.timer = setInterval(function () { W.rest--; if (W.rest <= 0) { W.rest = 0; clearInterval(W.timer); } wPaint(); }, 1000); }
+    wPaint();
+  };
+  setInterval(function () { $('wHr').textContent = (W.rest > 0 ? 112 : 128) + Math.round(Math.random() * 8); }, 1400);
+
+  FK.ready(function () { if (location.hash) { var t = document.querySelector(location.hash); if (t) t.scrollIntoView({ behavior: 'smooth' }); } });
+})();
+</script>
+</body>
+</html>

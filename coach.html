@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Forkout AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.canvas{padding-bottom:460px}
+.ch{display:flex;align-items:center;gap:24px;padding-top:112px}
+.orb{position:relative;flex:none;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--x-ffffff),var(--acc) 30%,var(--x-1c6b4a) 70%,var(--x-08130f));box-shadow:0 0 40px color-mix(in srgb,var(--acc) 50%,transparent);animation:breathe 3.2s ease-in-out infinite}
+.orb::after{content:"";position:absolute;right:4px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--x-3be38c);box-shadow:0 0 0 5px var(--bg)}
+@keyframes breathe{50%{box-shadow:0 0 70px color-mix(in srgb,var(--acc) 70%,transparent);transform:scale(1.03)}}
+.ch h1{margin:0;font-size:52px;font-weight:700;letter-spacing:-1px}
+.ch p{margin:8px 0 0;font-size:23px;color:var(--muted)}
+.ch .back{margin-left:auto}
+.ctx{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.ctx span{height:50px;display:flex;align-items:center;gap:10px;padding:0 20px;border-radius:25px;background:rgba(var(--ink),.04);border:1px solid var(--line);font-size:20px;color:var(--fg2)}
+.ctx i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.day{text-align:center;font-size:19px;letter-spacing:3px;color:var(--dim);margin:44px 0 10px}
+.chat{display:flex;flex-direction:column;gap:20px}
+.bub{max-width:84%;padding:24px 30px;border-radius:34px;font-size:24px;line-height:1.42;animation:fkin .45s var(--ease) both}
+.bub.me{align-self:flex-end;background:var(--acc);color:var(--on-acc);font-weight:500;border-bottom-right-radius:10px}
+.bub.ai{align-self:flex-start;background:rgba(var(--ink),.05);border:1px solid var(--line);border-bottom-left-radius:10px}
+.bub.ai b{color:var(--x-ffffff)}
+.bub ul{margin:12px 0 0;padding-left:28px}
+.bub li{margin:6px 0}
+.att{align-self:flex-start;width:84%;border-radius:32px;padding:26px 28px;animation:fkin .5s var(--ease) both}
+.att h4{margin:0;font-size:28px}
+.att .wk{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:18px}
+.att .wk div{height:70px;border-radius:16px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font-size:17px;font-weight:700;color:var(--on-acc)}
+.att .pills{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.att .pills span{padding:8px 16px;border-radius:18px;background:rgba(var(--ink),.06);font-size:20px;font-weight:600}
+.att .link{display:inline-flex;align-items:center;gap:10px;margin-top:18px;height:56px;padding:0 22px;border-radius:28px;background:var(--acc-soft);border:1px solid var(--acc-line);color:var(--acc);font-size:21px;font-weight:700}
+.dots{display:inline-flex;gap:8px;padding:26px 30px;border-radius:34px;background:rgba(var(--ink),.05);border:1px solid var(--line);align-self:flex-start}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--muted);animation:bounce 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{50%{transform:translateY(-8px);opacity:.5}}
+/* Composer sits above the tab bar */
+.composer{position:absolute;left:0;right:0;bottom:160px;padding:20px 48px 24px;background:linear-gradient(180deg,rgba(var(--r-000408),0),rgba(var(--r-000408),.95) 30%)}
+.qp{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -48px 18px;padding:0 48px}
+.qp::-webkit-scrollbar{display:none}
+.qp button{flex:none;height:56px;padding:0 22px;border-radius:28px;background:rgba(var(--ink),.05);border:1px solid var(--line);font-size:21px;color:var(--fg2)}
+.composer .input{background:var(--x-0c1419);border-color:var(--line2)}
+.composer input{flex:1;font-size:23px;color:var(--fg);outline:none}
+.mic{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.mic svg{width:30px;height:30px}
+.left10{display:inline-flex;margin-top:14px;padding:8px 18px;border-radius:18px;font-size:20px;font-weight:600;background:rgba(var(--ink),.07);color:var(--muted)}
+</style>
+</head>
+<body data-tab="" data-title="Forkout AI (coach)" data-note="Type a question (try protein, sore, swap or weight) or tap a suggestion. The coach knows your food and training.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll" id="scroll"><div class="canvas" id="canvas">
+        <div class="ch in">
+          <span class="ico acc" style="width:100px;height:100px;flex:none"><svg viewBox="0 0 24 24" fill="currentColor" style="width:48px;height:48px"><path d="M10.5 2.5l1.9 5.4 5.4 1.9-5.4 1.9-1.9 5.4-1.9-5.4L3.2 9.8l5.4-1.9z"/><path d="M18.5 13.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" opacity=".7"/></svg></span>
+          <div><h1>Forkout AI</h1><p>Your coach. Knows your food and your training</p><span class="left10" id="left10">7 of 10 questions left today</span></div>
+          <a class="back press" href="home.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+        </div>
+        <div class="ctx in" style="--i:1"><span><i style="--c:var(--mint)"></i>1,842 / 2,800 kcal</span><span><i style="--c:var(--protein)"></i>38g protein to go</span><span><i style="--c:var(--carbs)"></i>Upper Body Push today</span></div>
+
+        <div class="day in" style="--i:2">MONDAY</div>
+        <div class="chat in" style="--i:2" id="chat">
+          <div class="bub me">Build muscle. I can train 4 days a week, about an hour.</div>
+          <div class="bub ai">Got it. <b>Upper / Lower × 2</b> fits you best: each muscle twice a week, with time to recover. Weights go up when you hit all your reps.</div>
+          <div class="card att"><h4>Upper / Lower × 2</h4><div class="wk"><div style="background:var(--acc)">UP</div><div style="background:var(--carbs)">LO</div><div style="background:rgba(var(--ink),.06);color:var(--dim)">–</div><div style="background:var(--acc)">UP</div><div style="background:var(--carbs)">LO</div><div style="background:rgba(var(--ink),.06);color:var(--dim)">–</div><div style="background:rgba(var(--ink),.06);color:var(--dim)">–</div></div>
+            <a class="link" href="train.html">Open my plan →</a></div>
+          <div class="day" style="margin:24px 0 0">TODAY</div>
+          <div class="bub me">My shoulder clicks on bench. What should I change?</div>
+          <div class="bub ai">Usually it's elbows flaring out. Try this today:<ul><li>Tuck elbows to about <b>45°</b></li><li>Pull shoulder blades back and down first</li><li>Drop to <b>57.5 kg</b> for 2 sessions, then build back</li></ul></div>
+          <div class="card att"><h4>Bench press form</h4><div class="pills"><span>Chest</span><span>Front delts</span><span>Triceps</span></div><a class="link" href="form.html">▶ Watch the form</a></div>
+        </div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer">
+        <div class="composer">
+          <div class="qp" id="qp"><button>950 cals left, easy dinner?</button><button>How much protein do I need?</button><button>Swap an exercise</button><button>Why am I so sore?</button><button>Cheap high-protein snacks</button></div>
+          <label class="input"><input id="msg" placeholder="Ask your coach anything…"><span class="mic" role="button" aria-label="Voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span><span class="send" id="send" role="button" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$, chat = $('chat'), scroll = $('scroll');
+  var ANS = [
+    [['dinner', 'cals', 'eat'], 'This fits with <b>30 kcal</b> to spare and finishes your protein:', '<div class="card att"><h4>Honey-soy chicken stir-fry</h4><div class="pills"><span>920 kcal</span><span style="color:var(--protein)">P 60g</span><span style="color:var(--carbs)">C 98g</span><span style="color:var(--fat)">F 24g</span></div><a class="link" href="food-ai.html">Add to dinner →</a></div>'],
+    [['protein'], 'For you it\'s <b>180g a day</b> (about 2g per kg). You\'re at 142g today, so a Greek yoghurt + whey shake closes the gap.', ''],
+    [['swap', 'exercise', 'replace'], 'Sure. For <b>bench press</b> you could do dumbbell press (easier on shoulders) or push-ups with a band at home. Want me to swap it in today\'s workout?', '<div class="card att"><h4>Dumbbell bench press</h4><div class="pills"><span>3 × 10</span><span>22.5 kg each</span></div><a class="link" href="workout.html">Swap it in →</a></div>'],
+    [['sore', 'pain', 'hurt'], 'Normal 1–2 days after a new lift. Keep moving: an easy 20-min walk helps. If it\'s sharp pain or in a joint, skip that lift and tell me which one.', ''],
+    [['weight', 'losing', 'fat'], 'You\'re down <b>2.2 kg in 10 weeks</b>, right on track. If it stalls for 2 weeks I\'ll trim 150 kcal and add a 15-min incline walk.', ''],
+    [['snack', 'cheap'], 'Cheap high-protein snacks: <b>tuna on rice cakes</b> (A$1.20, 25g), <b>Greek yoghurt</b> (A$0.90, 18g), <b>2 boiled eggs</b> (A$0.80, 12g).', '']
+  ];
+  function bottom() { scroll.scrollTo({ top: scroll.scrollHeight, behavior: FK.reduce ? 'auto' : 'smooth' }); }
+  function send(text) {
+    text = (text || '').trim(); if (!text) return;
+    chat.insertAdjacentHTML('beforeend', '<div class="bub me"></div>'); chat.lastElementChild.textContent = text;
+    chat.insertAdjacentHTML('beforeend', '<div class="dots"><i></i><i></i><i></i></div>'); bottom();
+    var t = text.toLowerCase(), a = ANS.filter(function (x) { return x[0].some(function (w) { return t.indexOf(w) >= 0; }); })[0] ||
+      [0, 'Good question. Based on today (1,842 kcal, Upper Body Push at 5:30), I\'d keep it simple: hit your protein and get to bed by 10:30 for recovery.', ''];
+    setTimeout(function () { chat.querySelector('.dots').remove(); chat.insertAdjacentHTML('beforeend', '<div class="bub ai">' + a[1] + '</div>' + a[2]); bottom(); }, FK.reduce ? 0 : 900);
+  }
+  $('send').onclick = function () { send($('msg').value); $('msg').value = ''; };
+  $('msg').addEventListener('keydown', function (e) { if (e.key === 'Enter') { send(this.value); this.value = ''; } });
+  $('qp').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) send(b.textContent); });
+  document.querySelector('.mic').onclick = function () { toast('Listening… (voice input)'); };
+
+  // ---------- Live mode: the real Forkout AI (demo mode keeps the example chat above) ----------
+  if (FK.api && FK.api.live) {
+    var LIMIT = 40, busy = false;
+    function setLeft(n) { $('left10').textContent = n + ' of ' + LIMIT + ' questions left today'; $('left10').hidden = n > 10; }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function linkCard(l) { var L = FK.api.LINKS[l]; return L ? '<a class="link" href="' + L[0] + '" style="display:block;margin:-4px 0 6px">' + L[1] + ' →</a>' : ''; }
+    function mealCard(m) {
+      return '<div class="card att"><h4>' + esc(m.name) + '</h4><div class="pills"><span>' + m.kcal + ' kcal</span><span style="color:var(--protein)">P ' + m.protein + 'g</span><span style="color:var(--carbs)">C ' + m.carbs + 'g</span><span style="color:var(--fat)">F ' + m.fat + 'g</span></div>' +
+        '<div style="margin-top:12px;font-size:26px;color:var(--dim)">' + m.ingredients.map(function (i) { return esc(i.amount + ' ' + i.item); }).join(' · ') + '</div>' +
+        '<a class="link" href="food-ai.html">More meal ideas →</a></div>';
+    }
+    function aiBubble(r) { chat.insertAdjacentHTML('beforeend', '<div class="bub ai">' + FK.api.fmt(r.reply) + '</div>' + (r.meal ? mealCard(r.meal) : '') + (r.link && r.link !== 'none' ? linkCard(r.link) : '')); }
+    // Real numbers in the strip under the title
+    FK.api.chatContext().then(function (c) {
+      var left = Math.max(0, (c.kcal_goal || 0) - (c.kcal_eaten || 0)), pl = Math.max(0, (c.protein_goal || 0) - (c.protein_eaten || 0));
+      document.querySelector('.ctx').innerHTML = '<span><i style="--c:var(--mint)"></i>' + (c.kcal_eaten || 0).toLocaleString('en-AU') + ' / ' + (c.kcal_goal || 0).toLocaleString('en-AU') + ' kcal</span><span><i style="--c:var(--protein)"></i>' + pl + 'g protein to go</span><span><i style="--c:var(--carbs)"></i>' + esc(c.today_workout || 'Rest day') + (c.today_workout === 'Rest day' ? '' : ' today') + '</span>';
+      $('qp').firstChild.textContent = left + ' cals left, easy dinner?';
+    }).catch(function () {});
+    // Past messages from this account
+    chat.innerHTML = ''; document.querySelector('.day').textContent = 'TODAY';
+    FK.api.chatHistory('coach', 30).then(function (rows) {
+      if (!rows.length) { chat.innerHTML = '<div class="bub ai">Hey! I\'m Forkout AI. I can see your food and training for today. Ask me anything: meals that fit, swaps, soreness, protein, your plan.</div>'; }
+      rows.forEach(function (m) {
+        if (m.role === 'user') { chat.insertAdjacentHTML('beforeend', '<div class="bub me"></div>'); chat.lastElementChild.textContent = m.content; }
+        else chat.insertAdjacentHTML('beforeend', '<div class="bub ai">' + FK.api.fmt(m.content.replace(/\n\[Meal idea:[^\]]*\]$/, '')) + '</div>');
+      });
+      setTimeout(bottom, 100);
+    }).catch(function () { chat.innerHTML = '<div class="bub ai">Ask me anything about your training or food.</div>'; });
+    FK.api.chatLeft(LIMIT).then(setLeft).catch(function () { $('left10').hidden = true; });
+
+    send = function (text) {
+      text = (text || '').trim().slice(0, 1000); if (!text || busy) return;
+      busy = true;
+      chat.insertAdjacentHTML('beforeend', '<div class="bub me"></div>'); chat.lastElementChild.textContent = text;
+      chat.insertAdjacentHTML('beforeend', '<div class="dots"><i></i><i></i><i></i></div>'); bottom();
+      FK.api.chat('coach', text).then(function (r) {
+        aiBubble(r); FK.api.chatLeft(r.limit || LIMIT).then(setLeft).catch(function () {});
+      }, function (e) {
+        chat.insertAdjacentHTML('beforeend', '<div class="bub ai"></div>'); chat.lastElementChild.textContent = e.message || 'Something went wrong. Try again.';
+        if (e.status === 429 && /today/.test(e.message)) setLeft(0);
+      }).then(function () { var d = chat.querySelector('.dots'); if (d) d.remove(); busy = false; bottom(); });
+    };
+  }
+  FK.ready(function () { setTimeout(bottom, 400); });
+})();
+</script>
+</body>
+</html>

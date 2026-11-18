@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Your plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:3610px;min-height:3610px!important}</style>
+</head>
+<body class="solidtop" data-tab="none" data-title="Your plan" data-note="Change your goal, days, session length, split and calories. Pick Woman to see the women-focused splits.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="lg-top in" style="--i:0"><a class="ibtn press" href="train.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a><h1 class="ttl" style="margin-left:6px">Your plan</h1></div>
+        <section class="c in" style="--i:1;margin-top:0"><div class="qh">About you<small>Used to suggest a split that suits you. You can change it any time.</small></div>
+          <div class="chips5" id="sex"><button data-v="f">Woman</button><button data-v="m">Man</button><button data-v="x">Prefer not to say</button></div></section>
+        <section class="c in" style="--i:2"><div class="qh">Goal</div>
+          <div class="chips5" id="goal"><button data-v="Build muscle">Build muscle</button><button data-v="Lose fat">Lose fat</button><button data-v="Get stronger">Get stronger</button><button data-v="Tone &amp; recomp">Tone &amp; recomp</button></div></section>
+        <section class="c in" style="--i:3"><div class="qh">Days a week</div>
+          <div class="chips5" id="days"><button data-v="2">2</button><button data-v="3">3</button><button data-v="4">4</button><button data-v="5">5</button><button data-v="6">6</button></div>
+          <div class="qh" style="margin-top:44px">Time per session</div>
+          <div class="chips5" id="len"><button data-v="30">30 min</button><button data-v="45">45 min</button><button data-v="60">60 min</button><button data-v="75">75 min</button><button data-v="90">90 min</button></div>
+          <div class="qh" style="margin-top:44px">Training times<small>Set a time for each training day, in 30 minute steps. We'll suggest a pre-gym meal and remind you before each session.</small></div>
+          <div class="ttimes" id="times"></div></section>
+        <section class="c in" style="--i:4"><div class="qh">Your split<small id="splSub">Pick how your week is organised.</small></div><div id="spl"></div></section>
+        <section class="c in" style="--i:5"><div class="qh">Daily calories<small id="kcSub">Set from your goal. Change it if you like.</small></div>
+          <div class="kc"><b class="num"><span id="kc">2,800</span><small>kcal</small></b><div class="pm"><button id="kcM" aria-label="Less">−</button><button id="kcP" aria-label="More">+</button></div></div>
+          <div class="chips5"><button id="kcAuto">Reset to suggested</button></div></section>
+        <a class="btn wide save press in" style="--i:6" href="#" id="save">Save plan</a>
+        <p class="sub2" style="text-align:center;margin-top:22px">Changes start today. Past sessions stay as they are.</p>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var P = FKPlan.get();
+  function pressed(id, v) { document.querySelectorAll('#' + id + ' button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === String(v))); }); }
+  function fmt(n) { return n.toLocaleString('en-AU'); }
+  var DL = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  function drawSplits() {
+    var list = FKPlan.forDays(P.days), rec = FKPlan.rec(P.sex, P.days);
+    if (!FKPlan.find(P.split) || FKPlan.find(P.split).days !== P.days) P.split = rec;
+    list = list.slice().sort(function (a, b) { return (a.id === rec ? -1 : b.id === rec ? 1 : 0); });
+    $('spl').innerHTML = list.map(function (s) {
+      var pat = FKPlan.DAYPAT[s.days];
+      var strip = DL.map(function (d, i) { var k = pat.indexOf(i); return '<i class="' + (k > -1 ? 'on' : '') + '">' + (k > -1 ? s.s[k % s.s.length].charAt(0) : '') + '</i>'; }).join('');
+      var tag = s.id === rec ? '<span class="tg">Recommended</span>' : (s.women && P.sex === 'f' ? '<span class="tg w">Popular with women</span>' : '');
+      return '<button class="spl press" data-id="' + s.id + '" aria-pressed="' + (s.id === P.split) + '"><div class="r1"><b>' + s.name + '</b>' + tag + '</div><p>' + s.note + '</p><div class="wkp">' + strip + '</div></button>';
+    }).join('') + '<button class="spl press" data-id="custom"><div class="r1"><b>Build my own</b></div><p>Choose the sessions for each day. Coming soon.</p></button>';
+  }
+  var DN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  function drawTimes() {
+    var w = FKPlan.week(P);
+    $('times').innerHTML = w.map(function (x, d) { if (x.rest) return ''; return '<div class="tt"><div><b>' + DN[d] + '</b><span>' + x.name + '</span></div><div class="tst"><button class="press" data-d="' + d + '" data-s="-0.5" aria-label="30 minutes earlier">−</button><em class="num">' + FKPlan.hm(FKPlan.timeFor(P, d)) + '</em><button class="press" data-d="' + d + '" data-s="0.5" aria-label="30 minutes later">+</button></div></div>'; }).join('');
+  }
+  function draw() {
+    pressed('sex', P.sex); pressed('goal', P.goal); pressed('days', P.days); pressed('len', P.len); drawTimes();
+    drawSplits();
+    if (P.auto) P.kcal = FKPlan.KCAL[P.goal] || 2800;
+    $('kc').textContent = fmt(P.kcal);
+    $('kcSub').textContent = P.auto ? 'Suggested from your goal. Change it if you like.' : 'Custom. Tap Reset to go back to the suggestion.';
+  }
+  function bind(id, key, num) { $(id).addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var v = num ? +b.dataset.v : b.dataset.v; if (key === 'sex' && P.sex === v) v = ''; P[key] = v; if (key === 'days' || key === 'sex') P.split = FKPlan.rec(P.sex, P.days); draw(); FK.haptic(8); }); }
+  bind('sex', 'sex'); bind('goal', 'goal'); bind('days', 'days', true); bind('len', 'len', true);
+  $('times').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var d = +b.dataset.d; if (!P.times) P.times = [null, null, null, null, null, null, null]; P.times[d] = Math.min(23, Math.max(4, FKPlan.timeFor(P, d) + (+b.dataset.s))); drawTimes(); });
+  $('spl').addEventListener('click', function (e) { var b = e.target.closest('.spl'); if (!b) return; if (b.dataset.id === 'custom') return FK.toast('Custom splits are coming soon'); P.split = b.dataset.id; draw(); });
+  $('kcM').onclick = function () { P.kcal = Math.max(1200, P.kcal - 50); P.auto = false; draw(); };
+  $('kcP').onclick = function () { P.kcal = Math.min(5000, P.kcal + 50); P.auto = false; draw(); };
+  $('kcAuto').onclick = function () { P.auto = true; draw(); };
+  $('save').onclick = function (e) { e.preventDefault(); FKPlan.save(P); FK.toast('Plan updated'); setTimeout(function () { location.href = 'train.html'; }, 700); };
+  draw();
+  FK.ready();
+})();
+</script>
+</body>
+</html>

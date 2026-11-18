@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forkout App Screens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Overview: every screen at once. Click a screen's name to open it full size. */
+body{margin:0;background:radial-gradient(1000px 600px at 50% -10%,#0d1a17,transparent 70%),#020406;color:#F4F7F7;font-family:Inter,system-ui,sans-serif}
+header{max-width:1400px;margin:0 auto;padding:48px 24px 8px;display:flex;align-items:center;gap:20px}
+header svg{width:22px;height:74px;color:#BCD98A;filter:drop-shadow(0 0 10px rgba(188,217,138,.4))}
+h1{margin:0;font-size:32px;letter-spacing:-.5px}
+header p{margin:6px 0 0;color:#8D99A1}
+.grid{max-width:1400px;margin:0 auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:36px 24px}
+.s a{display:block;color:#D5DBDC;text-decoration:none;font-weight:600;font-size:14px;margin-bottom:10px}
+.s a:hover{color:#B7F2A3}
+.frame{width:195px;height:422px;border-radius:30px;overflow:hidden;box-shadow:0 0 0 5px #121716,0 0 0 6px #2a312e,0 30px 60px rgba(0,0,0,.6)}
+.frame iframe{width:390px;height:844px;border:0;zoom:.5;pointer-events:none}
+</style>
+</head>
+<body>
+<header>
+  <svg viewBox="276 160 232 802" fill="currentColor" aria-hidden="true"><path d="M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z"/><rect x="281" y="773" width="35" height="134" rx="10"/><rect x="318" y="740" width="44" height="202" rx="9"/><rect x="424" y="740" width="44" height="202" rx="9"/><rect x="470" y="773" width="35" height="134" rx="10"/></svg>
+  <div><h1>Forkout app design</h1><p>Every screen. Click a name to open it full size and tap around.</p></div>
+</header>
+<div class="grid" id="grid"></div>
+<script>
+[['home.html', 'Home'], ['food.html', 'Nutrition'], ['scan.html', 'Scan a meal'], ['meals.html', 'Meal ideas'], ['food-ai.html', 'Food AI'], ['train.html', 'Workouts · plan'], ['workout.html', 'Workout logger'], ['finish.html', 'Workout done'], ['plan.html', 'Your plan'], ['goal.html', 'Your goal'],
+ ['form.html', 'Form guide'], ['coach.html', 'Forkout AI (coach)'], ['progress.html', 'Progress'], ['onboarding.html', 'Onboarding'], ['paywall.html', 'Paywall'], ['settings.html', 'Settings'], ['extras.html', 'Widgets · Watch · alerts']]
+.forEach(function (s) {
+  document.getElementById('grid').insertAdjacentHTML('beforeend', '<div class="s"><a href="' + s[0] + '">' + s[1] + ' →</a><div class="frame"><iframe src="' + s[0] + '" loading="lazy" title="' + s[1] + '"></iframe></div></div>');
+});
+</script>
+</body>
+</html>

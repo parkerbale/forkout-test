@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Workout complete</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:auto}</style>
+</head>
+<body class="solidtop" data-tab="none" data-title="Workout complete" data-note="The finish screen after a workout: duration, sets, volume, any personal best and your weekly goal.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="fin in" style="--i:0"><div class="fbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12.2l3.6 3.6 7.4-7.6"/></svg></div><h1>Workout complete.</h1><p id="fName">Upper Body Push</p></div>
+        <div class="fst3 in" style="--i:1">
+          <div><b class="num" id="fT">52:14</b><span>Duration</span></div><div><b class="num" id="fSets">19</b><span>Sets completed</span></div><div><b class="num" id="fVol">4,820</b><span>Volume (kg)</span></div>
+        </div>
+        <section class="fcard in" style="--i:2" id="fPr"><div class="fh"><span class="fi pr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4.500a3 3 0 0 0 3.500 4M16 6h3.500A3 3 0 0 1 16 10M12 13v4M8.500 20h7"/></svg></span><b>New personal best</b></div>
+          <div class="fpb"><b class="num" id="fPrV">62.5 kg × 8</b><em id="fPrD">+2.5 kg</em></div><span class="fsub" id="fPrN">Bench press</span></section>
+        <section class="fcard in" style="--i:3"><div class="fh"><span class="fi wk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/></svg></span><b id="fWkT">Weekly goal complete</b></div>
+          <div class="fwk"><span id="fWkS">You completed all 4 planned workouts.</span><b class="num" id="fWkN">4/4</b></div><div class="fbar"><i id="fWkB" style="width:100%"></i></div></section>
+        <a class="btn wide press fdone in" style="--i:4" href="home.html">Done</a>
+        <button class="fshare press in" style="--i:4" id="fShare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Share workout</button>
+        <div class="fmark in" style="--i:5">FORKOUT</div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/plan.js"></script>
+<script src="js/fk.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var S = null; try { S = JSON.parse(localStorage.getItem('fk-session') || 'null'); } catch (e) {}
+  var secs = S ? S.secs : 52 * 60 + 14; $('fT').textContent = Math.floor(secs / 60) + ':' + ('0' + (secs % 60)).slice(-2);
+  if (S) {
+    $('fName').textContent = S.name; $('fSets').textContent = S.sets; $('fVol').textContent = Math.round(S.vol).toLocaleString('en-AU');
+    if (S.prs.length) { var p = S.prs[0]; $('fPrV').textContent = p[1] + ' kg × ' + p[2]; $('fPrN').textContent = p[0] + (S.prs.length > 1 ? ' + ' + (S.prs.length - 1) + ' more' : '');
+      if (p[3] != null) $('fPrD').textContent = '+' + (Math.round((p[1] - p[3]) * 10) / 10) + ' kg'; else $('fPrD').hidden = true; }
+    else $('fPr').hidden = true;
+  }
+  var H = []; try { H = JSON.parse(localStorage.getItem('fk-history') || '[]'); } catch (e) {}
+  if (S && S.id && !H.some(function (h) { return h.id === S.id; })) { H.push({ id: S.id, d: Date.now(), name: S.name, sets: S.sets, vol: S.vol }); try { localStorage.setItem('fk-history', JSON.stringify(H)); } catch (e) {} }
+  var now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7).getTime();
+  var P = window.FKPlan ? FKPlan.get() : { days: 4 }, wk = H.filter(function (h) { return h.d >= mon; }).length;
+  function weekly(done) {
+    var all = done >= P.days;
+    $('fWkN').textContent = done + '/' + P.days; $('fWkB').style.width = (done / P.days * 100) + '%';
+    $('fWkT').textContent = all ? 'Weekly goal complete' : 'Weekly goal';
+    $('fWkS').textContent = all ? 'You completed all ' + P.days + ' planned workouts.' : (P.days - done) + ' more to hit your goal this week.';
+  }
+  weekly(H.length ? Math.min(P.days, wk) : Math.min(P.days, 4));
+  // Live mode: count the finished workouts saved on the account this week
+  if (window.FK && FK.plan && FK.plan.live) FK.plan.thisWeek().then(function (w) { weekly(Math.min(P.days, w.length)); }).catch(function () {});
+  function card(photo) {
+    var W = 1080, Hh = 1920, c = document.createElement('canvas'); c.width = W; c.height = Hh; var x = c.getContext('2d');
+    var F = '"Inter", system-ui, -apple-system, "Segoe UI", sans-serif', G = '#BCD98A', GOOD = '#6FD08A';
+    x.fillStyle = '#0B0E0D'; x.fillRect(0, 0, W, Hh);
+    function rr(X, Y, w, h, r, fill, stroke) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); if (fill) { x.fillStyle = fill; x.fill(); } if (stroke) { x.strokeStyle = stroke; x.lineWidth = 2; x.stroke(); } }
+    function t(s, X, Y, size, w, col, al, ls) { x.font = w + ' ' + size + 'px ' + F; x.fillStyle = col; x.textAlign = al || 'left'; if (ls) { x.letterSpacing = ls + 'px'; } x.fillText(s, X, Y); x.letterSpacing = '0px'; }
+    if (photo) {
+      var ph = 1060, sc = Math.max(W / photo.width, ph / photo.height), pw0 = photo.width * sc, ph0 = photo.height * sc;
+      x.save(); x.beginPath(); x.rect(0, 0, W, ph); x.clip(); x.drawImage(photo, (W - pw0) / 2, (ph - ph0) / 2, pw0, ph0); x.restore();
+      rr(W / 2 - 170, 80, 340, 84, 42, 'rgba(10,12,11,.72)'); t('FORKOUT', W / 2, 136, 32, '600', '#E9EEE9', 'center', 12);
+      t('Workout complete.', 80, 1180, 76, '700', '#fff'); t($('fName').textContent, 80, 1240, 36, '500', 'rgba(255,255,255,.6)');
+      [[$('fT').textContent, 'Duration'], [$('fSets').textContent, 'Sets'], [$('fVol').textContent, 'Volume (kg)']].forEach(function (v, i) { var X = 80 + i * 314; rr(X, 1300, 290, 190, 40, 'rgba(255,255,255,.06)', 'rgba(255,255,255,.1)'); t(v[0], X + 145, 1400, 64, '700', '#fff', 'center'); t(v[1], X + 145, 1452, 30, '500', 'rgba(255,255,255,.55)', 'center'); });
+      if (!$('fPr').hidden) { rr(80, 1520, 920, 150, 40, 'rgba(255,255,255,.06)', 'rgba(255,255,255,.1)'); rr(120, 1553, 84, 84, 26, 'rgba(242,179,107,.2)'); t('★', 162, 1612, 44, '700', '#F2B36B', 'center');
+        var s1 = $('fPrN').textContent + '  ' + $('fPrV').textContent; t(s1, 236, 1612, 40, '700', '#fff'); x.font = '700 40px ' + F; var w1 = x.measureText(s1).width; if (!$('fPrD').hidden) t($('fPrD').textContent, 256 + w1, 1612, 34, '700', GOOD); }
+      t('Fuelled and trained with Forkout', W / 2, 1780, 32, '500', 'rgba(255,255,255,.55)', 'center'); t('forkoutai.app', W / 2, 1832, 36, '700', G, 'center');
+      return c.toDataURL('image/png');
+    }
+    // logo mark
+    x.save(); x.translate(W / 2 - 22, 120); x.scale(0.11, 0.11); x.translate(-276, -160); x.fillStyle = G;
+    x.fill(new Path2D('M333 185 L334 407 L372 441 L380 232 L392 165 L404 232 L412 441 L451 407 L452 185 Q478 300 485 422 Q485 431 479 437 L431 489 Q414 510 411 540 L411 958 L375 958 L375 540 Q372 510 355 489 L306 437 Q300 431 300 422 Q307 300 333 185 Z'));
+    [[281, 773, 35, 134], [318, 740, 44, 202], [424, 740, 44, 202], [470, 773, 35, 134]].forEach(function (r) { x.fillRect(r[0], r[1], r[2], r[3]); }); x.restore();
+    t('FORKOUT', W / 2, 260, 34, '600', '#E9EEE9', 'center', 14);
+    t('Workout complete.', W / 2, 470, 96, '700', '#FFFFFF', 'center');
+    t($('fName').textContent, W / 2, 545, 40, '500', 'rgba(255,255,255,.6)', 'center');
+    var st = [[$('fT').textContent, 'Duration'], [$('fSets').textContent, 'Sets'], [$('fVol').textContent, 'Volume (kg)']];
+    st.forEach(function (v, i) { var X = 80 + i * 314; rr(X, 640, 290, 230, 44, 'rgba(255,255,255,.06)', 'rgba(255,255,255,.1)'); t(v[0], X + 145, 760, 72, '700', '#fff', 'center'); t(v[1], X + 145, 820, 32, '500', 'rgba(255,255,255,.55)', 'center'); });
+    var y = 920;
+    if (!$('fPr').hidden) {
+      rr(80, y, 920, 300, 48, 'rgba(255,255,255,.06)', 'rgba(255,255,255,.1)');
+      rr(130, y + 50, 84, 84, 26, 'rgba(242,179,107,.2)'); t('★', 172, y + 110, 44, '700', '#F2B36B', 'center');
+      t('New personal best', 244, y + 105, 40, '700', '#fff');
+      var pv = $('fPrV').textContent; t(pv, 130, y + 210, 70, '700', '#fff'); x.font = '700 70px ' + F; var pw = x.measureText(pv).width;
+      if (!$('fPrD').hidden) t($('fPrD').textContent, 150 + pw, y + 210, 40, '700', GOOD);
+      t($('fPrN').textContent, 130, y + 262, 34, '500', 'rgba(255,255,255,.55)'); y += 330;
+    }
+    rr(80, y, 920, 230, 48, 'rgba(255,255,255,.06)', 'rgba(255,255,255,.1)');
+    t($('fWkT').textContent, 130, y + 90, 40, '700', '#fff'); t($('fWkN').textContent, 950, y + 90, 44, '700', '#fff', 'right');
+    rr(130, y + 140, 820, 18, 9, 'rgba(255,255,255,.12)'); var pct = parseFloat($('fWkB').style.width) / 100 || 0; if (pct > 0) rr(130, y + 140, Math.max(18, 820 * pct), 18, 9, GOOD);
+    t('Fuelled and trained with Forkout', W / 2, 1760, 34, '500', 'rgba(255,255,255,.55)', 'center');
+    t('forkoutai.app', W / 2, 1815, 36, '700', G, 'center');
+    return c.toDataURL('image/png');
+  }
+  var ov = document.createElement('div'); ov.className = 'shov'; ov.hidden = true;
+  ov.innerHTML = '<div class="shb"><img alt="Your workout share card"><div class="shrow"><label class="shph press"><input type="file" accept="image/*" id="shFile" hidden><span id="shPhL">Add a photo</span></label><button class="shph press" id="shRm" hidden>Remove photo</button></div><p>Press and hold the image to save it, then post it to your story.</p><button class="btn wide press" id="shClose">Done</button></div>';
+  var PH = null;
+  $('bottomLayer').appendChild(ov);
+  ov.querySelector('#shClose').onclick = function () { ov.hidden = true; };
+  ov.addEventListener('click', function (e) { if (e.target === ov) ov.hidden = true; });
+  function redraw() { ov.querySelector('img').src = card(PH); $('shRm').hidden = !PH; $('shPhL').textContent = PH ? 'Change photo' : 'Add a photo'; }
+  $('fShare').onclick = function () { redraw(); ov.hidden = false; };
+  $('shFile').onchange = function () { var f = this.files && this.files[0]; if (!f) return; var rd = new FileReader(); rd.onload = function () { var im = new Image(); im.onload = function () { PH = im; redraw(); }; im.src = rd.result; }; rd.readAsDataURL(f); this.value = ''; };
+  $('shRm').onclick = function () { PH = null; redraw(); };
+  setTimeout(function () { FK.burst(512, 300); FK.haptic([10, 40, 10]); }, 500);
+  FK.ready();
+})();
+</script>
+</body>
+</html>

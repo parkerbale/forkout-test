@@ -1,0 +1,237 @@
+/* Forkout design system v3 ("futuristic dark glass").
+   Every screen is laid out on a 1024px-wide canvas (the size of the reference picture) and shrunk to fit the phone.
+   All sizes below are canvas pixels: 1024 canvas px = the phone's full width. */
+
+:root,.dk{
+  --acc:#BCD98A;                                    /* logo neon lime (colour themes change this) */
+  --on-acc:#101808;
+  --glow:0 0 14px rgba(188,217,138,.20);
+  --mint:var(--acc); /* rings, calorie bar, highlights */
+  --acc-soft:color-mix(in srgb,var(--acc) 14%,transparent);
+  --acc-line:color-mix(in srgb,var(--acc) 40%,transparent);
+  --neon:#C6E38E;                                   /* the logo */
+  --protein:#F28B82; --carbs:#F2B36B; --fat:#7FB4F5; --lav:#B9A8F0; --teal:#74D3C2; --water:var(--x-5fc3ff); --flame:var(--x-ff9f5a); --red:var(--x-ff6b6b);
+  --fg:var(--x-f4f7f7); --fg2:var(--x-d5dbdc); --muted:var(--x-8d99a1); --dim:var(--x-5f6a71); --line:rgba(var(--ink),.08); --line2:rgba(var(--ink),.14);
+  --bg:var(--x-000408);
+  /* Text sizes (canvas px). The smallest is 21, so nothing gets too small on a real phone. */
+  --t-xs:21px; --t-s:23px; --t-m:26px; --t-l:30px; --t-xl:46px; --t-xxl:82px;
+  --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.3,1.5,.5,1);
+  color-scheme:dark;
+}
+/* Light mode: the colours flip through css/palette.css; these few are picked by hand. Anything inside .dk (camera, dark photos) stays dark. */
+html[data-fk="light"]{--acc:#648C3A;--on-acc:#fff;--glow:0 0 16px rgba(100,140,58,.22);--protein:#DD5E57;--carbs:#D98A2B;--fat:#3F7FD8;--lav:#7C66D6;--teal:#2F9F8C;--mint:#648C3A;--neon:#7BA64A;color-scheme:light}
+.dk{color:var(--fg)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--x-020507);color:var(--fg);font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit;background:none;border:0;padding:0}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{display:block}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+
+/* ───────── Desktop preview: phone in the middle, screen list + colour themes beside it ───────── */
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;gap:56px;padding:40px 24px;
+  background:radial-gradient(900px 600px at 60% 0%,var(--x-0d1a17),transparent 70%),var(--x-020406)}
+.device{position:relative;width:390px;height:844px;border-radius:56px;overflow:hidden;flex:none;
+  box-shadow:0 0 0 10px var(--x-121716),0 0 0 11.5px var(--x-2a312e),0 60px 120px rgba(0,0,0,.7),0 0 140px color-mix(in srgb,var(--acc) 8%,transparent)}
+.panel{width:250px;font-size:14px;line-height:1.5;color:var(--muted)}
+.panel h1{font:700 22px/1.2 Inter,sans-serif;color:var(--fg);margin:0 0 4px}
+.panel p{margin:0}
+.panel .plbl{display:block;font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;margin:22px 0 10px}
+.panel nav{display:flex;flex-direction:column;gap:2px}
+.panel nav a{padding:5px 10px;border-radius:8px;color:var(--fg2);font-size:13.5px}
+.panel nav a:hover{background:rgba(var(--ink),.05)}
+.panel nav a.on{background:var(--acc-soft);color:var(--acc);font-weight:600}
+.panel .seg{display:inline-flex;padding:3px;border-radius:12px;background:rgba(var(--ink),.06);border:1px solid var(--line)}
+.panel .seg button{height:30px;padding:0 16px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted)}
+.panel .seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.ghost{height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line2);color:var(--fg);font-size:13px;font-weight:600}
+@media (max-width:760px){.stage{display:block;padding:0}.device{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none}.panel{display:none}}
+
+/* ───────── App shell ───────── */
+.app{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:contain}
+.scroll::-webkit-scrollbar{display:none}
+.canvas{position:relative;width:1024px;min-height:2240px;overflow:hidden;padding:0 48px 240px;
+  background:var(--bg)}
+.canvas.photo-head{background:var(--bg)}
+.layer{position:absolute;left:0;width:1024px;pointer-events:none}
+.layer>*{pointer-events:auto}
+.layer.top{top:0;z-index:20}
+.layer.bottom{bottom:0;z-index:30}
+.a{position:absolute;line-height:1;white-space:nowrap}
+
+/* Status bar */
+.status{position:relative;height:96px;background:var(--bg)}
+body.photo-top .status{background:none}
+.status .t{left:112px;top:29px;font-size:28px;font-weight:600;letter-spacing:.2px}
+.status .ic{right:76px;top:33px;display:flex;gap:13px;align-items:center}
+.status.light .t{color:var(--x-ffffff)}
+
+/* Page header used by most screens */
+.head{padding-top:112px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+.head .k{font-size:19px;font-weight:500;letter-spacing:4.7px;color:var(--x-c8cfd2);text-transform:uppercase}
+.head h1{margin:14px 0 0;font-size:64px;font-weight:700;letter-spacing:-1.2px;line-height:1}
+.head .sub{margin-top:12px;font-size:var(--t-m);color:var(--x-c6cdd1)}
+.back{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:rgba(var(--ink),.06);border:1px solid var(--line)}
+.back svg{width:30px;height:30px}
+
+/* Glass cards */
+.card{position:relative;border-radius:40px;border:1px solid var(--line);
+  background:rgba(var(--ink),.055);
+  box-shadow:none}
+.card.green{background:rgba(var(--ink),.055)}
+.card.pad{padding:34px}
+.mt{margin-top:28px}
+.lbl{font-size:19px;font-weight:500;letter-spacing:4.4px;color:var(--x-d6ddde);text-transform:uppercase;line-height:1}
+.lbl.acc{color:var(--mint)}
+.row{display:flex;align-items:center;gap:20px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.muted{color:var(--muted)}
+
+/* Icon in a round chip */
+.ico{flex:none;display:grid;place-items:center;border-radius:50%;width:56px;height:56px;background:rgba(var(--ink),.08);color:var(--fg)}
+.ico svg{width:28px;height:28px}
+.ico.sq{border-radius:18px}
+.ico.mint{background:var(--x-1a3d30);color:var(--x-cfe9da)}
+.ico.acc{background:var(--acc-soft);color:var(--acc)}
+.ico.blue{background:var(--x-1a3350);color:var(--x-4fa6ff)}
+.ico.purple{background:var(--x-262444);color:var(--x-a68bff)}
+.ico.teal{background:var(--x-103446);color:var(--x-43c6ff)}
+.ico.water{background:rgba(var(--r-5fc3ff),.14);color:var(--water)}
+.ico.flame{background:rgba(var(--r-ff9f5a),.14);color:var(--flame)}
+
+/* Bars and rings */
+.bar{position:relative;height:12px;border-radius:6px;background:var(--x-29323b);overflow:hidden}
+.bar i{box-shadow:0 0 12px color-mix(in srgb,var(--c,var(--mint)) 30%,transparent);display:block;height:100%;width:0;border-radius:inherit;background:var(--c,var(--mint));transition:width 1.4s var(--ease)}
+.ring-fill{transition:stroke-dasharray 1.6s var(--ease)}
+
+/* Buttons and chips */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;height:76px;padding:0 36px;border-radius:38px;background:var(--acc);color:var(--on-acc);
+  font-size:var(--t-m);font-weight:700;box-shadow:var(--glow)}
+.btn svg{width:26px;height:26px}
+.btn.wide{width:100%}
+.btn.dark{background:rgba(var(--ink),.06);color:var(--fg);border:1px solid var(--line2);box-shadow:none}
+.chip{display:inline-flex;align-items:center;gap:10px;height:60px;padding:0 26px;border-radius:30px;font-size:var(--t-s);font-weight:500;
+  background:rgba(var(--ink),.05);border:1px solid var(--line);color:var(--fg2);transition:background-color .25s,border-color .25s,color .25s}
+.chip[aria-pressed="true"]{background:var(--acc-soft);border-color:var(--acc-line);color:var(--acc);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:14px}
+.input{display:flex;align-items:center;gap:16px;height:84px;padding:0 14px 0 30px;border-radius:42px;background:rgba(var(--ink),.05);border:1px solid var(--line);font-size:var(--t-s);color:var(--muted)}
+.input .send{margin-left:auto;width:60px;height:60px;border-radius:50%;background:var(--acc);color:var(--on-acc);display:grid;place-items:center}
+.input .send svg{width:28px;height:28px}
+.tick{width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:rgba(var(--ink),.06);border:1px solid var(--line);color:var(--dim);transition:background-color .25s,color .25s}
+.tick svg{width:28px;height:28px}
+.tick[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--on-acc);animation:pop .35s var(--spring)}
+@keyframes pop{40%{transform:scale(1.15)}}
+.photo-ph{display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--muted);font-size:20px;line-height:1.4;
+  background:repeating-linear-gradient(135deg,rgba(var(--ink),.04) 0 14px,transparent 14px 28px),var(--x-0b1116);border:2px dashed var(--line2)}
+.photo-ph b{display:block;color:var(--mint)}
+
+/* Press feedback: everything tappable shrinks slightly */
+.press,.btn,.chip,.tick,.tile,.sc{transition:transform .18s var(--spring),background-color .25s,border-color .25s,color .25s}
+.press:active,.btn:active,.chip:active,.tick:active,.tile:active,.sc:active{transform:scale(.96)}
+
+/* ───────── Tab bar ───────── */
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:160px;border-radius:72px 72px 0 0;background:linear-gradient(180deg,var(--x-0b1417),var(--x-050b0d) 40%);
+  border-top:1px solid rgba(var(--ink),.09);box-shadow:0 -30px 60px rgba(0,0,0,.5)}
+.tab{position:absolute;top:0;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:28px;gap:12px;font-size:19px;color:var(--x-98a3aa)}
+.tab svg{width:42px;height:42px}
+.tab.on{color:var(--acc)}
+.tab.on::after{content:"";position:absolute;bottom:8px;left:50%;width:90px;height:3px;margin-left:-45px;border-radius:2px;background:var(--acc);box-shadow:0 0 12px var(--acc)}
+.fab{position:absolute;left:474px;top:0;width:76px;height:76px;border-radius:50%;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;
+  box-shadow:0 0 0 10px rgba(var(--r-050b0d),.9),var(--glow);transition:transform .25s var(--spring)}
+.fab svg{width:36px;height:36px;transition:transform .3s var(--spring)}
+.fab[aria-expanded="true"] svg{transform:rotate(45deg)}
+.fab:active{transform:scale(.92)}
+.homeind{position:absolute;left:388px;bottom:39px;width:249px;height:8px;border-radius:4px;background:var(--x-ffffff);z-index:2}
+.homeind.solo{bottom:24px}
+
+/* + menu */
+.sheet-bg{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:48px;right:48px;bottom:190px;padding:20px;border-radius:36px;display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  background:linear-gradient(170deg,var(--x-0f1a1f),var(--x-081014));border:1px solid var(--line);opacity:0;transform:translateY(40px) scale(.96);pointer-events:none;
+  transition:transform .35s var(--spring),opacity .25s}
+.sheet.open{opacity:1;transform:none;pointer-events:auto}
+.sheet a,.sheet button{display:flex;align-items:center;gap:18px;height:116px;padding:0 22px;border-radius:24px;background:rgba(var(--ink),.04);border:1px solid var(--line);text-align:left;font-size:23px;font-weight:600}
+.sheet small{display:block;font-size:20px;color:var(--x-8c979e);font-weight:400;margin-top:6px}
+
+/* Message at the bottom */
+.toast{position:absolute;left:50%;bottom:200px;transform:translate(-50%,30px);opacity:0;padding:22px 32px;border-radius:32px;font-size:23px;font-weight:600;z-index:5;
+  background:rgba(var(--r-10181b),.95);border:1px solid var(--acc-line);transition:transform .35s var(--spring),opacity .25s;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* Neon burst for milestones */
+.burst{position:absolute;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.burst i{position:absolute;width:12px;height:30px;border-radius:6px;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+
+/* Entrance: things fade and slide up in turn */
+.in{opacity:0;translate:0 40px}
+.ready .in{animation:fkin .9s var(--ease) both;animation-delay:calc(var(--i,0) * 80ms + 80ms)}
+@keyframes fkin{to{opacity:1;translate:0 0}}
+
+@media (prefers-reduced-motion:reduce){
+  .in{opacity:1;translate:none}
+  .ready .in{animation:none}
+  .bar i,.ring-fill{transition:none}
+  *{animation-duration:.01ms!important}
+}
+
+/* Light mode touches: softer shadows */
+html[data-fk="light"] .tabbar{box-shadow:0 -12px 40px rgba(20,40,50,.08)}
+html[data-fk="light"] .card{box-shadow:0 8px 30px rgba(20,40,50,.05),inset 0 1px 0 rgba(255,255,255,.6)}
+html[data-fk="light"] .canvas.photo-head{background:var(--bg)}
+
+/* Ask bar: type to Forkout AI from the bottom of a screen (Food AI, Form guide) */
+.askfade{position:absolute;left:0;right:0;bottom:0;height:var(--af,360px);pointer-events:none;background:linear-gradient(180deg,rgba(var(--r-000408),0),rgba(var(--r-000408),.92) 45%)}
+.askbar{position:absolute;left:36px;right:36px;bottom:var(--ab,184px);display:flex;align-items:center;gap:16px;height:100px;padding:0 14px 0 28px;border-radius:50px;
+  background:linear-gradient(180deg,rgba(var(--r-0c1419),.94),rgba(var(--r-000408),.97));border:1px solid var(--line2);box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(var(--ink),.06);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);transition:border-color .25s,box-shadow .25s}
+.askbar.focus{border-color:var(--acc-line);box-shadow:0 18px 50px rgba(0,0,0,.45),0 0 0 6px var(--acc-soft)}
+.askbar .sp{flex:none;width:34px;height:34px;color:var(--acc);filter:drop-shadow(0 0 8px color-mix(in srgb,var(--acc) 50%,transparent))}
+.askbar input{flex:1;min-width:0;font-size:25px;color:var(--fg);outline:none;caret-color:var(--acc)}
+.askbar input::placeholder{color:var(--muted)}
+.askbar .send{flex:none;width:68px;height:68px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:var(--on-acc);transition:transform .2s var(--spring),opacity .2s}
+.askbar .send svg{width:30px;height:30px}
+.askbar.empty .send{opacity:.45;transform:scale(.92)}
+/* Chat bubbles + Forkout AI badge (shared) */
+.bub{max-width:84%;padding:24px 30px;border-radius:34px;font-size:24px;line-height:1.45;animation:fkin .45s var(--ease) both}
+.bub.me{align-self:flex-end;background:var(--acc);color:var(--on-acc);font-weight:500;border-bottom-right-radius:10px}
+.bub.ai{align-self:flex-start;background:rgba(var(--ink),.05);border:1px solid var(--line);border-bottom-left-radius:10px}
+.aihead{display:flex;align-items:center;gap:14px;font-size:20px;font-weight:600;color:var(--fg2);animation:fkin .4s var(--ease) both}
+.aiorb{width:44px;height:44px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%,#fff,var(--acc) 35%,#1c6b4a 75%);box-shadow:0 0 20px color-mix(in srgb,var(--acc) 60%,transparent);animation:orb 3s ease-in-out infinite}
+@keyframes orb{50%{box-shadow:0 0 34px color-mix(in srgb,var(--acc) 80%,transparent)}}
+.typing{display:inline-flex;gap:8px;padding:26px 30px;border-radius:34px;background:rgba(var(--ink),.05);border:1px solid var(--line);align-self:flex-start;animation:fkin .3s var(--ease) both}
+.typing i{width:12px;height:12px;border-radius:50%;background:var(--muted);animation:tbounce 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tbounce{50%{transform:translateY(-8px);opacity:.5}}
+
+/* Smoother feel: taps spring back, sheets and toasts glide */
+.press,.btn,.chip,.tick,.tile,.sc,.tab,.fab,.back,.send,.mode,.round,.shutter{transition:transform .45s cubic-bezier(.3,1.5,.45,1),background-color .3s,border-color .3s,color .3s,opacity .3s}
+.press:active,.btn:active,.chip:active,.tick:active,.tile:active,.sc:active,.back:active,.send:active,.mode:active,.round:active{transform:scale(.95);transition-duration:.12s}
+.fab:active{transform:scale(.9);transition-duration:.12s}
+@media (prefers-reduced-motion:reduce){.press,.btn,.chip,.tick,.tile,.sc,.tab,.fab,.back,.send{transition:none}}
+.sheet{transition:transform .55s cubic-bezier(.22,1.2,.36,1),opacity .3s}
+.toast{transition:transform .55s cubic-bezier(.22,1.2,.36,1),opacity .35s}
+
+/* Streak pill (top right of the main pages) */
+.head .streakpill{margin-left:auto;margin-bottom:6px;flex:none;display:flex;align-items:center;gap:8px;height:56px;padding:0 22px 0 16px;border-radius:28px;
+  background:linear-gradient(160deg,rgba(255,159,90,.18),rgba(255,120,60,.06));border:1px solid rgba(255,159,90,.35);box-shadow:0 0 22px rgba(255,140,60,.18);color:var(--fg)}
+.head .streakpill svg{width:28px;height:28px;filter:drop-shadow(0 0 6px rgba(255,150,70,.8))}
+.head .streakpill b{font-size:26px;font-weight:700}
+.head .streakpill + *{margin-left:18px}
+
+/* No green ball for Forkout AI: a small, still sparkle instead */
+.aiorb{width:30px!important;height:30px!important;border-radius:0!important;box-shadow:none!important;animation:none!important;background:var(--acc)!important;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.5 2.5l1.9 5.4 5.4 1.9-5.4 1.9-1.9 5.4-1.9-5.4L3.2 9.8l5.4-1.9z'/%3E%3Cpath d='M18.5 13.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.5 2.5l1.9 5.4 5.4 1.9-5.4 1.9-1.9 5.4-1.9-5.4L3.2 9.8l5.4-1.9z'/%3E%3Cpath d='M18.5 13.5l.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z'/%3E%3C/svg%3E") center/contain no-repeat}
+/* Calm screens: no looping glows, blinks or flickers while you're just looking */
+.streak-top svg,.head .streakpill svg,.flame,.tip::before,.ring.hit,.live i,.playov .pb,.frame,.drift,.tag .dot::after,.camprev .sh::after{animation:none!important}
+
+.tab.on svg,.ico.acc svg{filter:drop-shadow(0 0 6px rgba(188,217,138,.30))}
+html[data-fk="light"] .tab.on svg,html[data-fk="light"] .ico.acc svg{filter:none}
+/* profile photos: always a perfect circle (clip on the image itself, so every browser rounds it) */
+.avatar,.avw{aspect-ratio:1/1;flex:none}
+.avatar img,.prof img,#avImg{display:block;width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;object-position:50% 35%;border-radius:50%;clip-path:circle(50% at 50% 50%)}
+.prof img,#avImg{width:120px;height:120px}

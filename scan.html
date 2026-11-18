@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Scan a meal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+/* Scan, Cal AI style: full-screen camera → shutter → soft "analysing" pass with a % ring → results sheet glides up.
+   The canvas is exactly one screen tall here, so everything is placed from the top or bottom of the screen. */
+.canvas{padding:0;background:#000;overflow:hidden}
+#cam{position:absolute;inset:0;overflow:hidden;transition:transform 1s var(--ease)}
+.fill{position:absolute;inset:-60px;background:url(photos/scan-bowl.jpg) center/cover;filter:blur(30px) brightness(.8)}
+/* The whole photo shows, edge to edge, so the full bowl is always in frame */
+.imgbox{position:absolute;left:0;width:100%;top:50%;aspect-ratio:1080/1920;transform:translateY(-50%);-webkit-mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(transparent,#000 7%,#000 93%,transparent)}
+.imgbox img{width:100%;height:100%;object-fit:cover}
+.drift{position:absolute;inset:0;animation:drift 7s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:scale(1.01) translate(0,0)}35%{transform:scale(1.015) translate(-5px,3px)}70%{transform:scale(1.01) translate(4px,-4px)}100%{transform:scale(1.02) translate(-2px,5px)}}
+.shot .drift{animation-play-state:paused}
+.shade{position:absolute;inset:0;background:#000;opacity:0;transition:opacity .6s}
+.analyzing .shade{opacity:.32}
+.sweep{position:absolute;inset:0;opacity:0;transition:opacity .4s;background:linear-gradient(100deg,transparent 30%,rgba(var(--ink),.22) 46%,rgba(var(--ink),.04) 54%,transparent 70%) 0 0/300% 100%;mix-blend-mode:screen}
+.analyzing .sweep{opacity:1;animation:sweep 1.5s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes sweep{0%{background-position:120% 0}100%{background-position:-20% 0}}
+.vtop{position:absolute;left:0;right:0;top:0;height:420px;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent)}
+.vbot{position:absolute;left:0;right:0;bottom:0;height:820px;background:linear-gradient(0deg,rgba(0,0,0,.8),rgba(0,0,0,.35) 55%,transparent);transition:opacity .5s}
+.topbar{position:absolute;left:48px;right:48px;top:112px;display:flex;align-items:center;justify-content:space-between;transition:opacity .4s}
+.topbar .back{background:rgba(0,0,0,.35);border-color:rgba(var(--ink),.18);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.topbar h1{margin:0;font-size:32px;font-weight:600;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+/* Viewfinder corners */
+.frame{position:absolute;left:44px;right:44px;top:calc(50% - 330px);height:720px;transition:transform .7s var(--ease),opacity .5s}
+.frame i{position:absolute;width:120px;height:120px;border:7px solid var(--x-ffffff);filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+.frame i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0;border-radius:56px 0 0 0}
+.frame i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0;border-radius:0 56px 0 0}
+.frame i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0;border-radius:0 0 0 56px}
+.frame i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0;border-radius:0 0 56px 0}
+.frame{animation:breathe 2.8s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(.975)}}
+.shot .frame{animation:none;transform:scale(.9);opacity:0}
+/* Found foods */
+.tag{position:absolute;opacity:0;transform:scale(.6);transition:opacity .35s,transform .5s var(--spring)}
+.tag.on{opacity:1;transform:none}
+.tag .dot{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;background:var(--x-ffffff);box-shadow:0 0 0 6px rgba(var(--ink),.28),0 4px 14px rgba(0,0,0,.4)}
+.tag .dot::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:3px solid rgba(var(--ink),.7);animation:ping 1.6s ease-out infinite}
+@keyframes ping{0%{transform:scale(.8);opacity:1}100%{transform:scale(2.2);opacity:0}}
+.tag span{position:absolute;left:30px;top:-30px;white-space:nowrap;padding:14px 24px;border-radius:30px;font-size:24px;font-weight:600;color:var(--x-ffffff);
+  background:rgba(var(--r-0a0e10),.62);border:1px solid rgba(var(--ink),.2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.tag.l span{left:auto;right:30px}
+/* Analysing card */
+.anal{position:absolute;left:50%;bottom:300px;display:flex;align-items:center;gap:26px;padding:22px 40px 22px 22px;border-radius:70px;white-space:nowrap;
+  background:rgba(var(--r-0a0e10),.6);border:1px solid rgba(var(--ink),.18);-webkit-backdrop-filter:blur(24px) saturate(1.4);backdrop-filter:blur(24px) saturate(1.4);
+  opacity:0;transform:translate(-50%,40px) scale(.94);transition:opacity .4s,transform .6s var(--spring);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.analyzing .anal{opacity:1;transform:translate(-50%,0)}
+.anal svg{width:100px;height:100px;transform:rotate(-90deg)}
+.anal .pc{position:absolute;left:22px;top:22px;width:100px;height:100px;display:grid;place-items:center;font-size:25px;font-weight:700}
+.anal b{display:block;font-size:28px;font-weight:600}
+.anal small{display:block;margin-top:6px;font-size:22px;color:var(--x-c8d0d3)}
+/* Camera controls */
+.modes{position:absolute;left:0;right:0;bottom:350px;display:flex;justify-content:center;gap:14px;transition:opacity .35s}
+.mode{display:flex;flex-direction:column;align-items:center;gap:8px;width:184px;padding:18px 0 16px;border-radius:26px;font-size:21px;font-weight:600;color:var(--x-ffffff);
+  background:rgba(var(--ink),.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.mode svg{width:36px;height:36px}
+.mode.on{background:var(--x-ffffff);color:var(--x-0a0d0f)}
+.mode small{font-size:16px;font-weight:500;opacity:.7}
+.controls{position:absolute;left:0;right:0;bottom:120px;display:flex;align-items:center;justify-content:space-between;padding:0 130px;transition:opacity .35s}
+.round{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;background:rgba(var(--ink),.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.round svg{width:42px;height:42px}
+.shutter{width:180px;height:180px;border-radius:50%;border:8px solid var(--x-ffffff);display:grid;place-items:center}
+.shutter i{width:144px;height:144px;border-radius:50%;background:var(--x-ffffff);transition:transform .18s var(--ease)}
+.shutter:active i,.shot .shutter i{transform:scale(.86)}
+.shot .modes,.shot .controls,.shot .vbot{opacity:0;pointer-events:none}
+.flash{position:absolute;inset:0;background:var(--x-ffffff);opacity:0;pointer-events:none}
+.flash.go{animation:flash .45s ease-out}
+@keyframes flash{0%{opacity:.75}100%{opacity:0}}
+
+/* Result sheet */
+.res{position:absolute;left:0;right:0;bottom:0;top:var(--sheetTop,860px);border-radius:60px 60px 0 0;padding:22px 48px 80px;overflow-y:auto;scrollbar-width:none;
+  background:linear-gradient(180deg,var(--x-0d1519),var(--x-05090c) 26%);border-top:1px solid var(--line2);box-shadow:0 -30px 80px rgba(0,0,0,.55);
+  transform:translateY(105%);transition:transform .85s cubic-bezier(.22,1,.36,1)}
+.res::-webkit-scrollbar{display:none}
+.res.open{transform:none}
+.res>*{opacity:0;transform:translateY(30px);transition:opacity .5s,transform .6s var(--ease)}
+.res.open>*{opacity:1;transform:none}
+.res.open>:nth-child(2){transition-delay:.08s}.res.open>:nth-child(3){transition-delay:.14s}.res.open>:nth-child(4){transition-delay:.2s}
+.res.open>:nth-child(5){transition-delay:.26s}.res.open>:nth-child(6){transition-delay:.32s}.res.open>:nth-child(n+7){transition-delay:.38s}
+.handle{width:90px;height:8px;border-radius:4px;background:rgba(var(--ink),.25);margin:0 auto 30px}
+.rtop{display:flex;align-items:center;justify-content:space-between}
+.conf{font-size:20px;font-weight:600;color:var(--mint);padding:10px 18px;border-radius:20px;background:var(--acc-soft);border:1px solid var(--acc-line)}
+.res h2{margin:18px 0 0;font-size:48px;font-weight:700;letter-spacing:-.8px;line-height:1.05}
+.res .sub{margin-top:10px;font-size:24px;color:var(--muted)}
+.kcal{display:flex;align-items:center;gap:26px;margin-top:30px;padding:28px 32px;border-radius:34px;background:rgba(var(--ink),.04);border:1px solid var(--line)}
+.kcal .ico{width:84px;height:84px}.kcal .ico svg{width:40px;height:40px}
+.kcal div>span{display:block;font-size:22px;color:var(--muted)}
+.kcal b{display:block;font-size:76px;font-weight:700;letter-spacing:-1.5px;line-height:1;margin-top:6px}
+.kcal b small{font-size:28px;font-weight:500;color:var(--fg2);letter-spacing:0;margin-left:10px}
+.mac{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.mac>div{display:flex;align-items:center;gap:16px;padding:22px 20px;border-radius:30px;background:rgba(var(--ink),.04);border:1px solid var(--line);transition:background-color .6s}
+.mac>div.hl{background:var(--acc-soft)}
+.mac svg{width:64px;height:64px;transform:rotate(-90deg);flex:none}
+.mac em{display:block;font-style:normal;font-size:20px;color:var(--muted)}
+.mac b{display:block;font-size:34px;font-weight:600;margin-top:4px}
+.health{margin-top:16px;padding:24px 30px;border-radius:30px;background:rgba(var(--ink),.04);border:1px solid var(--line)}
+.health .between{font-size:24px;font-weight:600}
+.health .between b{color:var(--mint)}
+.health .bar{margin-top:16px;height:10px}
+.items{margin-top:26px}
+.it{display:flex;justify-content:space-between;align-items:center;padding:20px 6px;border-bottom:1px solid var(--line);font-size:24px;transition:background-color .6s;border-radius:10px}
+.it span span{color:var(--muted);margin-left:12px}
+.it.hl{background:var(--acc-soft)}
+.fixl{margin:34px 0 18px;font-size:23px;font-weight:600;color:var(--fg2)}
+.typed{margin-top:20px}
+.typed svg.sp{width:28px;height:28px;color:var(--acc);flex:none}
+.res-btns{display:grid;grid-template-columns:1fr 1.4fr;gap:16px;margin-top:34px}
+@media (prefers-reduced-motion:reduce){.drift,.frame,.tag .dot::after{animation:none}}
+
+/* v5 simplification */
+#camTitle,#flashBtn{display:none}
+.modes .mode:nth-child(2),.modes .mode:nth-child(3){display:none}
+.res .health,.res .conf{display:none}
+</style>
+</head>
+<body class="photo-top" data-tab="none" data-title="Scan a meal" data-note="Tap the shutter (sound on). Then try the fix chips: the numbers update.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas dk" id="canvas">
+        <div id="cam"><div class="fill"></div><div class="drift"><div class="imgbox"><img src="photos/scan-bowl.jpg" alt="Grilled chicken breast, rice, avocado, broccoli and greens in a dark bowl">
+          <div class="tag" style="left:30%;top:50%"><i class="dot"></i><span>Chicken · 180g</span></div>
+          <div class="tag l" style="left:50%;top:63%"><i class="dot"></i><span id="riceTag">Rice · 180g</span></div>
+          <div class="tag" style="left:68%;top:58%"><i class="dot"></i><span>Avocado · 70g</span></div>
+          <div class="tag l" style="left:76%;top:42%"><i class="dot"></i><span>Broccoli · 90g</span></div>
+          <div class="tag" style="left:20%;top:40%"><i class="dot"></i><span>Greens · 40g</span></div>
+        </div></div><div class="shade"></div><div class="sweep"></div></div>
+        <div class="vtop"></div><div class="vbot"></div>
+        <div class="topbar">
+          <a class="back press" href="food.html" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+          <h1 id="camTitle">Scanner</h1>
+          <button class="back press" id="flashBtn" aria-label="Flash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg></button>
+        </div>
+        <div class="frame"><i></i><i></i><i></i><i></i></div>
+        <div class="anal"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke-width="8" style="stroke:rgba(var(--ink),.18)"/><circle id="aRing" cx="50" cy="50" r="42" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 264" style="stroke:var(--x-ffffff)"/></svg>
+          <span class="pc num" id="aPc">0%</span><span><b>Analysing your meal</b><small id="stepTxt">Finding each food…</small></span></div>
+        <div class="modes">
+          <span class="mode on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5V6a2 2 0 0 1 2-2h2.5M15.5 4H18a2 2 0 0 1 2 2v2.5M20 15.5V18a2 2 0 0 1-2 2h-2.5M8.5 20H6a2 2 0 0 1-2-2v-2.5"/><circle cx="12" cy="12" r="3"/></svg>Scan food</span>
+          <span class="mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6v12M7.5 6v12M10 6v12M13.5 6v12M16 6v12M20 6v12"/></svg>Barcode<small>Soon</small></span>
+          <span class="mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg>Food label<small>Soon</small></span>
+          <a class="mode" href="food.html#search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10"/></svg>Type it</a>
+        </div>
+        <div class="controls">
+          <button class="round" id="flashBtn2" aria-label="Flash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg></button>
+          <button class="shutter" id="shoot" aria-label="Scan this meal"><i></i></button>
+          <span class="round" aria-hidden="true" style="overflow:hidden;padding:0"><img src="photos/yoghurt.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></span>
+        </div>
+        <div class="flash" id="flash"></div>
+      </div></div>
+      <div class="layer top dk" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer">
+        <div class="res" id="res">
+          <div class="handle"></div>
+          <div class="rtop"><span class="lbl acc">Lunch · 12:41</span><span class="conf">94% sure</span></div>
+          <div><h2>Grilled chicken bowl</h2><div class="sub">Chicken, rice, avocado, broccoli &amp; greens</div></div>
+          <div class="kcal"><span class="ico flame"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 3.5 5 5.5 5 10.5A5 5 0 0 1 7 12.5c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9z"/></svg></span>
+            <div><span>Calories</span><b class="num"><span id="mK">0</span><small>kcal</small></b></div></div>
+          <div class="mac">
+            <div><svg viewBox="0 0 40 40" style="width:64px;height:64px;transform:none;color:var(--protein)"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".2"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="9" r="6.200" fill="currentColor"/><path d="M10.600 13.400 5.200 18.800" stroke-width="2.600"/><circle cx="4.200" cy="17.400" r="1.900" fill="currentColor" stroke="none"/><circle cx="6.600" cy="19.800" r="1.900" fill="currentColor" stroke="none"/></g></svg><div><em>Protein</em><b class="num" style="color:var(--protein)"><span id="mP">0</span>g</b></div></div>
+            <div><svg viewBox="0 0 40 40" style="width:64px;height:64px;transform:none;color:var(--carbs)"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".2"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.500V9" stroke-width="2"/><path d="M12 2c1.700 1.600 2.200 3.200 0 5.500C9.800 5.200 10.300 3.600 12 2z" fill="currentColor" stroke="none"/><path d="M12 9.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 9.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 15c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 15c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/><path d="M12 20.500c-3 0-4.800-1.800-4.800-4.800 3 0 4.800 1.800 4.800 4.800zM12 20.500c3 0 4.800-1.800 4.800-4.800-3 0-4.800 1.800-4.800 4.800z" fill="currentColor" stroke="none"/></g></svg><div><em>Carbs</em><b class="num" style="color:var(--carbs)"><span id="mC">0</span>g</b></div></div>
+            <div><svg viewBox="0 0 40 40" style="width:64px;height:64px;transform:none;color:var(--fat)"><circle cx="20" cy="20" r="20" fill="currentColor" fill-opacity=".2"/><g transform="translate(8 8)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.600c3 0 4.600 3.200 4.600 6.200 0 1.600 1 2.800 1.900 4.300 1.600 2.700.8 5.200-1.300 6.700-1.600 1.200-3.300 1.700-5.200 1.700s-3.600-.5-5.200-1.700c-2.100-1.500-2.900-4-1.300-6.700.9-1.500 1.900-2.700 1.900-4.300 0-3 1.600-6.200 4.600-6.200z" stroke-width="2"/><circle cx="12" cy="15" r="3.200" fill="currentColor" stroke="none"/></g></svg><div><em>Fat</em><b class="num" style="color:var(--fat)"><span id="mF">0</span>g</b></div></div>
+          </div>
+          <div class="health"><div class="between"><span>Health score</span><b class="num" id="hs">8/10</b></div><div class="bar"><i id="hsBar"></i></div></div>
+          <div class="items" id="items"></div>
+          <div class="fixl" id="fixl">Not quite right? Tell the AI</div>
+          <div class="chips" id="fixes"></div>
+          <label class="input typed"><svg class="sp" viewBox="0 0 24 24" fill="currentColor"><path d="M10.5 2.5l1.9 5.4 5.4 1.9-5.4 1.9-1.9 5.4-1.9-5.4L3.2 9.8l5.4-1.9z"/></svg>
+            <input id="ask" placeholder="e.g. half the rice, no oil" style="flex:1;font-size:23px;color:var(--fg);outline:none">
+            <span class="send" id="askGo" role="button" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></label>
+          <div class="res-btns"><button class="btn dark" id="again">↺ Scan again</button><button class="btn" id="add">Add to lunch</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/plan.js"></script>
+<script src="js/fk.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$, app = $('app');
+  var FOOD = [{ id: 'chk', n: 'Grilled chicken breast', q: 180, k: 297 }, { id: 'rice', n: 'White rice', q: 180, k: 235 }, { id: 'avo', n: 'Avocado', q: 70, k: 112 },
+    { id: 'veg', n: 'Broccoli & mixed greens', q: 130, k: 39 }, { id: 'oil', n: 'Olive oil', q: '1 tsp', k: 40 }];
+  var BASE = { k: 723, p: 65, c: 64, f: 22, h: 8 };
+  var FIX = [
+    { id: 'halfrice', label: 'Half the rice', say: 'Half the rice', d: { k: -117, p: -1, c: -26, f: 0, h: .5 }, row: 'rice', rowTxt: ['90g', '118'], words: ['half', 'rice'] },
+    { id: 'nooil', label: 'No oil', say: 'No oil', d: { k: -40, p: 0, c: 0, f: -4.5, h: .5 }, row: 'oil', rowTxt: ['removed', '0'], words: ['oil'] },
+    { id: 'xchk', label: 'Extra chicken', say: 'Add extra chicken', d: { k: 99, p: 19, c: 0, f: 2, h: 0 }, row: 'chk', rowTxt: ['240g', '396'], words: ['chicken'] },
+    { id: 'noavo', label: 'No avocado', say: 'Leave out the avocado', d: { k: -112, p: -1, c: -6, f: -10, h: -.5 }, row: 'avo', rowTxt: ['removed', '0'], words: ['avo'] }
+  ];
+  var active = {}, cur = { k: 0, p: 0, c: 0, f: 0 }, phase = 'idle', timers = [];
+  // Trial mode: the onboarding's "Try one snap". Same camera, a little faster, and it ends at the free trial.
+  var TRIAL = /[?&]trial=1/.test(location.search);
+  if (TRIAL) {
+    $('camTitle').textContent = 'Try one snap';
+    $('add').textContent = 'Wow. Start my free trial'; $('again').textContent = '↺ Snap another';
+    document.querySelector('.topbar a.back').href = 'onboarding.html';
+  }
+  var later = function (fn, ms) { timers.push(setTimeout(fn, ms)); };
+
+  function totals() { var t = { k: BASE.k, p: BASE.p, c: BASE.c, f: BASE.f, h: BASE.h }; FIX.forEach(function (x) { if (active[x.id]) { for (var k in t) t[k] += x.d[k]; } }); return t; }
+  function drawItems(changed) {
+    $('items').innerHTML = FOOD.map(function (it) {
+      var q = typeof it.q === 'number' ? it.q + 'g' : it.q, k = it.k;
+      FIX.forEach(function (x) { if (active[x.id] && x.row === it.id) { q = x.rowTxt[0]; k = x.rowTxt[1]; } });
+      return '<div class="it' + (changed === it.id ? ' hl' : '') + '"><span>' + it.n + '<span>' + q + '</span></span><b class="num">' + k + '</b></div>';
+    }).join('');
+    $('riceTag').textContent = active.halfrice ? 'Rice · 90g' : 'Rice · 180g';
+    if (changed) setTimeout(function () { var h = document.querySelector('.it.hl'); if (h) h.classList.remove('hl'); }, 1200);
+  }
+  function paintMacros(ms) {
+    var t = totals(), f = cur; cur = t;
+    FK.count($('mK'), f.k, t.k, ms); FK.count($('mP'), f.p, t.p, ms); FK.count($('mC'), f.c, t.c, ms); FK.count($('mF'), f.f, t.f, ms);
+    
+    var h = Math.max(1, Math.min(10, Math.round(t.h))); $('hs').textContent = h + '/10'; $('hsBar').style.width = h * 10 + '%';
+  }
+  function drawFixes() {
+    $('fixes').innerHTML = FIX.map(function (x) { return '<button class="chip" data-id="' + x.id + '" aria-pressed="' + !!active[x.id] + '">' + x.label + '</button>'; }).join('');
+  }
+  function apply(x, on, said) {
+    active[x.id] = on; drawFixes();
+    typeOut(said || (on ? x.say : 'Undo: ' + x.say.toLowerCase()), function () {
+      drawItems(x.row); paintMacros(700);
+      var m = document.querySelector('.mac div'); m.classList.add('hl'); setTimeout(function () { m.classList.remove('hl'); }, 900);
+    });
+  }
+  $('fixes').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    var x = FIX.filter(function (f) { return f.id === b.dataset.id; })[0]; apply(x, !active[x.id]);
+  });
+  var typing = [];
+  function typeOut(txt, cb) {
+    typing.forEach(clearTimeout); typing = [];
+    var el = $('ask'); el.value = '';
+    if (FK.reduce) { el.value = txt; cb(); return; }
+    for (var i = 1; i <= txt.length; i++) (function (n) { typing.push(setTimeout(function () { el.value = txt.slice(0, n); }, n * 28)); })(i);
+    typing.push(setTimeout(cb, txt.length * 28 + 180));
+  }
+  // Typing your own fix: matches the words to one of the fixes
+  function askAI() {
+    var v = $('ask').value.toLowerCase().trim(); if (!v) return;
+    var hit = FIX.filter(function (x) { return x.words.every(function (w) { return v.indexOf(w) >= 0; }); });
+    if (!hit.length) { toast('Try: half the rice, no oil, extra chicken'); return; }
+    hit.forEach(function (x) { apply(x, true, $('ask').value); });
+  }
+  $('askGo').onclick = askAI;
+  $('ask').addEventListener('keydown', function (e) { if (e.key === 'Enter') askAI(); });
+  // Scroll the result sheet so the fix chips are in view (used by the demo video too)
+  window.showFixes = function () { var r = $('res'); r.scrollTo({ top: $('fixl').offsetTop - 260, behavior: FK.reduce ? 'auto' : 'smooth' }); };
+
+  // Shutter sound, made on the fly
+  var AC = null;
+  function shutterSound() {
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume();
+      var sr = AC.sampleRate, len = Math.floor(sr * .2), buf = AC.createBuffer(1, len, sr), d = buf.getChannelData(0);
+      var burst = function (off, dur, decay, gain) { var o = Math.floor(off * sr), n = Math.floor(dur * sr), prev = 0; for (var k = 0; k < n && o + k < len; k++) { var w = Math.random() * 2 - 1, hp = w - prev; prev = w; d[o + k] += hp * Math.exp(-k / (decay * sr)) * gain; } };
+      burst(0, .05, .006, .9); burst(.075, .07, .012, .7);
+      for (var k = 0; k < Math.floor(.05 * sr); k++) d[k] += Math.sin(2 * Math.PI * 120 * k / sr) * Math.exp(-k / (.01 * sr)) * .4;
+      var src = AC.createBufferSource(); src.buffer = buf; var g = AC.createGain(); g.gain.value = .55; src.connect(g); g.connect(AC.destination); src.start();
+    } catch (e) {}
+  }
+  // Analysing: the % ring eases from 0 to 100 while the foods are found one by one
+  function analyse(ms, done) {
+    var ring = $('aRing'), len = 2 * Math.PI * 42, s = performance.now();
+    var steps = ['Finding each food…', 'Estimating portions…', 'Working out macros…'];
+    (function step(n) {
+      var p = FK.reduce ? 1 : Math.min(1, (n - s) / ms), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      ring.setAttribute('stroke-dasharray', (len * e) + ' ' + len); $('aPc').textContent = Math.round(e * 100) + '%';
+      $('stepTxt').textContent = steps[Math.min(2, Math.floor(e * 3))];
+      if (p < 1) requestAnimationFrame(step); else done();
+    })(s);
+  }
+  function shoot() {
+    if (phase !== 'idle') return; phase = 'snap';
+    shutterSound(); FK.haptic(15);
+    app.classList.add('shot'); $('flash').classList.add('go'); $('camTitle').textContent = 'Analysing';
+    later(function () { app.classList.add('analyzing'); }, 380);
+    later(function () {
+      analyse(TRIAL ? 1700 : 2300, function () {
+        later(reveal, 150);
+      });
+    }, 420);
+    document.querySelectorAll('.tag').forEach(function (t, i) { later(function () { t.classList.add('on'); FK.haptic(4); }, 900 + i * 300); });
+  }
+  // Results: the photo glides up so the food stays in view, and the sheet slides up over it
+  function reveal() {
+    app.classList.remove('analyzing'); phase = 'done';
+    var H = $('canvas').offsetHeight, top = Math.round(H * .4), W = $('canvas').offsetWidth;
+    $('res').style.setProperty('--sheetTop', top + 'px');
+    // Slide the bowl up into the space above the sheet, just the bowl in frame
+    var ih = W * 1920 / 1080, bowlY = (H - ih) / 2 + ih * .53, aim = 96 + (top - 96) / 2 + 20, sc = Math.min(1, (top - 150) / (ih * .4));
+    $('cam').style.transformOrigin = '50% ' + bowlY + 'px';
+    $('cam').style.transform = 'translateY(' + Math.round(aim - bowlY) + 'px) scale(' + sc.toFixed(3) + ')';
+    $('camTitle').textContent = TRIAL ? 'Your first snap' : 'Results';
+    drawItems(null); drawFixes(); $('res').scrollTop = 0; $('res').classList.add('open'); later(function () { paintMacros(1200); }, 250);
+  }
+  $('shoot').onclick = shoot;
+  $('cam').onclick = shoot;
+  $('again').onclick = function () {
+    timers.forEach(clearTimeout); timers = []; typing.forEach(clearTimeout);
+    phase = 'idle'; active = {}; cur = { k: 0, p: 0, c: 0, f: 0 };
+    app.classList.remove('shot', 'analyzing'); $('flash').classList.remove('go'); $('res').classList.remove('open'); $('ask').value = '';
+    $('cam').style.transform = ''; $('cam').style.transformOrigin = ''; $('camTitle').textContent = TRIAL ? 'Try one snap' : 'Scanner';
+    document.querySelectorAll('.tag').forEach(function (t) { t.classList.remove('on'); }); $('riceTag').textContent = 'Rice · 180g';
+  };
+  $('add').onclick = function () {
+    if (TRIAL) { location.href = 'paywall.html'; return; }
+    try { FKPlan.logMeal(); } catch (e) {}
+    toast('Added to lunch · ' + cur.k + ' kcal'); setTimeout(function () { location.href = 'food.html'; }, 1100);
+  };
+  // ───────── LIVE: real photo → Forkout AI (scan-meal function) → USDA numbers → saved to your diary ─────────
+  // Without a backend set up, everything above runs as the demo (fixed bowl photo).
+  if (FK.db && FK.db.live) (function () {
+    var R = null, busy = false, slot = FK.store.slotNow();
+    var pick = document.createElement('input'); pick.type = 'file'; pick.accept = 'image/*'; pick.setAttribute('capture', 'environment'); pick.hidden = true; document.body.appendChild(pick);
+    var img = document.querySelector('#cam img');
+    document.querySelectorAll('.tag').forEach(function (t) { t.remove(); });
+    $('riceTag') || document.body.insertAdjacentHTML('beforeend', '<span id="riceTag" hidden></span>');
+    if (!TRIAL) $('add').textContent = 'Add to ' + slot.toLowerCase();
+    document.querySelector('.rtop .lbl').textContent = slot + ' · ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function oops(e) { toast(FK.db.friendly ? FK.db.friendly(e) : (e && e.message) || 'Something went wrong'); }
+    function show(r, changedName) {
+      R = r; var t = r.totals || { kcal: 0, protein: 0, carbs: 0, fat: 0 };
+      document.querySelector('#res h2').textContent = r.meal_name || 'Your meal';
+      document.querySelector('#res .sub').textContent = r.description || '';
+      document.querySelector('.rtop .conf').textContent = Math.round((r.confidence || 0) * 100) + '% sure';
+      $('items').innerHTML = (r.items || []).map(function (it) {
+        return '<div class="it' + (changedName && it.name === changedName ? ' hl' : '') + '"><span>' + esc(it.name) + '<span>' + Math.round(it.grams) + 'g' + (it.source === 'estimate' ? ' · est.' : '') + '</span></span><b class="num">' + Math.round(it.kcal) + '</b></div>';
+      }).join('');
+      var from = cur; cur = { k: Math.round(t.kcal), p: Math.round(t.protein), c: Math.round(t.carbs), f: Math.round(t.fat) };
+      FK.count($('mK'), from.k, cur.k, 900); FK.count($('mP'), from.p, cur.p, 900); FK.count($('mC'), from.c, cur.c, 900); FK.count($('mF'), from.f, cur.f, 900);
+      var h = Math.max(1, Math.min(10, Math.round(r.health_score || 5))); $('hs').textContent = h + '/10'; $('hsBar').style.width = h * 10 + '%';
+      $('fixes').innerHTML = ['Half portion', 'No oil', 'Bigger portion', 'Add sauce'].map(function (x) { return '<button class="chip" data-fix="' + x + '" aria-pressed="false">' + x + '</button>'; }).join('');
+    }
+    function fix(text) {
+      if (!R || busy || !text) return; busy = true; $('ask').value = text; $('askGo').style.opacity = .4;
+      FK.api.fixMeal(R.meal, text).then(function (r) { busy = false; $('askGo').style.opacity = ''; $('ask').value = ''; if (!r.is_food) return toast('That didn\'t look like a change to this meal'); show(r); FK.haptic(10); },
+        function (e) { busy = false; $('askGo').style.opacity = ''; oops(e); });
+    }
+    // Replace the demo's buttons with the real ones
+    $('fixes').addEventListener('click', function (e) { var b = e.target.closest('[data-fix]'); if (b) { e.stopImmediatePropagation(); fix(b.dataset.fix.toLowerCase()); } }, true);
+    $('askGo').onclick = function () { fix($('ask').value.trim()); };
+    $('ask').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.stopImmediatePropagation(); fix(this.value.trim()); } }, true);
+    // ----- The camera: the shutter takes the photo from the live camera right here in the app -----
+    var lib = document.createElement('input'); lib.type = 'file'; lib.accept = 'image/*'; lib.hidden = true; document.body.appendChild(lib); // photo library (secondary)
+    var fill = document.querySelector('#cam .fill'), drift = document.querySelector('#cam .drift');
+    var vid = document.createElement('video'); vid.setAttribute('playsinline', ''); vid.setAttribute('aria-label', 'Camera'); vid.muted = true; vid.autoplay = true;
+    vid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none';
+    $('cam').insertBefore(vid, $('cam').querySelector('.shade'));
+    var hint = document.createElement('div'); hint.hidden = true; hint.textContent = 'Tap the round button to open your camera';
+    hint.style.cssText = 'position:absolute;left:0;right:0;top:44%;text-align:center;font-size:30px;font-weight:600;color:#fff;opacity:.85;padding:0 90px;pointer-events:none';
+    $('cam').insertAdjacentElement('afterend', hint);
+    var stream = null, camOK = false;
+    function camStop() { if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; } vid.srcObject = null; vid.style.display = 'none'; camOK = false; }
+    function camStart() {
+      camStop();
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.resolve(false);
+      return navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false }).then(function (s) {
+        stream = s; vid.srcObject = s; vid.style.display = ''; camOK = true; var p = vid.play(); if (p && p.catch) p.catch(function () {}); return true;
+      }, function () { return false; });
+    }
+    // What you see before a photo: the live camera, or (no camera allowed) a plain screen with a hint. Never the demo bowl.
+    function idleView() {
+      drift.style.display = 'none'; fill.style.display = 'none'; hint.hidden = true;
+      return camStart().then(function (ok) { hint.hidden = ok; return ok; });
+    }
+    window.FKCAM = { torch: function (on) { var t = stream && stream.getVideoTracks()[0]; try { if (t && t.getCapabilities && t.getCapabilities().torch) t.applyConstraints({ advanced: [{ torch: !!on }] }).catch(function () {}); } catch (e) {} } };
+    window.addEventListener('pagehide', camStop);
+    // Photo-library button (bottom right): there if you want it, but the camera is the main way
+    var libBtn = document.createElement('button'); libBtn.className = 'round'; libBtn.setAttribute('aria-label', 'Choose a photo from your library');
+    libBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.500" y="4.500" width="17" height="15" rx="3"/><circle cx="9" cy="10" r="1.600"/><path d="M4 17l5-4.500 3.500 3L16 12l4 4"/></svg>';
+    var oldLib = document.querySelector('.controls > span.round'); if (oldLib) oldLib.replaceWith(libBtn);
+    libBtn.onclick = function () { if (phase === 'idle') lib.click(); };
+    $('shoot').onclick = $('cam').onclick = function () {
+      if (phase !== 'idle') return;
+      if (camOK && vid.videoWidth) {
+        var c = document.createElement('canvas'); c.width = vid.videoWidth; c.height = vid.videoHeight; c.getContext('2d').drawImage(vid, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { if (b) begin(b); else pick.click(); }, 'image/jpeg', 0.9);
+      } else pick.click(); // no camera available to the page: the phone's own camera opens instead
+    };
+    pick.onchange = lib.onchange = function () { var f = this.files && this.files[0]; this.value = ''; if (f) begin(f); };
+    idleView();
+    function begin(f) {
+      var url = URL.createObjectURL(f); img.src = url; fill.style.backgroundImage = 'url(' + url + ')';
+      camStop(); drift.style.display = ''; fill.style.display = ''; hint.hidden = true; phase = 'snap';
+      shutterSound(); FK.haptic(15); app.classList.add('shot'); $('flash').classList.add('go'); $('camTitle').textContent = 'Analysing';
+      later(function () { app.classList.add('analyzing'); }, 380);
+      var job = FK.api.scanMeal(f), anim = new Promise(function (ok) { later(function () { analyse(1800, ok); }, 420); });
+      Promise.all([job, anim]).then(function (x) {
+        var r = x[0];
+        if (!r.is_food) { $('again').onclick(); toast('No food found in that photo. Try again.'); return; }
+        reveal(); show(r);
+      }, function (e) { $('again').onclick(); oops(e); });
+    };
+    // reveal() runs the demo's drawing too; the live data is painted straight after it
+    var demoPaint = paintMacros; paintMacros = function () { if (!R) demoPaint.apply(null, arguments); };
+    var demoItems = drawItems; drawItems = function () { if (!R) demoItems.apply(null, arguments); };
+    var demoFixes = drawFixes; drawFixes = function () { if (!R) demoFixes.apply(null, arguments); };
+    var again = $('again').onclick; $('again').onclick = function () { R = null; img.src = 'photos/scan-bowl.jpg'; fill.style.backgroundImage = ''; again(); idleView(); };
+    $('add').onclick = function () {
+      if (!R || busy) return; busy = true;
+      FK.store.addMeal({ name: R.meal_name, kcal: cur.k, protein: R.totals.protein, carbs: R.totals.carbs, fat: R.totals.fat, slot: slot, source: 'scan',
+        items: (R.items || []).map(function (i) { return { name: i.name, grams: Math.round(i.grams), kcal: Math.round(i.kcal) }; }) })
+        .then(function () {
+          try { FKPlan.logMeal(); } catch (e) {}
+          if (TRIAL) { location.href = 'paywall.html'; return; }
+          toast('Added to ' + slot.toLowerCase() + ' · ' + cur.k + ' kcal'); setTimeout(function () { location.href = 'food.html'; }, 1100);
+        }, function (e) { busy = false; oops(e); });
+    };
+  })();
+  var flashOn = false;
+  $('flashBtn').onclick = $('flashBtn2').onclick = function () { flashOn = !flashOn; if (window.FKCAM) FKCAM.torch(flashOn); $('flashBtn').style.color = $('flashBtn2').style.color = flashOn ? 'var(--acc)' : ''; toast(flashOn ? 'Flash on' : 'Flash off'); };
+  FK.ready();
+})();
+</script>
+</body>
+</html>

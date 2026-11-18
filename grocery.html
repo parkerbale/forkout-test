@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Grocery plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>
+.setup{margin-top:40px;padding:34px}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.stp{padding:24px 26px;border-radius:30px;background:rgba(var(--ink),.04);border:1px solid var(--line)}
+.stp>span{display:block;font-size:21px;color:var(--muted)}
+.stp .v{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.stp b{font-size:52px;font-weight:700;letter-spacing:-1px;line-height:1}
+.stp .pm{display:flex;gap:10px}
+.stp .pm button{width:58px;height:58px;border-radius:50%;background:rgba(var(--ink),.07);border:1px solid var(--line);font-size:30px;line-height:1;display:grid;place-items:center}
+.budget{margin-top:30px}
+.budget .between{font-size:23px;color:var(--fg2)}
+.budget .between b{font-size:40px;color:var(--fg);font-weight:700;letter-spacing:-.6px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:12px;border-radius:6px;margin:24px 0 8px;outline:none;background:linear-gradient(90deg,var(--mint) var(--p,30%),rgba(var(--ink),.12) var(--p,30%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:46px;height:46px;border-radius:50%;background:#fff;border:6px solid var(--acc);box-shadow:0 0 20px color-mix(in srgb,var(--acc) 60%,transparent)}
+input[type=range]::-moz-range-thumb{width:34px;height:34px;border-radius:50%;background:#fff;border:6px solid var(--acc)}
+.scale{display:flex;justify-content:space-between;font-size:19px;color:var(--dim)}
+.q{margin-top:30px}
+.q>.lbl{display:block;margin-bottom:16px}
+.build{margin-top:34px}
+.chat{display:flex;flex-direction:column;gap:20px;margin-top:34px}
+/* The plan */
+.plan{padding:34px;animation:fkin .55s var(--ease) both}
+.plan .tot{display:flex;align-items:baseline;gap:14px;margin-top:18px;flex-wrap:wrap}
+.plan .tot b{font-size:84px;font-weight:700;color:var(--mint);letter-spacing:-2px;line-height:1}
+.plan .tot span{font-size:24px;color:var(--muted)}
+.plan .sub{margin-top:12px;font-size:23px;color:var(--fg2);line-height:1.45}
+.plan .meter{margin-top:22px;height:12px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.facts div{padding:20px;border-radius:24px;background:rgba(var(--ink),.04);border:1px solid var(--line);text-align:center}
+.facts b{display:block;font-size:34px;font-weight:700}
+.facts span{display:block;margin-top:6px;font-size:19px;color:var(--muted)}
+.cat{margin-top:34px;font-size:19px;letter-spacing:3.6px;color:var(--muted);text-transform:uppercase}
+.gi{display:flex;align-items:center;gap:20px;padding:18px 0;border-bottom:1px solid var(--line);font-size:24px;cursor:pointer}
+.gi .tick{width:52px;height:52px;border-radius:16px}
+.gi .tick svg{width:24px;height:24px}
+.gi span{flex:1;min-width:0}
+.gi small{color:var(--muted);margin-left:10px}
+.gi b{font-weight:600;font-variant-numeric:tabular-nums}
+.gi.got span{text-decoration:line-through;color:var(--dim)}
+.dinners{margin-top:34px}
+.dn{display:flex;align-items:center;gap:18px;padding:16px 0;border-bottom:1px solid var(--line);font-size:23px}
+.dn em{flex:none;width:72px;font-style:normal;font-size:19px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
+</style>
+</head>
+<body data-tab="nutrition" data-streak="1" data-title="Grocery plan" data-note="Set who's eating, your budget and goal, or just tell Forkout AI (try: healthy plan for 2 adults and 4 kids, about $250). Tick items off as you shop.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas" id="canvas">
+        <div class="head in">
+          <div><div class="k">Nutrition</div><h1>Grocery plan</h1><div class="sub">Built by Forkout AI for your week</div></div>
+          <a class="back press" href="food.html" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+        </div>
+
+        <section class="card setup in" style="--i:1">
+          <span class="lbl">Who's eating</span>
+          <div class="who">
+            <div class="stp"><span>Adults</span><div class="v"><b class="num" id="ad">1</b><div class="pm"><button data-k="ad" data-d="-1" aria-label="One less adult">−</button><button data-k="ad" data-d="1" aria-label="One more adult">+</button></div></div></div>
+            <div class="stp"><span>Kids</span><div class="v"><b class="num" id="kd">0</b><div class="pm"><button data-k="kd" data-d="-1" aria-label="One less kid">−</button><button data-k="kd" data-d="1" aria-label="One more kid">+</button></div></div></div>
+          </div>
+          <div class="budget"><div class="between"><span>Weekly budget</span><b class="num">A$<span id="bOut">60</span></b></div>
+            <input type="range" id="bud" min="30" max="500" step="5" value="60" aria-label="Weekly budget in dollars"><div class="scale"><span>A$30</span><span>A$250</span><span>A$500</span></div></div>
+          <div class="q"><span class="lbl">Goal</span><div class="chips" id="goal"><button class="chip" data-g="protein" aria-pressed="true">High protein</button><button class="chip" data-g="healthy" aria-pressed="false">Healthy all-round</button><button class="chip" data-g="budget" aria-pressed="false">Cheapest</button><button class="chip" data-g="veg" aria-pressed="false">Vegetarian</button></div></div>
+          <div class="q"><span class="lbl">Store</span><div class="chips" id="store"><button class="chip" aria-pressed="true">Coles</button><button class="chip" aria-pressed="false">Woolworths</button><button class="chip" aria-pressed="false">Aldi</button></div></div>
+          <button class="btn wide build" id="build">Build my plan</button>
+        </section>
+
+        <div class="chat" id="chat" aria-live="polite"></div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  var S = { ad: 1, kd: 0, bud: 60, goal: 'protein', store: 'Coles' };
+  var GOALS = { protein: 'High protein', healthy: 'Healthy all-round', budget: 'Cheapest', veg: 'Vegetarian' };
+  // Price per adult per week (kids count as 0.6). p = priority: 1 always, 2 usually, 3 if the budget allows.
+  // tags: which goals an item suits (missing = all).
+  var ITEMS = [
+    ['Protein', 'Chicken breast', 1, 'kg', 12, 1, 'protein healthy budget'], ['Protein', 'Eggs', 12, '', 6.5, 1], ['Protein', 'Greek yoghurt', 1, 'kg', 5, 1],
+    ['Protein', 'Lean beef mince', 0.5, 'kg', 7.5, 2, 'protein healthy'], ['Protein', 'Canned tuna', 4, 'tins', 5.2, 2, 'protein budget healthy'],
+    ['Protein', 'Salmon fillets', 2, '', 10, 3, 'healthy protein'], ['Protein', 'Firm tofu', 450, 'g', 3.5, 1, 'veg'], ['Protein', 'Chickpeas & lentils', 3, 'tins', 3.6, 1, 'veg budget'],
+    ['Carbs', 'Rice', 1, 'kg', 1.8, 1], ['Carbs', 'Rolled oats', 0.75, 'kg', 1.7, 1], ['Carbs', 'Wholemeal bread', 1, 'loaf', 3.8, 2], ['Carbs', 'Wholemeal pasta', 0.5, 'kg', 2.5, 2], ['Carbs', 'Potatoes', 1, 'kg', 2.5, 3],
+    ['Fruit & veg', 'Bananas', 1, 'kg', 3.4, 1], ['Fruit & veg', 'Frozen mixed veg', 1, 'kg', 2.8, 1], ['Fruit & veg', 'Broccoli', 2, 'heads', 4, 2, 'healthy protein veg'],
+    ['Fruit & veg', 'Spinach', 280, 'g', 3, 2, 'healthy veg protein'], ['Fruit & veg', 'Apples', 1, 'kg', 4.5, 2, 'healthy veg'], ['Fruit & veg', 'Frozen berries', 0.5, 'kg', 5, 3, 'healthy protein veg'], ['Fruit & veg', 'Tomatoes', 0.5, 'kg', 4, 3],
+    ['Dairy & pantry', 'Milk', 2, 'L', 3.1, 1], ['Dairy & pantry', 'Cheese', 250, 'g', 3.5, 2], ['Dairy & pantry', 'Peanut butter', 1, 'jar', 2.5, 3], ['Dairy & pantry', 'Wholemeal wraps', 8, '', 3.5, 3]
+  ];
+  var DINNERS = {
+    protein: ['Honey-soy chicken stir-fry', 'Beef burrito bowls', 'Tuna pasta bake', 'Grilled chicken & avo bowl', 'Salmon, rice & greens', 'Chicken pesto pasta', 'Egg fried rice'],
+    healthy: ['Salmon, rice & greens', 'Chicken & veg traybake', 'Beef & bean chilli', 'Grilled chicken salad bowls', 'Lentil & veg soup', 'Chicken pesto pasta', 'Homemade pizzas on wraps'],
+    budget: ['Chicken, rice & frozen veg', 'Mince & potato bake', 'Tuna pasta bake', 'Chickpea & egg curry', 'Egg fried rice', 'Lentil & veg soup', 'Beef & bean nachos'],
+    veg: ['Tofu stir-fry', 'Chickpea & egg curry', 'Lentil & veg soup', 'Bean burrito bowls', 'Veggie pesto pasta', 'Egg fried rice', 'Spinach & feta omelettes']
+  };
+  var STORE = { Coles: 1, Woolworths: 1.03, Aldi: 0.86 };
+
+  function money(v) { return 'A$' + v.toFixed(2); }
+  function qty(n, unit, u) {
+    var v = n * u;
+    if (unit === 'kg' || unit === 'L') v = Math.round(v * 4) / 4; else if (unit === 'g') { v = Math.round(v / 50) * 50; if (v >= 1000) { return (v / 1000).toFixed(1).replace('.0', '') + ' kg'; } } else v = Math.max(1, Math.round(v));
+    return v + (unit ? ' ' + unit : '');
+  }
+  // Fits the list to the budget: must-haves first, then the next most useful items while there's money left
+  function makePlan() {
+    var units = S.ad + S.kd * 0.6, k = STORE[S.store] * (S.goal === 'budget' ? 0.88 : 1);
+    var list = ITEMS.filter(function (it) { return !it[6] || it[6].split(' ').indexOf(S.goal) >= 0; })
+      .filter(function (it) { return !(S.goal === 'veg' && /chicken|beef|tuna|salmon/i.test(it[1])); });
+    list.sort(function (a, b) { return a[5] - b[5]; });
+    var out = [], total = 0;
+    list.forEach(function (it) {
+      var cost = it[4] * units * k;
+      if (it[5] === 1 || total + cost <= S.bud) { out.push({ cat: it[0], n: it[1], q: qty(it[2], it[3], units), c: cost }); total += cost; }
+    });
+    return { items: out, total: total, units: units };
+  }
+  function bubble(cls, html) { var el = document.createElement('div'); el.className = cls; el.innerHTML = html; $('chat').appendChild(el); return el; }
+  function build(said) {
+    if (said) bubble('bub me', said.replace(/</g, '&lt;'));
+    var who = S.ad + (S.ad === 1 ? ' adult' : ' adults') + (S.kd ? ' and ' + S.kd + (S.kd === 1 ? ' kid' : ' kids') : '');
+    var t = bubble('typing', '<i></i><i></i><i></i>'); FK.scrollTo(t, 600);
+    setTimeout(function () {
+      t.remove();
+      var P = makePlan(), over = P.total > S.bud;
+      bubble('aihead', '<span class="aiorb"></span>Forkout AI');
+      bubble('bub ai', 'Here\'s a <b>' + GOALS[S.goal].toLowerCase() + '</b> week for <b>' + who + '</b> at ' + S.store + '. ' +
+        (over ? 'The basics come to a little over your budget, so I kept it to the essentials.' : 'It comes in at <b>' + money(P.total) + '</b>, under your A$' + S.bud + '.'));
+      var cats = {}; P.items.forEach(function (it) { (cats[it.cat] = cats[it.cat] || []).push(it); });
+      var dn = DINNERS[S.goal], days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      var el = bubble('card plan', '<span class="lbl acc">Your grocery plan · ' + S.store + '</span>' +
+        '<div class="tot"><b class="num">' + money(P.total) + '</b><span>of A$' + S.bud + ' a week</span></div>' +
+        '<div class="sub">' + who.charAt(0).toUpperCase() + who.slice(1) + ' · ' + GOALS[S.goal] + ' · about ' + money(P.total / Math.max(1, S.ad + S.kd) / 7) + ' per person a day</div>' +
+        '<div class="bar meter"><i style="width:' + Math.min(100, P.total / S.bud * 100) + '%"></i></div>' +
+        '<div class="facts"><div><b class="num">' + P.items.length + '</b><span>items</span></div><div><b class="num">7</b><span>dinners</span></div><div><b class="num">' + (S.goal === 'veg' ? '120' : S.goal === 'protein' ? '180' : '150') + 'g</b><span>protein a day</span></div></div>' +
+        Object.keys(cats).map(function (c) {
+          return '<div class="cat">' + c + '</div>' + cats[c].map(function (it) {
+            return '<div class="gi" role="checkbox" aria-checked="false" tabindex="0"><button class="tick" aria-pressed="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></button><span>' + it.n + '<small>' + it.q + '</small></span><b>' + money(it.c) + '</b></div>';
+          }).join('');
+        }).join('') +
+        '<div class="cat">Dinners this week</div><div class="dinners">' + days.map(function (d, i) { return '<div class="dn"><em>' + d + '</em>' + dn[i] + '</div>'; }).join('') + '</div>' +
+        '<div class="btns"><button class="btn dark" data-act="again">↻ Swap meals</button><button class="btn" data-act="share">Share list</button></div>');
+      el.addEventListener('click', function (e) {
+        var row = e.target.closest('.gi');
+        if (row) { var on = !row.classList.contains('got'); row.classList.toggle('got', on); row.setAttribute('aria-checked', on); row.querySelector('.tick').setAttribute('aria-pressed', on); FK.haptic(); }
+        var b = e.target.closest('[data-act]');
+        if (b && b.dataset.act === 'share') toast('List shared');
+        if (b && b.dataset.act === 'again') { DINNERS[S.goal].push(DINNERS[S.goal].shift()); DINNERS[S.goal].push(DINNERS[S.goal].shift()); build('Swap the dinners please'); }
+      });
+      setTimeout(function () { FK.scrollTo(el, 200); }, 120);
+    }, FK.reduce ? 0 : 750);
+  }
+  function paint() {
+    $('ad').textContent = S.ad; $('kd').textContent = S.kd; $('bOut').textContent = S.bud; var r = $('bud'); r.value = S.bud; r.style.setProperty('--p', ((S.bud - 30) / 470 * 100) + '%');
+    document.querySelectorAll('#goal .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.g === S.goal)); });
+    document.querySelectorAll('#store .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c.textContent === S.store)); });
+  }
+  document.querySelectorAll('.pm button').forEach(function (b) { b.onclick = function () { var k = b.dataset.k; S[k] = Math.max(k === 'ad' ? 1 : 0, Math.min(8, S[k] + +b.dataset.d)); paint(); }; });
+  $('bud').addEventListener('input', function () { S.bud = +this.value; paint(); });
+  $('goal').onclick = function (e) { var c = e.target.closest('.chip'); if (c) { S.goal = c.dataset.g; paint(); } };
+  $('store').onclick = function (e) { var c = e.target.closest('.chip'); if (c) { S.store = c.textContent; paint(); } };
+  $('build').onclick = function () { build(); };
+  // Tell the AI in plain words: "healthy plan for 2 adults and 4 kids, about $250"
+  function parse(t) {
+    var s = t.toLowerCase(), m;
+    if ((m = /(\d+)\s*(adult|grown|parent|people|person)/.exec(s))) S.ad = Math.max(1, Math.min(8, +m[1]));
+    if ((m = /(\d+)\s*(kid|child|children|teen)/.exec(s))) S.kd = Math.min(8, +m[1]); else if (/no kids/.test(s)) S.kd = 0;
+    if ((m = /\$\s*(\d+)|(\d+)\s*(dollars|bucks)|budget\D{0,8}(\d+)|about\s*(\d{2,3})/.exec(s))) S.bud = Math.max(30, Math.min(500, +(m[1] || m[2] || m[4] || m[5])));
+    if (/vegetarian|veggie|no meat/.test(s)) S.goal = 'veg'; else if (/cheap|budget|save|cheapest/.test(s)) S.goal = 'budget'; else if (/healthy|balanced|all.round/.test(s)) S.goal = 'healthy'; else if (/protein|muscle/.test(s)) S.goal = 'protein';
+    if (/aldi/.test(s)) S.store = 'Aldi'; else if (/woolies|woolworths/.test(s)) S.store = 'Woolworths'; else if (/coles/.test(s)) S.store = 'Coles';
+    paint();
+  }
+  FK.askbar({ placeholder: 'e.g. healthy plan for 2 adults and 4 kids, $250', onSend: function (txt) { parse(txt); build(txt); } });
+  paint();
+  FK.ready();
+})();
+</script>
+</body>
+</html>

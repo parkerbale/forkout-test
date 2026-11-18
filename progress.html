@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Forkout · Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/palette.css">
+<link rel="stylesheet" href="css/fk.css">
+<link rel="stylesheet" href="css/v5.css">
+<script>try{var q=/[?&]theme=(light|dark)/.exec(location.search),t=q?q[1]:localStorage.getItem('fk-look');if(!t)t='dark';if(t==='auto')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='light')document.documentElement.dataset.fk='light'}catch(e){}</script>
+<style>.canvas#canvas{height:3450px;min-height:3450px!important}</style>
+</head>
+<body data-tab="progress" data-title="Progress" data-note="Streak, weight, best lifts and your weekly photo album.">
+<div class="stage">
+  <div class="device">
+    <div class="app" id="app">
+      <div class="scroll"><div class="canvas v5" id="canvas">
+        <div class="top in" style="--i:0"><h1 class="ttl">Progress</h1></div>
+        <section class="c in" style="--i:1;margin-top:0">
+          <div class="streak"><div class="n num"><span id="stP">12</span><small>day streak</small></div><svg class="fl" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c1.2 4.2 5.8 5.6 5.8 11a5.8 5.8 0 0 1-11.6 0c0-3.4 2.2-4.6 2.3-7 1 1.2 2.1 2.2 3.3 2.3-.4-2.2-.6-4.3.2-6.3z"/></svg></div>
+          <div class="wk"><div>M<i class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></i></div><div>T<i class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></i></div><div>W<i class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.500l4.500 4.500L19 7.500"/></svg></i></div><div>T<i class="t"></i></div><div>F<i class=""></i></div><div>S<i class=""></i></div><div>S<i class=""></i></div></div>
+        </section>
+        <section class="c in" style="--i:2">
+          <div class="k">This week</div>
+          <div class="ws"><div><b class="num">3<small>of 4</small></b><span>Workouts done</span></div><div><b class="num">2,640<small>kcal</small></b><span>Average a day</span></div><div><b class="num">168<small>g</small></b><span>Average protein</span></div><div><b class="num up">−0.4<small>kg</small></b><span>Weight change</span></div></div>
+        </section>
+        <section class="c in" style="--i:2">
+          <div class="wh"><div class="k">Weight</div><button class="logw press" id="logW">+ Log weight</button></div>
+          <div class="wt"><b class="num" id="wNow">78.4</b><span>kg</span><em id="wDelta">−2.2 kg</em></div>
+          <div id="wChart"><svg class="chart" viewBox="-6 -10 842 220" preserveAspectRatio="none"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--acc)" stop-opacity=".32"/><stop offset="1" stop-color="var(--acc)" stop-opacity="0"/></linearGradient></defs><path d="M0.0 26.7 L92.2 46.7 L184.4 33.3 L276.7 73.3 L368.9 93.3 L461.1 106.7 L553.3 133.3 L645.6 140.0 L737.8 160.0 L830.0 173.3 L830 200 L0 200 Z" fill="url(#ga)"/><path d="M0.0 26.7 L92.2 46.7 L184.4 33.3 L276.7 73.3 L368.9 93.3 L461.1 106.7 L553.3 133.3 L645.6 140.0 L737.8 160.0 L830.0 173.3" fill="none" stroke="var(--acc)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="830.0" cy="173.3" r="9" fill="var(--acc)"/></svg></div>
+        </section>
+        <section class="c in" style="--i:3">
+          <div class="k">Personal bests</div>
+          <div class="lifts"><div><div class="l">Bench</div><b class="num"><span id="pbB">62.5</span><small>kg</small></b><span class="pr" style="margin:12px 0 0;display:inline-block">PR</span></div><div><div class="l">Squat</div><b class="num">90<small>kg</small></b></div><div><div class="l">Deadlift</div><b class="num">120<small>kg</small></b></div></div>
+        </section>
+        <div class="sec in" style="--i:4" id="photo"><h3>Photo album</h3><span class="k" style="font-size:23px">7 weeks</span></div>
+        <div class="album in" style="--i:4" id="album"></div>
+      </div></div>
+      <div class="layer top" id="topLayer"></div>
+      <div class="layer bottom" id="bottomLayer"></div>
+    </div>
+  </div>
+  <aside class="panel"></aside>
+</div>
+<script src="js/fk.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/config.js"></script>
+<script src="js/db.js"></script>
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/workouts.js"></script>
+<script src="js/sync.js"></script>
+<script>
+(function () {
+  var $ = FK.$;
+  try { $('stP').textContent = FKPlan.streak(); } catch (e) {}
+  try { var LG = JSON.parse(localStorage.getItem('fk-log') || '{}'); if (LG['Bench press'] && LG['Bench press'].best > 62.5) $('pbB').textContent = LG['Bench press'].best; } catch (e) {}
+  // Weight log (saved on this device)
+  var WL = null; try { WL = JSON.parse(localStorage.getItem('fk-weights') || 'null'); } catch (e) {}
+  if (!WL) { var seed = [80.6, 80.3, 80.5, 79.9, 79.6, 79.4, 79.0, 78.9, 78.6, 78.4]; WL = seed.map(function (v, i) { return { d: Date.now() - (seed.length - 1 - i) * 7 * 864e5, kg: v }; }); }
+  function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  function drawW() {
+    var pts = WL.slice(-12).map(function (x) { return x.kg; }), W = 830, H = 200;
+    var lo = Math.min.apply(null, pts) - 0.5, hi = Math.max.apply(null, pts) + 0.5;
+    var xs = pts.map(function (_, i) { return pts.length > 1 ? i * W / (pts.length - 1) : W / 2; }), ys = pts.map(function (p) { return H - (p - lo) / (hi - lo) * H; });
+    var line = xs.map(function (x, i) { return (i ? 'L' : 'M') + x.toFixed(1) + ' ' + ys[i].toFixed(1); }).join(' ');
+    var lx = xs[xs.length - 1], ly = ys[ys.length - 1];
+    $('wChart').innerHTML = '<svg class="chart" viewBox="-6 -10 ' + (W + 12) + ' ' + (H + 20) + '" preserveAspectRatio="none"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--acc)" stop-opacity=".32"/><stop offset="1" stop-color="var(--acc)" stop-opacity="0"/></linearGradient></defs><path d="' + line + ' L' + lx + ' ' + H + ' L0 ' + H + ' Z" fill="url(#ga)"/><path d="' + line + '" fill="none" stroke="var(--acc)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="' + lx + '" cy="' + ly + '" r="9" fill="var(--acc)"/></svg>';
+    var now = WL[WL.length - 1].kg, d = now - WL[0].kg;
+    $('wNow').textContent = f1(now); $('wDelta').textContent = (d > 0 ? '+' : d < 0 ? '−' : '') + f1(Math.abs(d)) + ' kg';
+  }
+  drawW();
+  // Live mode: the weight chart is the account's real weigh-ins (demo mode keeps the example chart)
+  var LIVE = !!(window.FK && FK.db && FK.db.live);
+  function dayStr(t) { var d = new Date(t); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  if (LIVE) {
+    var P0 = FKPlan.get();
+    WL = [{ d: Date.now(), kg: P0.weight || 70 }]; drawW();
+    FK.db.select('weights', { select: 'day,kg', order: 'day.asc', limit: 60 }).then(function (rows) {
+      if (rows && rows.length) { WL = rows.map(function (r) { return { d: new Date(r.day + 'T12:00:00').getTime(), kg: +r.kg }; }); drawW(); }
+    }).catch(function () {});
+  }
+  var ws =document.createElement('div'); ws.className = 'msheet v5'; ws.hidden = true; $('bottomLayer').appendChild(ws);
+  var cur = 78.4;
+  $('logW').onclick = function () {
+    cur = WL[WL.length - 1].kg;
+    ws.innerHTML = '<div class="msb"><div class="handle"></div><h2>Log today’s weight</h2><p class="lwh">Weigh yourself first thing in the morning for the most accurate trend.</p><div class="lws"><button class="pm press" data-d="-0.1">−</button><b class="num"><span id="lwV">' + f1(cur) + '</span><small>kg</small></b><button class="pm press" data-d="0.1">+</button></div><button class="btn wide press" id="lwSave">Save</button></div>';
+    ws.hidden = false;
+    ws.querySelectorAll('.pm').forEach(function (b) { b.onclick = function () { cur = Math.max(30, Math.round((cur + +b.dataset.d) * 10) / 10); $('lwV').textContent = f1(cur); FK.haptic(5); }; });
+    $('lwSave').onclick = function () {
+      var today = new Date().toDateString(), last = WL[WL.length - 1];
+      if (new Date(last.d).toDateString() === today) last.kg = cur; else WL.push({ d: Date.now(), kg: cur });
+      if (LIVE) FK.db.insert('weights', { day: dayStr(Date.now()), kg: cur }, true).catch(function () { FK.toast('Couldn’t save to your account, try again'); });
+      try { if (!LIVE) localStorage.setItem('fk-weights', JSON.stringify(WL)); var P = FKPlan.get(); P.weight = cur; FKPlan.save(P); } catch (e) {}
+      ws.hidden = true; drawW(); FK.toast('Weight saved · ' + f1(cur) + ' kg');
+    };
+  };
+  ws.addEventListener('click', function (e) { if (e.target === ws) ws.hidden = true; });
+  var WK = [[12, 'week12.jpg'], [10, 'week10.jpg'], [8, 'week08.jpg'], [6, 'week06.jpg'], [4, 'week04.jpg'], [2, 'week02.jpg'], [1, 'week1.jpg']];
+  $('album').innerHTML = '<button class="tile add press" id="addPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Week 13</span></button>' +
+    WK.map(function (w, i) { return '<button class="tile press" data-i="' + i + '"><img src="photos/' + w[1] + '" alt="Week ' + w[0] + '"><span>Week ' + w[0] + '</span></button>'; }).join('');
+  var lb = document.createElement('div'); lb.className = 'lb'; lb.hidden = true;
+  lb.innerHTML = '<button class="x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img alt=""><div class="cap"></div>';
+  $('bottomLayer').appendChild(lb);
+  var cur = 0;
+  function open(i) { cur = i; lb.querySelector('img').src = 'photos/' + WK[i][1]; lb.querySelector('.cap').innerHTML = '<b>Week ' + WK[i][0] + '</b><span>' + (i === 0 ? 'Latest' : i === WK.length - 1 ? 'Starting point' : '') + '</span>'; lb.hidden = false; }
+  $('album').addEventListener('click', function (e) { var t = e.target.closest('.tile'); if (!t) return; if (t.id === 'addPhoto') return FK.toast('Camera opens here to add this week\u2019s photo'); open(+t.dataset.i); });
+  lb.querySelector('.x').onclick = function () { lb.hidden = true; };
+  lb.addEventListener('click', function (e) { if (e.target === lb) lb.hidden = true; });
+  FK.ready();
+})();
+</script>
+</body>
+</html>
